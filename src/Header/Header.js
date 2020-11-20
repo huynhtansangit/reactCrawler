@@ -1,6 +1,61 @@
 import React, { Component } from 'react';
 
 class Header extends Component {
+    componentDidMount() {
+        (function () {
+
+            var doc = document.documentElement;
+            var w = window;
+
+            var prevScroll = w.scrollY || doc.scrollTop;
+            var curScroll;
+            var direction = 0;
+            var prevDirection = 0;
+
+            var header = document.getElementById('navbar');
+
+            var checkScroll = function () {
+
+                /*
+                ** Find the direction of scroll
+                ** 0 - initial, 1 - up, 2 - down
+                */
+
+                curScroll = w.scrollY || doc.scrollTop;
+                if (curScroll > prevScroll) {
+                    //scrolled up
+                    direction = 2;
+                }
+                else if (curScroll < prevScroll) {
+                    //scrolled down
+                    direction = 1;
+                }
+
+                if (direction !== prevDirection) {
+                    toggleHeader(direction, curScroll);
+                }
+
+                prevScroll = curScroll;
+            };
+
+            var toggleHeader = function (direction, curScroll) {
+                if (direction === 2 && curScroll > 52) {
+
+                    //replace 52 with the height of your header in px
+
+                    header.classList.add('hide-customized');
+                    prevDirection = direction;
+                }
+                else if (direction === 1) {
+                    header.classList.remove('hide-customized');
+                    prevDirection = direction;
+                }
+            };
+
+            window.addEventListener('scroll', checkScroll);
+
+        })();
+    }
     render() {
         return (
             <header>
@@ -46,7 +101,7 @@ class Header extends Component {
                                 <div className=" pt-2">
                                     <div className="form-group input-header-container navbar-nav">
                                         <img className="icon-input-header" src="Assets/Images/Banner/urlIcon1x.png" alt="" />
-                                        <input style={{ paddingLeft: '55px !important' }} type="text" className="form-control input-header" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Url" />
+                                        <input style={{ paddingLeft: '55px' }} type="text" className="form-control input-header" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Url" />
                                         <button type="button" className="btn btn-dark btn-input-header"><i className="fas fa-sign-in-alt" /></button>
                                     </div>
                                 </div>

@@ -61,7 +61,7 @@ class Banner extends Component {
                 <form id="form-banner">
                     <div className="form-group input-url-container">
                         <img className="icon-input-url" src="Assets/Images/Banner/urlIcon1x.png" alt="" />
-                        <input style={{ paddingLeft: '55px !important' }} type="text" className="form-control input-url-element" id="input-url-banner" aria-describedby="emailHelp" placeholder="Url" />
+                        <input style={{ paddingLeft: '55px ' }} type="text" className="form-control input-url-element" id="input-url-banner" aria-describedby="emailHelp" placeholder="Url" />
                     </div>
                     <button type="submit" className="submit-btn btn btn-danger">Submit <img className="icon-search" src="/Assets/Images/Banner/btnIconSearch.png" alt="icon-search" /></button>
                 </form>

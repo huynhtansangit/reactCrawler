@@ -5,7 +5,7 @@
     font-size: 100%;
     scroll-behavior: smooth;
 }
-#navbar.hide-customized {
+.hide-customized {
 	top: -9.6rem;
 }
 body {

@@ -17,7 +17,7 @@ class Gallery extends Component {
                             <span>VIDEO TAP</span>
                         </div>
                     </div>
-                    <div className="row" style={{ marginTop: '40px !important', width: '100%' }}>
+                    <div className="row" style={{ marginTop: '40px', width: '100%' }}>
                         <div className="col-lg-8 col-md-8 col-sm-12 image-video-container ">
                             <div className="img-card">
                                 <img src="Assets/Images/Gallery/1.png" alt="" />
