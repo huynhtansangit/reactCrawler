@@ -5,7 +5,7 @@ import Header from './Header/Header';
 import Banner from './Banner/Banner';
 import Gallery from './Gallery/Gallery';
 import Storage from './Storage/Storage';
-import Aboutus from './Aboutus/Aboutus';
+import AboutUs from './AboutUs/AboutUs';
 import Footer from './Footer/Footer';
 
 
@@ -16,7 +16,7 @@ function App() {
       <Banner></Banner>
       <Gallery></Gallery>
       <Storage></Storage>
-      <Aboutus></Aboutus>
+      <AboutUs></AboutUs>
       <Footer></Footer>
     </div>
   );
