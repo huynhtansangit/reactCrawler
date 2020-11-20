@@ -1,0 +1,66 @@
+@font-face {
+    font-family: MuseoSlab500;
+    src: url(/Assets/fonts/Museo_Slab_500.otf);
+}
+
+.edit-pic-container{
+    margin: 0 5.875rem;
+    height: 100%;
+    border: black solid 1px;
+}
+
+.test{
+    height: 100%;
+    border: black solid 1px;
+}
+
+#edit-pic-main-option-container{
+    background-color: #212B36;
+}
+
+.selected-edit-pic-main-option{
+    background-color: #9c9c9c;
+    /* opacity: 20%; */
+}
+
+.edit-pic-main-option-title{
+    color: white;
+    font-family: MuseoSlab500;
+    margin-top: 0.8rem;
+    padding-bottom: 2rem;
+}
+
+.edit-pic-container input{
+    border-bottom: solid 0.2rem rgb(204, 1, 1) !important;
+
+    height: 4.5rem !important;
+}
+
+.navigator-icon-menu{
+    font-size: xxx-large;
+    margin-top: 2rem;
+}
+
+.fa-light{
+    color: white;
+}
+
+#pic-preview{
+    box-shadow: 0.3rem 0.3rem 0.5rem grey;
+}
+
+#btn-export-container{
+    background-color: #C9BCBC;
+}
+
+.btn-export{
+    background-color: #212B36 !important;
+    color: white !important;
+    box-shadow: 0.3rem 0.3rem 0.5rem grey;
+    width: 10rem;
+    /* margin-top: 1rem; */
+    margin: 1rem 0;
+
+    height: 3.2rem;
+    font-family: MuseoSlab500;
+}

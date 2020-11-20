@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="Assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Assets/css/EditPicture.css">
+    <link rel="stylesheet" href="Assets/css/Storage.css" crossorigin="anonymous">
+
+    <!-- jQuery and JS bundle w/ Popper.js -->
+    <script src="Assets/js/jquery-3.5.1.js"></script>
+    <script src="Assets/js/popper.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
+
+<body>
+    <section id="edit-pic-section">
+        <div class="edit-pic-container row">
+            <div id="edit-pic-main-option-container" class="col-1 p-0 m-0 text-center">
+                <div id="edit-pic-text-main-option" class="edit-pic-main-option selected-edit-pic-main-option">
+                    <i class="fas fa-file-signature fa-light navigator-icon-menu"></i>
+                    <h5 class="edit-pic-main-option-title mb-0">Text</h5>
+                </div>
+                <div id="edit-pic-color-main-option" class="edit-pic-main-option">
+                    <i class="fas fa-palette fa-light navigator-icon-menu"></i>
+                    <h5 class="edit-pic-main-option-title mb-0">Color</h5>
+                </div>
+                <div id="edit-pic-img-main-option" class="edit-pic-main-option">
+                    <i class="fas fa-file-image fa-light navigator-icon-menu"></i>
+                    <h5 class="edit-pic-main-option-title mb-0">Image</h5>
+                </div>
+
+            </div>
+            <div id="edit-pic-detail-main-option-container" class="col-3">
+                <div id="edit-pic-text-option" class="edit-pic-option">
+                    <div class="mt-2">
+                        <label for="insert-text">Insert Text</label>
+                        <input class="w-100 form-control" type="text" name="insert-text" id="insert-text"
+                            placeholder="Create yourself">
+                    </div>
+                    <div class="mt-2">
+                        <label>Rotation</label>
+                        <input id="input-adjust-pic-rotation" class="form-control adjust-bar p-0" type="range" min="-360" max="360" value="0">
+                        <div class="row">
+                            <p class="col-4 text-left">-360</p>
+                            <p class="col-4 text-center">0</p>
+                            <p class="col-4 text-right">360</p>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <label>Font size</label>
+                        <input id="input-adjust-pic-font-size" class="form-control adjust-bar p-0" type="range" min="0" max="100" value="20">
+                        <div class="row">
+                            <p class="col-6 text-left">0</p>
+                            <p class="col-6 text-right">100</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="edit-pic-color-option" class="edit-pic-option">
+                    <div class="mt-2">
+                        <label>Picture width</label>
+                        <input id="input-adjust-pic-width" class="form-control adjust-bar p-0" type="range" min="-360" max="360" value="0">
+                        <div class="row">
+                            <p class="col-4 text-left">-360</p>
+                            <p class="col-4 text-center">0</p>
+                            <p class="col-4 text-right">360</p>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <label>Logo height</label>
+                        <input id="input-adjust-pic-height" class="form-control adjust-bar p-0" type="range" min="-360" max="360" value="0">
+                        <div class="row">
+                            <p class="col-4 text-left">-360</p>
+                            <p class="col-4 text-center">0</p>
+                            <p class="col-4 text-right">360</p>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <label>Opacity</label>
+                        <input id="input-adjust-pic-opacity" class="form-control adjust-bar p-0" type="range" min="1" max="100" value="50">
+                        <div class="row">
+                            <p class="col-6 text-left">0</p>
+                            <p class="col-6 text-right">100</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="edit-pic-image-option" class="edit-pic-option">
+                    Updating...
+                </div>
+            </div>
+            <div id="preview-editing-pic" class="col-8 p-3">
+                <img id="pic-preview" class="w-100 h-100" src="/Assets/Images/EditPicture/preview-img.png" alt="preview picture">
+            </div>
+        </div>
+        <div id="btn-export-container" class="text-center">
+            <button id="btn-export" class="btn-export rounded">Export</button>
+        </div>
+    </section>
+    <script src="https://kit.fontawesome.com/yourcode.js"></script>
+    <script src="/Assets/js/EditPicture.js"></script>
+</body>
+
+</html>

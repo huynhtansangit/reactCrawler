@@ -1,0 +1,265 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    scroll-behavior: smooth;
+}
+#navbar.hide-customized {
+	top: -9.6rem;
+}
+body {
+}
+section{
+    position: relative !important;
+}
+/*----------------------------- Set font -----------------------------*/
+@font-face {
+    font-family: MuseoSlab700;
+    src: url("../fonts/Museo_Slab_700.otf") format("opentype");
+}
+@font-face {
+    font-family: Poppins;
+    src: url("../fonts/Poppins-Regular.otf") format("opentype");
+}
+@font-face {
+    font-family: PoppinsSemiBold;
+    src: url("../fonts/Poppins-SemiBold.otf") format("opentype");
+}
+@font-face {
+    font-family: Pristina;
+    src: url("../fonts/PRISTINA.TTF") format("truetype");
+}
+@font-face {
+    font-family: semiBold;
+    src: url("../fonts/Montserrat-SemiBold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: regular;
+    src: url("../fonts/Roboto-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: RobotoBlack;
+    src: url("../fonts/Roboto-Black.ttf") format("truetype");
+}
+@font-face {
+    font-family: RobotoMedium;
+    src: url("../fonts/Roboto-Medium.ttf") format("truetype");
+}
+.Poppins {
+    font-family: Poppins !important;
+}
+.RobotoMedium {
+    font-family: RobotoMedium !important;
+}
+.RobotoBlack {
+    font-family: RobotoBlack !important;
+}
+.RobotoRegular {
+    font-family: regular !important;
+}
+.Montserrat-SemiBold {
+    font-family: semiBold !important;
+}
+
+/* End  font  setting*/
+/* Responsive */
+@media only screen and (max-width: 1920px) {
+    
+}
+@media only screen and (max-width: 1642px) {
+   /* Banner */
+   /* .dropdown-header-customize{
+       top: 75px !important;
+   } */
+   .banner {
+      width: 1092px !important; 
+      height: 681px !important; 
+   }
+   .img-decor-banner {
+    width: 719px;
+    height: 793px;
+    top: -89px !important;
+    left: 231px !important;
+   }
+   .girl-circle-decor {
+    width: 100px !important;
+    height: 100px !important;
+   }
+   #girl-1{
+    top: 620.38px !important;
+    left: 656px !important;
+   }
+   #girl-3{
+    left: 849px !important;
+   }
+   #girl-2{
+    top: 353px !important;
+    left: 949px !important;
+   }
+   #girl-4{
+    top: 473px !important;
+    left: 889px !important;
+   }
+   #girl-5{
+    top: 373px !important;
+    left: 779px !important;
+   }
+   #girl-6{
+    top: 520.38px !important;
+    left: 56px !important;
+   }
+   .btn-outline-dark{
+       left: 75% !important;
+   }
+   #circle-1{
+    width: 333px !important;
+    height: 300px !important;
+    left: -200px !important ;
+   }
+   #circle-5{
+    width: 202px !important;
+    height: 206px !important;
+    left: 841px !important;
+   }
+   
+   #circle-6{
+    left: 881px !important;
+   }
+   .big-slogan{
+       font-size: 35px !important;
+       line-height: 46px !important;
+       top: 280px !important;
+   }
+   /* ----- */
+   /* ---- */
+}
+@media only screen and (max-width: 1366px) {
+    
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+    .logo-app{
+        width: 150px !important;
+        height: 150px !important;
+    }
+    .btn-outline-dark{
+        left: 73% !important;
+    }
+    #circle-3 {
+        width: 262px  !important;
+        height: 266px !important;
+    }
+    #circle-2 {
+        top: 580px !important;
+        right: 493px !important;
+    }
+    #circle-4 {
+        width: 120px  !important;
+        height: 120px !important;
+        top: 90px !important;
+        right: 870px !important;
+    }
+    #girl-6 {
+        top: 400.38px !important;
+        left: 26px !important;
+    }
+    .dropdown-banner button{
+        width: 390px !important;
+        height: 50px !important;
+    }
+    .dropdown-banner .dropdown-menu {
+        width: 390px !important;
+    }
+    #input-url-banner{
+        width: 390px !important;
+        height: 50px !important;
+    }
+    #banner-section button{
+        font-size: 14px !important;
+    }
+    #banner-section button .fa-chevron-right{
+        margin-left: 5px !important;
+    }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+    .banner {
+        width:  802px !important; 
+        height: 511px !important; 
+     }
+     .img-decor-banner {
+        width: 519px;
+        height: 593px;
+        top: -73px !important;
+        left: 195px !important;
+       }
+       .big-slogan{
+        font-size: 30px !important;
+        line-height: 40px !important;
+        top: 180px !important;
+        left: 161px !important;
+    }
+    .small-slogan{
+        font-size: 14px !important;
+        line-height: 25px !important;
+        left: 161px !important;
+        top: 320px !important;
+    }
+    .dropdown-banner{
+        top: 469px !important;
+        left: 161px !important;
+     }
+     #form-banner {
+        left: 161px !important;
+        top: 539px !important;
+
+     }
+
+       #girl-3{
+        left: 549px !important;
+       }
+       #girl-2{
+        left: 649px !important;
+       }
+       #girl-4{
+        left: 589px !important;
+       }
+       #girl-5{
+        left: 479px !important;
+       }
+       #circle-1{
+        width: 234px !important;
+        height: 201px !important;
+        left: -108px !important ;
+       }
+       #circle-5{
+        width: 202px !important;
+        height: 206px !important;
+        left: 541px !important;
+       }
+       
+       #circle-6{
+        left: 581px !important;
+       }
+}
+ /* Medium devices (landscape tablets, 768px and up) */
+ @media only screen and (max-width: 768px) {
+
+}
+ /* Extra small devices (phones, 600px and down) */
+ @media only screen and (max-width: 600px) {
+
+}
+
+
+
+
+
+
+
+
+
+
+

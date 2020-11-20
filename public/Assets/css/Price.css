@@ -1,0 +1,188 @@
+.price-container{
+    position: relative;
+    margin: 0px 94px 0px 94px;
+    padding: 100px 0px 100px 0px;
+}
+.price-container h4 {
+    text-transform:capitalize;
+    font-family: semiBold;
+    font-weight: 800;
+    font-size: 56px; 
+}
+.price-container .row{
+    position: relative;
+}
+.pricing-item{
+    position: relative;
+    border-radius: 10px;
+    border: 1px solid #FC84B6;
+    font-family: RobotoBlack;
+    margin: auto;
+    width: 380px;
+    height: 270px;
+    padding: 10px;
+    text-align: center;
+    cursor: default;
+}
+.pricing-item h3{
+    font-size: 42px;
+    margin-top: 20px;
+}
+.pricing-content{
+    position: relative;
+    width: 330px;
+    border-bottom: 1px solid #70707036;
+    border-top: 1px solid #70707036;
+    padding: 4px 0px 4px 0px;
+    margin:30px auto 0px auto;
+}
+.pricing-content .price-number{
+    position: relative;
+    display: block;
+    font-size: 38px;
+}
+.pricing-content .price-number::before{
+    content: url("../Images/Pricing/vndIcon.png");
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    transform: scale(0.8);
+    width: 25px;
+    height: 25px;
+}
+.pricing-content .price-number::after{
+    content: '/ ACCOUNT';
+    display: inline;
+    width: 120px;
+    height: 50px;
+    font-family: regular;
+    font-size: 16px;
+    color: #0303037c;
+}
+.button-request {
+    position: relative;
+    border: 1px solid #CD3D76;
+    border-radius: 6px;
+    padding: 4px 10px 4px 10px;
+    bottom: 30px;
+    background-color: white;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    width: 170px;
+    margin: 0 auto;
+    display: inline-block;
+    top: 50px;
+}
+.button-request img{
+    
+}
+.button-request:hover {
+    border: 2px solid #db5e90;
+    box-shadow: 0px 3px 6px rgba(128, 128, 128, 0.24);
+}
+@media only screen and (max-width: 1920px) {
+    
+}
+@media only screen and (max-width: 1642px) {
+    .price-section div h4 {
+        font-size: 40px !important;
+    }
+    .price-section div p {
+        font-size: 22px !important;
+    }
+    .pricing-item{
+        width:270px !important;
+        height:200px !important;
+        margin-top: 40px;
+    }
+    .pricing-item h3{
+        font-size: 28px;
+        margin-top: 10px !important;
+    }
+    .pricing-content{
+        width: 230px !important;
+        margin:0px auto 0px auto !important;
+        padding: 0px 0px 5px 0px !important;
+    }
+    .price-number {
+        font-size: 28px !important;
+    }
+    .pricing-content .price-number::before{
+        transform: scale(0.6) !important;
+    }
+    .pricing-content .price-number::after{
+        width: 120px;
+        height: 50px;
+        font-size: 16px !important;
+    }
+    .button-request {
+        width: 150px !important;
+        font-size: 14px !important;
+    }
+    .button-request img {
+        width: 30px;
+        height: 32px;
+    }
+}
+@media only screen and (max-width: 1366px) {
+    
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+
+}
+ /* Medium devices (landscape tablets, 768px and up) */
+ @media only screen and (max-width: 768px) {
+
+}
+ /* Extra small devices (phones, 600px and down) */
+ @media only screen and (max-width: 600px) {
+
+}
+@media only screen and (max-width: 460px){
+    .price-section div h4 {
+        font-size: 30px !important;
+    }
+    .price-section div p {
+        font-size: 18px !important;
+    }
+    .pricing-item{
+        width:220px !important;
+        height:170px !important;
+        margin-top: 40px;
+    }
+    .pricing-item h3{
+        font-size: 24px;
+        margin-top: 10px !important;
+    }
+    .pricing-content{
+        width: 200px !important;
+        margin:0px auto 0px auto !important;
+        padding: 0px 0px 5px 0px !important;
+    }
+    .price-number {
+        font-size: 22px !important;
+    }
+    .pricing-content .price-number::before{
+        transform: scale(0.5) !important;
+    }
+    .pricing-content .price-number::after{
+        width: 100px;
+        height: 50px;
+        font-size: 12px !important;
+    }
+    .button-request {
+        width: 130px !important;
+        font-size: 10px !important; 
+        top: 30px !important;
+        
+    }
+    .button-request img {
+        width: 25px;
+        height: 28px;
+    }
+}

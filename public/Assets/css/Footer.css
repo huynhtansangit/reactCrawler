@@ -1,0 +1,93 @@
+@font-face {
+    font-family: poppinsBold;
+    src: url(/Assets/fonts/Poppins-Bold.otf);
+}
+
+@font-face {
+    font-family: roboto;
+    src: url(/Assets/fonts/Roboto-Medium.ttf);
+}
+
+.customized-row-footer{
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.footer-container{
+    background-image: url("/Assets/images/Footer/background-footer.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right;
+    position: relative;
+}
+
+.parent-menu{
+    margin-top: 2.2rem;
+    font-family: poppinsBold;
+    font-size: 1.25rem;
+}
+
+.contact-icon{
+    object-fit: cover;
+}
+
+.row-contain-icon-and-info{
+    height: 3rem !important;
+
+    position: relative;
+}
+
+.information-icon{
+    padding: 0.5rem;
+    width: 2.1rem;
+    height: 2.1rem;
+    
+    flex: 0 0 0;
+}
+
+.column-footer{
+    display: flex !important;
+    flex-flow: column wrap !important;
+    align-items: center !important;
+}
+
+.child-menu{
+    margin: 5rem 0 !important;
+    font-family: roboto;
+    font-size: large;
+}
+
+#footer-logo{
+    width: 10.5rem; 
+    height: 10.5rem;
+}
+
+/* flex: 0 0 8.333333%*/
+@media only screen and (max-width: 1920px) {
+    
+
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+    #footer-logo{
+        width: 8rem; 
+        height: 8rem;
+    }
+
+    p, label, a {
+        font-size: small !important;
+    }
+}
+ /* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    p, label, a {
+        font-size: x-small !important;
+    }
+
+    .contact-icon{
+        width: 1rem;
+        height: 1rem;
+    }
+}

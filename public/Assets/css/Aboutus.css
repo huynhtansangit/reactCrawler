@@ -1,0 +1,155 @@
+.about-us-container{
+    position: relative;
+    margin: 0px 0px 0px 0px;
+    background-image: url("../Images/Aboutus/aboutus-background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 40px;
+    padding-top: 20px;
+
+}
+.about-us-container .row >div {
+    text-align: center;
+    position: relative;
+    height: auto;
+}
+#instagram-banner-img{
+    opacity: 0.8;
+    position: relative;
+    top: 0px;
+}
+.about-us-text{
+    position: relative;
+    font-family: Pristina;
+    font-weight: 500;
+    letter-spacing: 4px;
+    font-size: 55px;
+    top: 30px;
+}
+.info-member-item{
+    font-family: regular;
+    text-transform: capitalize;
+}
+.info-member-item a p{
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 26px;
+}
+.info-member-item .position{
+    font-size: 20px;
+    letter-spacing: 4px;
+}
+.info-member-item img {
+    transition: ease all 0.3s;
+    background: black !important;
+}
+.info-member-item a img:hover{
+    opacity: 0.6;
+}
+.avt-member{
+    border-radius: 50%;
+    height: 200px;
+    width: 200px;
+    object-fit: cover !important;
+}
+.intro-app-rectangle{
+    position: relative;
+    height: auto;
+    width: auto;
+    border-radius: 41px;
+    background-color: #f9f584cc;
+    top: 100px;
+    left: -20px;
+}
+.intro-app-rectangle .row{
+    height: auto;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+}
+
+.text-content .number {
+    font-family: RobotoBlack;
+    color: #154B61;
+    font-size: 55px;
+}
+.text-content .text {
+    font-family: RobotoMedium;
+    color: #154B61;
+    font-size: 26px;
+}
+.about-us-container .row {
+    margin: 0 !important;
+}
+@media only screen and (max-width: 1920px) {
+    
+}
+@media only screen and (max-width: 1642px) {
+    
+}
+@media only screen and (max-width: 1366px) {
+    
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+    /* .about-us-container {
+        background-size: contain;
+    } */
+    .about-us-text{
+        letter-spacing: 4px;
+        font-size: 35px;
+        top: 20px;
+    }
+    .info-member-item .position{
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+    .info-member-item a p{
+        font-size: 18px !important;
+    }
+    .text-content .number {
+
+        font-size: 35px;
+    }
+    .text-content .text {
+
+        font-size: 16px;
+    }
+    .avt-member{
+        height: 120px;
+        width: 120px;
+    }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+    .text-content .number {
+
+        font-size: 25px;
+    }
+    .text-content .text {
+        font-size: 12px;
+    }
+
+}
+ /* Medium devices (landscape tablets, 768px and up) */
+ @media only screen and (max-width: 768px) {
+.about-us-text{
+    display: none;
+}
+.background-about-us{
+
+}
+.intro-app-rectangle {
+    top: 10px;
+}
+}
+ /* Extra small devices (phones, 600px and down) */
+ @media only screen and (max-width: 600px) {
+
+}
+@media only screen and (max-width: 460px){
+    
+}

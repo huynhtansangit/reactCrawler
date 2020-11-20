@@ -1,0 +1,386 @@
+
+
+section{
+    position: relative !important;
+}
+
+.storage-container,.profile-container {
+    position: relative;
+    background-image: url("../Images/Store/colorGradient\ \(2\).png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#you-can-find-downloaded-stuff-here{
+    width: 87.2rem;
+    height: 15.8rem;
+}
+
+.wrapper-storage{
+    margin-left: 4.2rem !important;
+    margin-right: 4.2rem !important;
+
+    /* Bổ sung cái này cho nó phân biệt với phân footer */
+    padding-bottom: 1rem;
+}
+
+/* Css cho customized-btn dạng nằm ngang. */
+.storage-container ul{
+    margin-bottom: 0.2rem;
+}
+
+.horizontal-wrapper-customized-btn{
+    margin: 0.2rem 2rem;
+}
+
+.horizontal-wrapper-customized-btn .customized-btn::after{
+    content: none;
+}
+/* Hết css cho customized-btn ngang. */
+
+.downloaded-img{
+    width: 25.5rem;
+    height: 17.1rem;
+    object-fit: cover;
+    vertical-align: middle;
+    /* margin: 0 1rem; */
+}
+
+#profile-storage-container, #picture-storage-container, #video-storage-container{
+    justify-content: center;
+    background-color: white;
+    padding: 1.5rem 0;
+    width: 101.1rem !important;
+    height: 45rem;
+}   
+
+#picture-storage-container{
+    display: flex !important;
+    flex-flow: column wrap !important;
+    align-items: center !important;
+}
+
+input{
+    border-bottom: solid 0.2rem rgb(204, 1, 1) !important;
+
+    height: 3.5rem !important;
+}
+.btn-apply{
+    background-color: #212B36 !important;
+    color: white !important;
+    box-shadow: 0.3rem 0.3rem 0.5rem grey;
+    width: 10rem;
+    margin-top: 1rem;
+
+    height: 3.2rem;
+}
+
+.selected-customized-btn{
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.164);
+    position:relative;
+    z-index:1;
+}
+
+.customized-btn{
+    display: flex !important;
+    flex-flow: column wrap !important;
+    justify-content: center;
+    align-items: center !important;
+    background-color: white;
+    color: #0A0A0A;
+    padding-top: 1rem;
+    width: 100%;
+    height: 8.4rem;
+}
+.customized-btn::after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  margin-top: -25px;   
+  border-top: 25px solid transparent;
+  border-bottom: 25px solid transparent;
+  border-left: 1em solid;
+  right: -1em;
+  -webkit-filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
+  filter: drop-shadow(6px 3px 6px rgba(133, 125, 125, 0.692));
+  overflow: hidden;
+  color: white;
+}
+.customized-btn:hover{
+    background-color: rgb(245, 244, 244);
+}   
+
+/* Khi hover selected-customized-btn thi no khong doi mau. */
+.selected-customized-btn:hover {
+    background-color: white;
+}
+
+.icon-customized-btn{
+    width: 2.1rem;
+    height: 2.1rem;
+}
+
+.vertical-wrapper-customized-btn{
+    position: relative;
+    
+    /* Edit cái này để cho nó lùi qua trái như ban đầu. */
+    /* left: -30px; */
+    
+    display: flex !important;
+    flex-flow: column wrap !important;
+    align-items: center !important;
+}
+
+.avatar-img{
+    
+    width: 9.25rem;
+    height: 9.25rem;
+    object-fit: cover;
+    vertical-align: middle;
+    border-radius: 50%!important;
+}
+
+.form-group{
+    display: flex !important;
+    flex-flow: column wrap !important;
+    align-items: center !important;
+}
+
+#left-side{
+    border-right: solid 0.2rem #707070;
+}
+
+.swiper-slide{
+    display: flex !important;
+    flex-flow: column wrap !important;
+    align-items: center !important;
+}
+
+/* footer, label, p in all files will be changed like below which making uniform */
+p, label, a {
+    color: #0A0A0A;
+    font-size: large;
+    font-family: Roboto;
+}
+
+/* IMPORTANT: Ghi đè lại thư viện Swiper để hiển thị nút chọn bị lỗi */
+.swiper-container{
+    z-index: auto;
+}
+
+.swiper-button-next::after{
+    margin-right: 10rem;
+}
+
+.swiper-button-prev::after{
+    margin-left: 5rem;
+}
+
+.storage-customized-border{
+    border-bottom: #707070 solid 0.2rem;
+}
+.storage-tab .row{
+    height:45rem;
+}
+
+/* Effect in gallery */
+#storage-section .image-video-container .img-card{
+    position: relative;
+	height: 100%;
+	width: 100%;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.9 );
+    border-radius: 2px;
+    display: block;
+    transition: opacity ease-out 250ms;
+    background: black;
+}
+#storage-section .img-card::before, #storage-section .img-card::after {
+    content: '';
+    position: absolute;
+    top: 1.25em;
+    bottom: 1.25em;
+    left: 1.25em;
+    right: 1.25em;
+    opacity: 1;
+    transition: transform ease-out 250ms;
+    z-index: 0;
+}
+#storage-section .img-card::before {
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    transform: scale(0, 1);
+}
+#storage-section .img-card::after {
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    transform: scale(1, 0);
+}
+#storage-section .img-card:hover::before {
+    transform: scale(1.05, 1);
+}
+#storage-section .img-card:hover::after {
+    transform: scale(1, 1.05);
+}
+#storage-section .img-card:hover img{
+    opacity: 0.4;
+}
+#storage-section .card__text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    opacity: 0;
+    transition: opacity ease-out 250ms;
+    z-index: 10;
+}
+#storage-section .card__text .btn-outline-secondary {
+    transform: scale(1);
+    margin: 10px;
+}
+#storage-section .img-card:hover .card__text {
+    opacity: 1;
+}
+#storage-section .card__title {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 0;
+}
+#storage-section .fa-download, #storage-section .fa-edit{
+    color: white !important;
+    font-size: 24px !important;
+}
+/* ---- btn effect ----- */
+/* End effect */
+
+/* Responsive bên dưới */
+@media only screen and (max-width: 2400px) {
+    .horizontal-wrapper-customized-btn{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 1920px) {
+    .storage-width-smaller-992{
+        display: none;
+    }
+
+    /* .horizontal-wrapper-customized-btn{
+        display: none;
+    } */
+}
+@media only screen and (max-width: 1442px) {
+    #you-can-find-downloaded-stuff-here{
+        width: 62rem;
+        height: auto;
+    }
+    
+    .vertical-wrapper-customized-btn p {
+        display: none;
+    }
+
+    .wrapper-storage{
+        margin: 0 0.5rem !important;
+    }
+
+    .avatar-img{
+        max-width: 6.8rem;
+        max-height: 6.8rem;
+    }
+}
+@media only screen and (max-width: 1366px) {
+    #you-can-find-downloaded-stuff-here{
+        width: 45rem;
+        height: auto;
+    }
+
+    .avatar-img{
+        max-width: 5rem;
+        max-height: 5rem;
+    }
+
+    .icon-customized-btn{
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+    #you-can-find-downloaded-stuff-here{
+        width: 54.5rem;
+        height: auto;
+    }
+
+    /* ẩn cái vertical-wrapper-customized-btn hiện horizontal-wrapper-customized-btn*/
+    .horizontal-wrapper-customized-btn{
+        display: flex;
+    }
+    .vertical-wrapper-customized-btn{
+        display: none !important;
+    }
+
+    /* điều chỉnh lại kích thước margin cho wrapper-storage */
+    .wrapper-storage{
+        margin: 0 2rem !important;
+    }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+    .storage-customized-border{
+        /* Xoa border */
+        border-bottom: #707070 solid 0;
+    }
+    #you-can-find-downloaded-stuff-here{
+        width: 45rem;
+        height: auto;
+    }
+    /* Khi width cua storage nho hon 922px thi se responsive
+        an cai storage > 922 di, hien cai nho hon thoi
+    */
+    .storage-width-smaller-992{
+        display: contents;
+    }
+    .storage-width-grater-992{
+        display: none;
+    }
+    .btn-apply{
+        max-width: 6rem;
+        max-height: 2rem;
+    }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+    .wrapper-storage{
+        /* margin: 0 2rem !important; */
+    }
+
+    #you-can-find-downloaded-stuff-here{
+        width: 34.5rem;
+        height: auto;
+    }
+
+}
+@media only screen and (max-width: 600px) {
+    .wrapper-storage{
+        margin: 0 2rem !important;
+    }
+
+    #you-can-find-downloaded-stuff-here{
+        display: none;
+    }
+
+    .avatar-img{
+        max-width: 5.78rem;
+        max-height: 5.78rem;
+    }
+
+    p, label, a, button {
+        font-size: x-small;
+    }
+
+    .downloaded-img{
+        width: 11rem;
+        height: 11.35rem;
+        margin: 0;
+    }
+}
