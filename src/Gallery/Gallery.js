@@ -1,6 +1,33 @@
 import React, { Component } from 'react';
+import ImageItem from './ImageItem';
 
 class Gallery extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: true,
+            imgUrl: "",
+        }
+    }
+
+    async componentDidMount() {
+        const url = "https://dacnhk1.herokuapp.com/download/instagram";
+        const option = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "url": "https://www.instagram.com/p/CGu-aKTDUNoBjIwqNli4wumHSi2VzXVnEvMFw80/"
+            })
+        };
+        const response = await fetch(url, option);
+        const data = await response.json();
+        const urlImg = data.data[0].url;
+        this.setState({ imgUrl: urlImg, loading: false });
+        console.log(this.state.imgUrl);
+    }
     render() {
         return (
             <section id="gallery-section">
@@ -19,76 +46,35 @@ class Gallery extends Component {
                     </div>
                     <div className="row" style={{ marginTop: '40px', width: '100%' }}>
                         <div className="col-lg-8 col-md-8 col-sm-12 image-video-container ">
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/1.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/2.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/3.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/4.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/5.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/6.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/7.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/8.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/9.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
-                            <div className="img-card">
-                                <img src="Assets/Images/Gallery/10.png" alt="" />
-                                <div className="card__text">
-                                    <p className="card__title"><button type="button" className="btn btn-outline-secondary"><i className="fas fa-download" /></button></p>
-                                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
-                                </div>
-                            </div>
+                            {this.state.loading || !this.state.imgUrl ? (
+                                <ImageItem itemSrc=""></ImageItem>
+                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
+                                )}
+                            {this.state.loading || !this.state.imgUrl ? (
+                                <ImageItem itemSrc=""></ImageItem>
+                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
+                                )}
+                            {this.state.loading || !this.state.imgUrl ? (
+                                <ImageItem itemSrc=""></ImageItem>
+                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
+                                )}
+                            {this.state.loading || !this.state.imgUrl ? (
+                                <ImageItem itemSrc=""></ImageItem>
+                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
+                                )}
+                            {this.state.loading || !this.state.imgUrl ? (
+                                <ImageItem itemSrc=""></ImageItem>
+                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
+                                )}
+                            {this.state.loading || !this.state.imgUrl ? (
+                                <ImageItem itemSrc=""></ImageItem>
+                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
+                                )}
+                            {this.state.loading || !this.state.imgUrl ? (
+                                <ImageItem itemSrc=""></ImageItem>
+                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
+                                )}
+
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
                             <div className="avt-container">
