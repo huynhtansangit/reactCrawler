@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import ImageItem from './ImageItem';
+import UserInsta from './UserInsta';
 import {
     BrowserRouter as Router,
     Switch,
     Route,
     Link
-  } from "react-router-dom";
+} from "react-router-dom";
 class Gallery extends Component {
     constructor(props) {
         super(props);
@@ -24,13 +25,26 @@ class Gallery extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "url": "https://www.instagram.com/p/CGu-aKTDUNoBjIwqNli4wumHSi2VzXVnEvMFw80/"
+                "url": "https://www.instagram.com/emmawatson/"
             })
         };
+        
         const response = await fetch(url, option);
         const data = await response.json();
-        const urlImg = data.data[0].url;
-        this.setState({ imgUrl: urlImg, loading: false });
+        let imagesData = [];
+        let videosData = [];
+        const userInsta = data['owner'];
+
+        data['data'].forEach(ele => {
+            if(ele['isVideo']){
+                videosData.push(ele);
+            }
+            else{
+                imagesData.push(ele);
+            }            
+        });
+
+        this.setState({ loading: false, imagesData: imagesData, videosData: videosData, userInsta: userInsta });
         console.log(this.state.imgUrl);
     }
     render() {
@@ -51,46 +65,31 @@ class Gallery extends Component {
                     </div>
                     <div className="row" style={{ marginTop: '40px', width: '100%' }}>
                         <div className="col-lg-8 col-md-8 col-sm-12 image-video-container ">
-                            {this.state.loading || !this.state.imgUrl ? (
-                                <ImageItem itemSrc=""></ImageItem>
-                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
-                                )}
-                            {this.state.loading || !this.state.imgUrl ? (
-                                <ImageItem itemSrc=""></ImageItem>
-                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
-                                )}
-                            {this.state.loading || !this.state.imgUrl ? (
-                                <ImageItem itemSrc=""></ImageItem>
-                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
-                                )}
-                            {this.state.loading || !this.state.imgUrl ? (
-                                <ImageItem itemSrc=""></ImageItem>
-                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
-                                )}
-                            {this.state.loading || !this.state.imgUrl ? (
-                                <ImageItem itemSrc=""></ImageItem>
-                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
-                                )}
-                            {this.state.loading || !this.state.imgUrl ? (
-                                <ImageItem itemSrc=""></ImageItem>
-                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
-                                )}
-                            {this.state.loading || !this.state.imgUrl ? (
-                                <ImageItem itemSrc=""></ImageItem>
-                            ) : (<ImageItem itemSrc={this.state.imgUrl}></ImageItem>
-                                )}
-
+                            {
+                                this.state.loading ? (
+                                    <ImageItem itemSrc="https://img.idesign.vn/2018/10/23/id-loading-1.gif"></ImageItem>) : (
+                                    this.state.imagesData.map((img, idx) => <ImageItem itemSrc={img.url} key={idx} />)
+                                )
+                            }
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
-                            <div className="avt-container">
-                                <img width={160} height={160} src="Assets/Images/Gallery/avtImg.png" alt="avatar-image" />
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '30px' }}>
-                                <i style={{ paddingRight: '15px' }} className="fab fa-instagram" />hunghung.cule.567</div>
-                            <p style={{ fontSize: '26px', paddingTop: '49px', fontWeight: 'bold' }}>Available items</p>
-                            <div className="number-of-images-available" style={{ fontWeight: 'bold', paddingTop: '43px', color: '#154B61', fontSize: '35px' }}>
-                                432
-              </div>
+                            {
+                                this.state.loading ? (<UserInsta
+                                        avatar="https://img.idesign.vn/2018/10/23/id-loading-1.gif"
+                                        username="Loading"
+                                        fullname="Loading"
+                                        countPost="Loading"
+                                        countFollowedBy= "Loading"
+                                    />) : (
+                                    <UserInsta
+                                        avatar={this.state.userInsta.avatar}
+                                        username={this.state.userInsta.username}
+                                        fullname={this.state.userInsta.fullname}
+                                        countPost={this.state.userInsta.countPost}
+                                        countFollowedBy={this.state.userInsta.countFollowedBy}
+                                    />
+                                )
+                            }
                             <button style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }} type="button" className="btn btn-danger">sign in to download</button>
                         </div>
                     </div>
