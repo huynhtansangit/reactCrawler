@@ -1,24 +1,25 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Header from './Header/Header';
-import Banner from './Banner/Banner';
-import Gallery from './Gallery/Gallery';
-import Storage from './Storage/Storage';
-import AboutUs from './AboutUs/AboutUs';
-import Footer from './Footer/Footer';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import Editor from './Pages/Editor/Editor';
+import Index from './Index/Index';
 
 function App() {
   return (
+    <Router>
     <div className="App">
-      <Header></Header>
-      <Banner></Banner>
-      <Gallery></Gallery>
-      <Storage></Storage>
-      <AboutUs></AboutUs>
-      <Footer></Footer>
+      <Route path="/Editor" exact component ={Editor}/>
+      <Route path="/Index" exact component ={Index}/>
     </div>
+    </Router>
+
   );
 }
 export default App;
