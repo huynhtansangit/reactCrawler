@@ -95,8 +95,13 @@ class Editor extends Component {
                             <img id="pic-preview" className="w-100 h-100" src="/Assets/Images/EditPicture/preview-img.png" alt="preview picture" />
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div id="btn-export-container" className="text-center">
                         <button id="btn-export" className="btn-export rounded">Export</button>
+=======
+                    <div id="preview-editing-pic" className="col-8 p-3">
+                        <img id="pic-preview" className="w-100 h-100" src="/Assets/Images/Gallery/11.png" alt="preview picture" />
+>>>>>>> c21b01345276bad0624877fba2412a905ca2e2ca
                     </div>
                 </section>
             </div>
