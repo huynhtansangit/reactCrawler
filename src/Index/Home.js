@@ -9,7 +9,7 @@ class Index extends Component {
     render() {
         return (
             <div>
-                <Header></Header>
+                <Header sticky="fixed-top"></Header>
                 <Banner></Banner>
                 <Gallery></Gallery>
                 <Storage></Storage>

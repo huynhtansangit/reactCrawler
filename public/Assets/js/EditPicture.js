@@ -31,12 +31,18 @@ $(document).ready(function () {
         // Ẩn các cái menu còn lại.
         $(".edit-pic-option").hide();
         // show cái mới được chọn.
-        showEditPicOption($(this));
+        showEditPicOption($(this)); 
     });
+    var inputRange =0;
+    window.setTimeout(function () {
+        inputRange= document.getElementsByClassName('adjust-bar');
+        console.log(inputRange.length);
+        for (let i=0;i<inputRange.length-1;i++){
+            inputRange[i].addEventListener('input',editImage);
+        }
+    }, 2000)
+   
+})
 
     // Xử lý range bar khi điều chỉnh sẽ có edit hình real-time
-    $("input[type='range']").on('input', function(){
-        //Xử lý với Id ở đây.
-        console.log($(this).attr('id'));
-    })
-})
+// for(let i=0;i<)

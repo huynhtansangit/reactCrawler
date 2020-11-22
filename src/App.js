@@ -9,7 +9,7 @@ import {
   Link
 } from "react-router-dom";
 import Editor from './Pages/Editor/Editor';
-import Index from './Index/Index';
+import Index from './Index/Home';
 
 function App() {
   return (

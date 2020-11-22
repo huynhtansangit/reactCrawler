@@ -1,24 +1,30 @@
 
-window.setTimeout(function(){
+window.setTimeout(function () {
     document.getElementById("gallery-section").scrollIntoView();
-},1000)
+}, 2000)
 
-$(".submit-btn").click(function (e) { 
+$(".submit-btn").click(function (e) {
     e.preventDefault();
-    $("nav").fadeToggle(400);   
+    $("nav").fadeToggle(400);
 });
-var scrollVar=0;
-$(window).scroll(function () { 
-    var x =$(this).scrollTop();
-if(x>scrollVar){
-    $('nav').removeClass('d-none');
-    $('nav').fadeIn(200);
-}
-else{
-    $('nav').fadeOut("slow", function() {
-        $('nav').addClass('d-none');
+var scrollVar = 0;
+var isStickty = $('nav').hasClass("sticky-top");
+if (isStickty) {
+    $(window).scroll(function () {
+        console.log(isStickty);
+        var x = $(this).scrollTop();
+        if (x > scrollVar) {
+            $('nav').removeClass('d-none');
+            $('nav').fadeIn(200);
+        }
+        else {
+            $('nav').fadeOut("slow", function () {
+                $('nav').addClass('d-none');
+            });
+
+        }
     });
 }
-});
+
 
 

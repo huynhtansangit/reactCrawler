@@ -59,7 +59,7 @@ class Header extends Component {
     render() {
         return (
             <header>
-                <nav id="navbar" className="navbar navbar-expand-md navbar-light bg-light fixed-top">
+                <nav id="navbar" className={`navbar navbar-expand-md navbar-light bg-light ${this.props.sticky}`}>
                     <div className="container">
                         <button className="navbar-toggler" data-toggle="collapse" data-target="#collapse_target" aria-expanded="false" aria-controls="collapse-target">
                             <span className="navbar-toggler-icon" />

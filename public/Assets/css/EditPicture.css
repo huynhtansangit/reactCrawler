@@ -42,7 +42,7 @@
 }
 
 .fa-light{
-    color: white;
+    color: white !important;
 }
 
 #pic-preview{
