@@ -76,7 +76,7 @@ class Banner extends Component {
                 But if you find it hart to save them let's get started with us!
                 </div>
                 <div className="dropdown dropdown-banner">
-                    <button className="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className="btn dropdown-toggle btn-select-social-network" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Choose...
                     </button>
                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">

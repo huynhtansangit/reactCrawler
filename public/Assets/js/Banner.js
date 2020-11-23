@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    $(".dropdown-item").on('click', () => {
-        console.log($(this).values);
+    $(".dropdown-item").on('click',function() {
+        // console.log($(this).text());
+        $(".btn-select-social-network").text($(this).text());
     })
 })
