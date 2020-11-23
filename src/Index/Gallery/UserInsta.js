@@ -15,7 +15,7 @@ class UserInsta extends Component {
         return (
             <div>
                 <div className="avt-container">
-                    <img style={{"border-radius": "50%"}} width={160} height={160} src={this.props.avatar} alt="avatar-image" />
+                    <img style={{"borderRadius": "50%"}} width={160} height={160} src={this.props.avatar} alt="avatar-image" />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '30px' }}>
                 <i style={{ paddingRight: '15px' }} className="fab fa-instagram" />{this.props.username}</div>
