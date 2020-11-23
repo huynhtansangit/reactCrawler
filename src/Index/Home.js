@@ -82,7 +82,10 @@ class Index extends Component {
     render() {
         return (
             <div>
-                <Header sticky="fixed-top"></Header>
+                <Header
+                    onUpdateBannerInput={this.onUpdateBannerInput.bind(this)} 
+                    sticky="fixed-top"
+                ></Header>
                 <Banner 
                     onUpdateBannerInput={this.onUpdateBannerInput.bind(this)}
                 ></Banner>

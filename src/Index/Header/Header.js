@@ -1,6 +1,33 @@
 import React, { Component } from 'react';
 
 class Header extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            inputUrlElement: '',
+            nameSocialNetwork: ''
+        }
+
+        this.updateInputUrlElement = this.updateInputUrlElement.bind(this);
+        this.selectSocialNetwork = this.selectSocialNetwork.bind(this);
+    }
+
+    selectSocialNetwork = (event)=>{
+        console.log(`update name social network: ${event.target.getAttribute('id')}`);
+        this.setState({ nameSocialNetwork: event.target.getAttribute('id') })
+    }
+
+    updateInputUrlElement = (event) => {
+        console.log(`update url ${event.target.value}`);
+        this.setState({ inputUrlElement: event.target.value })
+    }
+
+    updateBannerInput () {
+        console.log("update btn header");
+        this.props.onUpdateBannerInput(this.state.inputUrlElement ,this.state.nameSocialNetwork)
+    }
+
     componentDidMount() {
         (function () {
 
@@ -72,7 +99,7 @@ class Header extends Component {
                                         <ul className="navbar-nav">
                                             <li className="parent-home nav-item dropdown">
                                                 <a href="#" role="button" className="nav-link active" data-toggle="dropdown" data-target="#home_dropdown">Home
-                          <span className="caret" />
+                            <span className="caret" />
                                                 </a>
                                             </li>
                                             <li className="parent-page nav-item dropdown">
@@ -85,13 +112,13 @@ class Header extends Component {
                                     </div>
                                     <div title="Today is open" className="float-right pb-2" style={{ marginTop: '8px' }}>
                                         <div className="dropdown dropdown-header-customize">
-                                            <button className="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button className="btn dropdown-toggle btn-select-social-network" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Choose...
-                      </button>
+                                            </button>
                                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a className="dropdown-item" href="#">Instagram tool</a>
-                                                <a className="dropdown-item" href="#">Tiktok tool</a>
-                                                <a className="dropdown-item" href="#">Facebook tool</a>
+                                                <a id="instagram" className="dropdown-item" onClick={this.selectSocialNetwork}>Instagram tool</a>
+                                                <a id="tiktok" className="dropdown-item" onClick={this.selectSocialNetwork} href="#">Tiktok tool</a>
+                                                <a id="facebook" className="dropdown-item" onClick={this.selectSocialNetwork} href="#">Facebook tool</a>
                                             </div>
                                         </div>
                                     </div>
@@ -101,8 +128,8 @@ class Header extends Component {
                                 <div className=" pt-2">
                                     <div className="form-group input-header-container navbar-nav">
                                         <img className="icon-input-header" src="Assets/Images/Banner/urlIcon1x.png" alt="" />
-                                        <input style={{ paddingLeft: '55px' }} type="text" className="form-control input-header" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Url" />
-                                        <button type="button" className="btn btn-dark btn-input-header"><i className="fas fa-sign-in-alt" /></button>
+                                        <input style={{ paddingLeft: '55px' }} type="text" className="form-control input-header" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Url" onChange={this.updateInputUrlElement}/>
+                                        <button type="button" className="btn btn-dark btn-input-header" onClick={this.updateBannerInput.bind(this)}><i className="fas fa-sign-in-alt" /></button>
                                     </div>
                                 </div>
                             </div>
