@@ -8,23 +8,18 @@ $(".submit-btn").click(function (e) {
     $("nav").fadeToggle(400);
 });
 var scrollVar = 0;
-var isStickty = $('nav').hasClass("sticky-top");
-if (isStickty) {
-    $(window).scroll(function () {
-        console.log(isStickty);
-        var x = $(this).scrollTop();
-        if (x > scrollVar) {
-            $('nav').removeClass('d-none');
-            $('nav').fadeIn(200);
-        }
-        else {
-            $('nav').fadeOut("slow", function () {
-                $('nav').addClass('d-none');
-            });
-
-        }
-    });
-}
+$(window).scroll(function () {
+    var x = $(this).scrollTop();
+    if (x > scrollVar) {
+        $('nav').removeClass('d-none');
+        $('nav').fadeIn(200);
+    }
+    else {
+        $('nav').fadeOut("slow", function () {
+            $('nav').addClass('d-none');
+        });
+    }
+});
 
 
 
