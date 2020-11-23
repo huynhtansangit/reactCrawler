@@ -9,11 +9,13 @@
     "@toast-ui/react-image-editor": "^1.2.1",
     "dotenv": "^8.2.0",
     "filerobot-image-editor": "^3.12.4",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-player": "^2.7.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "swiper": "^6.3.5"
   },
   "scripts": {
     "start": "react-scripts start",
