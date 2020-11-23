@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ImageItem from './ImageItem';
 import UserInsta from './UserInsta';
+import ReactPlayer from 'react-player'
+
 import {
     BrowserRouter as Router,
     Switch,
@@ -35,14 +37,14 @@ class Gallery extends Component {
                         <h2 className="text-left slogan-title text-uppercase" style={{ letterSpacing: '4px' }}>Let's enjoy yourself</h2>
                     </div>
                     <div className="row">
-                        <div className="btn photo-btn col-sm">
-                            <span>IMAGE TAP</span>
+                        <div id="btn-image-gallery" className="btn photo-btn col-sm">
+                            <span>IMAGE TAB</span>
                         </div>
-                        <div className="btn  video-btn col-sm">
-                            <span>VIDEO TAP</span>
+                        <div id="btn-video-gallery" className="btn video-btn col-sm">
+                            <span>VIDEO TAB</span>
                         </div>
                     </div>
-                    <div className="row" style={{ marginTop: '40px', width: '100%' }}>
+                    <div id="image-tab-gallery" className="row gallery-tab">
                         <div className="col-lg-8 col-md-8 col-sm-12 image-video-container ">
                             {
                                 Object.keys(this.props.dataGallery).length === 0 ? 
@@ -92,6 +94,35 @@ class Gallery extends Component {
                             <button style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }} type="button" className="btn btn-danger">sign in to download</button>
                         </div>
                     </div>
+                    <div id="video-tab-gallery" className="row gallery-tab swiper-container">
+                        <div className="swiper-wrapper">
+                        {
+                            Object.keys(this.props.dataGallery).length === 0 ? 
+                                // Check if data is null => Show loading
+                                (<img className="justify-item-center" src="https://img.idesign.vn/2018/10/23/id-loading-1.gif"/>) 
+                                : 
+                                // Else: loaded
+                                (
+                                    !this.props.dataGallery.error ?
+                                    // If not error => Show images 
+                                    (this.props.dataGallery.videosData.map((video, idx) => 
+                                    <div className="swiper-slide">
+                                        <ReactPlayer 
+                                            url={video.url} key={idx} 
+                                            controls={true}
+                                            width={'100rem'}
+                                            height={'100rem'}
+                                        />
+                                    </div>)) 
+                                    : 
+                                    // else: error occurred => Show pic 500
+                                    (<img className="justify-item-center" src="https://bizflyportal.mediacdn.vn/bizflyportal/461/347/2020/06/02/22/54/nhi15910916872906.jpg"/>)
+                                )
+                        }
+                        </div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div> 
                 </div>
             </section>
         );

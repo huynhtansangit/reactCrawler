@@ -68,7 +68,7 @@ class Index extends Component {
     }
 
     async componentDidUpdate(){
-        console.log("home did update");
+        console.log("Home did update");
         if (this.state.clickedBtnSearch) {
             console.log(`Searching because ${this.state.clickedBtnSearch}`);
             // Note: if getMedia before setState will search twice due to async of js

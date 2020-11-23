@@ -12,6 +12,10 @@
 .gallery-container{
     padding: 0px;
 }
+.gallery-tab{
+    margin-top: 40px !important;
+    width: 100% !important; 
+}
 .photo-btn{
     display: flex;
     position: relative;
