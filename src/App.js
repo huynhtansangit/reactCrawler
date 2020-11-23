@@ -16,7 +16,7 @@ function App() {
     <Router>
     <div className="App">
       <Route path="/Editor" exact component ={Editor}/>
-      <Route path="/Index" exact component ={Index}/>
+      <Route path="/Index" component ={Index}/>
     </div>
     </Router>
 

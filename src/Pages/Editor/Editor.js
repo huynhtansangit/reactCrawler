@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Header from '../../Index/Header/Header';
-
 class Editor extends Component {
     render() {
         return (
@@ -10,52 +9,64 @@ class Editor extends Component {
                         <div id="edit-pic-main-option-container" className="col-1 p-0 m-0 text-center">
                             <div id="edit-pic-text-main-option" className="edit-pic-main-option selected-edit-pic-main-option">
                                 <i className="fas fa-adjust fa-light navigator-icon-menu"></i>
-                                <h5 className="edit-pic-main-option-title mb-0">Text</h5>
+                                <h5 className="edit-pic-main-option-title mb-0">Filter</h5>
                             </div>
                             <div id="edit-pic-color-main-option" className="edit-pic-main-option">
-                                <i className="fas fa-palette fa-light navigator-icon-menu" />
-                                <h5 className="edit-pic-main-option-title mb-0">Color</h5>
+                                <i class="fas fa-tint fa-light navigator-icon-menu"></i>
+                                <h5 className="edit-pic-main-option-title mb-0">Effect</h5>
                             </div>
                             <div id="edit-pic-img-main-option" className="edit-pic-main-option">
                                 <i className="fas fa-file-image fa-light navigator-icon-menu" />
                                 <h5 className="edit-pic-main-option-title mb-0">Image</h5>
                             </div>
                         </div>
-                        <div id="edit-pic-detail-main-option-container" className="col-3">
+                        <div id="edit-pic-detail-main-option-container" className="col-3 border-right">
                             {/* Filter option */}
                             <div id="edit-pic-text-option" className="edit-pic-option">
                                 <div className="mt-2">
-                                    <label>Grayscale</label>
-                                    <input id="input-adjust-pic-grayscale" className="form-control adjust-bar p-0" type="range"   min={-100} max={100} defaultValue={0} />
-                                    <div className="row">
-                                        <p className="col-4 text-left">-100</p>
-                                        <p className="col-4 text-center">0</p>
-                                        <p className="col-4 text-right">100</p>
+                                    <label>Url</label>
+                                    <form id="form-url-editor">
+                                        <input type="text" id="link-input" placeholder="Image url" />
+                                        <button id="change-image" type="button" className="btn btn-dark" >Submit</button>
+                                    </form>
+                                </div>
+                                <div className="mt-2 d-block">
+                                    <div  class=" btn-group btn-group-sm w-100 mt-4">
+                                        <button class="filter-btn brightness-remove btn btn-info">-</button>
+                                        <button class="btn btn-secondary btn-disabled" disabled>Brightness
+                                            <p class="bright-value mb-0">0</p>
+                                        </button>
+                                        <button class="filter-btn brightness-add btn btn-info">+</button>
                                     </div>
                                 </div>
                                 <div className="mt-2">
-                                    <label>Blur</label>
-                                    <input id="input-adjust-pic-blur" className="form-control adjust-bar p-0" type="range"   min={-100} max={100} defaultValue={0}/>
-                                    <div className="row">
-                                        <p className="col-4 text-left">-100</p>
-                                        <p className="col-4 text-center">0</p>
-                                        <p className="col-4 text-right">100</p>
+                                <div  class=" btn-group btn-group-sm w-100 mt-4">
+                                        <button class="filter-btn contrast-remove btn btn-info">-</button>
+                                        <button class="btn btn-secondary btn-disabled" disabled>Contrast
+                                            <p class="contrast-value mb-0">0</p>
+
+                                        </button>
+                                        <button class="filter-btn contrast-add btn btn-info">+</button>
                                     </div>
                                 </div>
                                 <div className="mt-2">
-                                    <label>Hue-rotate</label>
-                                    <input id="input-adjust-hue-rotate" className="form-control adjust-bar p-0" type="range"  min={-100} max={100} defaultValue={0} />
-                                    <div className="row">
-                                        <p className="col-6 text-left">-100</p>
-                                        <p className="col-6 text-right">100</p>
+                                <div  class=" btn-group btn-group-sm w-100 mt-4">
+                                        <button class="filter-btn saturation-remove btn btn-info">-</button>
+                                        <button class="btn btn-secondary btn-disabled" disabled>Saturation
+                                            <p class="saturation-value mb-0">0</p>
+
+                                        </button>
+                                        <button class="filter-btn saturation-add btn btn-info">+</button>
                                     </div>
                                 </div>
                                 <div className="mt-2">
-                                    <label>Sepia</label>
-                                    <input id="input-adjust-sepia" className="form-control adjust-bar p-0" type="range"   min={-100} max={100} defaultValue={0} />
-                                    <div className="row">
-                                        <p className="col-6 text-left">-100</p>
-                                        <p className="col-6 text-right">100</p>
+                                <div  class=" btn-group btn-group-sm w-100 mt-4">
+                                        <button class="filter-btn vibrance-remove btn btn-info">-</button>
+                                        <button class="btn btn-secondary btn-disabled" disabled>Vibrance
+                                            <p class="vibrance-value mb-0">0</p>
+
+                                        </button>
+                                        <button class="filter-btn vibrance-add btn btn-info">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -91,17 +102,13 @@ class Editor extends Component {
                                 Updating...
                 </div>
                         </div>
-                        <div id="preview-editing-pic" className="col-8 p-3">
-                            <img id="pic-preview" className="w-100 h-100" src="/Assets/Images/EditPicture/preview-img.png" alt="preview picture" />
+                        <div id="preview-editing-pic" className="image-container col-8 p-3">
+                            {/* <img id="foto-image" className="w-100 mt-4 h-100 image" /> */}
+                            <canvas id="canvas" className="image w-100 mt-4"></canvas>
                         </div>
                     </div>
-<<<<<<< HEAD
                     <div id="btn-export-container" className="text-center">
                         <button id="btn-export" className="btn-export rounded">Export</button>
-=======
-                    <div id="preview-editing-pic" className="col-8 p-3">
-                        <img id="pic-preview" className="w-100 h-100" src="/Assets/Images/Gallery/11.png" alt="preview picture" />
->>>>>>> c21b01345276bad0624877fba2412a905ca2e2ca
                     </div>
                 </section>
             </div>

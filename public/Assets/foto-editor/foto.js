@@ -3,6 +3,7 @@ class Foto {
     constructor() {
 
         var root = this;
+        console.log(root);
 
         this.operationOrgCanvas = document.createElement("canvas");
         this.operationOrgCtx = this.operationOrgCanvas.getContext("2d");
@@ -69,12 +70,11 @@ class Foto {
     }
 
     loadImage() {
-
         var input = document.getElementById("foto-file");
-        this.selectedFileName = input.files.item(0).name
+        // this.selectedFileName = input.files.item(0).name;
         var reader = new FileReader();
         var root = this;
-
+        console.log(root);
         reader.onload = function (e) {
 
             root.image = new Image();

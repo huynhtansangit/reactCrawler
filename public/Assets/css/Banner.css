@@ -273,11 +273,7 @@
      height: 32px;
      float: right;
  }
- .btn-group{
-     position: absolute;
-     top: 71px;
-     left: 1050px;
- }
+
  .sign-in-btn,.sign-up-btn{
     font-family: PoppinsSemiBold;
     line-height: 30px;
