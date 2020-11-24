@@ -21,7 +21,7 @@ class ImageItem extends Component {
                     </button>
                     </p>
                     <p className="card__body">
-                    <Link to='/Editor'>
+                    <Link to={{pathname:'/Testing', state:{imgSrc:this.props.itemSrc}}}>
                     <button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button>
                     </Link>
                     </p>
