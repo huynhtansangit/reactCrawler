@@ -101,6 +101,9 @@ class Gallery extends Component {
                             <button
                                 style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
                                 type="button" className="btn btn-danger">sign in to download</button>
+                            <button
+                                style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                                type="button" className="btn btn-danger" onClick={this.props.getMoreMedia}>Test load more media </button>
                         </div>
                     </div>
                     <div id="video-tab-gallery" className="row gallery-tab ">

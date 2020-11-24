@@ -98,15 +98,15 @@ class Header extends Component {
                                     <div className="float-left">
                                         <ul className="navbar-nav">
                                             <li className="parent-home nav-item dropdown">
-                                                <a href="#" role="button" className="nav-link active" data-toggle="dropdown" data-target="#home_dropdown">Home
+                                                <a role="button" className="nav-link active" data-toggle="dropdown" data-target="#home_dropdown">Home
                             <span className="caret" />
                                                 </a>
                                             </li>
                                             <li className="parent-page nav-item dropdown">
-                                                <a className="nav-link " data-target="page-dropdown" href="#">About us<span className="caret" /></a>
+                                                <a className="nav-link " data-target="page-dropdown">About us<span className="caret" /></a>
                                             </li>
                                             <li className="parent-shop nav-item dropdown">
-                                                <a className="nav-link " data-toggle="dropdown" data-target="shop-dropdown" href="#">Contact<span className="caret" /></a>
+                                                <a className="nav-link " data-toggle="dropdown" data-target="shop-dropdown">Contact<span className="caret" /></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -117,8 +117,8 @@ class Header extends Component {
                                             </button>
                                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 <a id="instagram" className="dropdown-item" onClick={this.selectSocialNetwork}>Instagram tool</a>
-                                                <a id="tiktok" className="dropdown-item" onClick={this.selectSocialNetwork} href="#">Tiktok tool</a>
-                                                <a id="facebook" className="dropdown-item" onClick={this.selectSocialNetwork} href="#">Facebook tool</a>
+                                                <a id="tiktok" className="dropdown-item" onClick={this.selectSocialNetwork}>Tiktok tool</a>
+                                                <a id="facebook" className="dropdown-item" onClick={this.selectSocialNetwork}>Facebook tool</a>
                                             </div>
                                         </div>
                                     </div>
