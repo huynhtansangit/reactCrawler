@@ -45,6 +45,7 @@ $(document).ready(function () {
     //         this.brightness(5).render();
     //     })
     // });
+    let img;
     document.addEventListener("click", e => {
         if (e.target.classList.contains("filter-btn")) {
           if (e.target.classList.contains("brightness-add")) {
@@ -97,7 +98,6 @@ $(document).ready(function () {
         //Add to canvas
         img=new Image();
         //set source
-        img.src=value;
         img.crossOrigin = "Anonymous";
         //on image load
         img.onload=function(){

@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect
+    Link,
 } from "react-router-dom";
 import Editor from '../../Pages/Editor/Editor';
 
 class ImageItem extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            imgSrc:"",
-            isRedirect:false,
+        this.state = {
+            imgSrc: "",
+            isRedirect: false,
         }
     }
     render() {
@@ -24,7 +20,11 @@ class ImageItem extends Component {
                     <p className="card__title"><button onClick={this.redirect} type="button" className="btn btn-outline-secondary"><i className="fas fa-download" />
                     </button>
                     </p>
-                    <p className="card__body"><button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button></p>
+                    <p className="card__body">
+                    <Link to='/Editor'>
+                    <button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button>
+                    </Link>
+                    </p>
                 </div>
             </div>
         );

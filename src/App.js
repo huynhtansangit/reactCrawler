@@ -15,8 +15,10 @@ function App() {
   return (
     <Router>
     <div className="App">
+    <Switch>
       <Route path="/Editor" exact component ={Editor}/>
-      <Route path="/Index" component ={Index}/>
+      <Route path="/" component ={Index}/>
+    </Switch>
     </div>
     </Router>
 
