@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Banner extends Component {
     constructor(props) {
@@ -60,8 +61,13 @@ class Banner extends Component {
                     <div className="girl-circle-decor" id="girl-6">
                     </div>
                 </div>
+                <Link to="/login">
                 <button type="button" className=" btn btn-outline-dark">Sign-in <i className="fas fa-key" /></button>
+                    
+                </Link>
+                <Link to="/register">
                 <button type="button" className=" btn btn-outline-danger">Sign-up<i style={{ marginLeft: '10px' }} className="fas fa-chevron-right" /></button>
+                </Link>
                 <div className="pink-circle-decor" id="circle-1">
                 </div>
                 <div className="big-slogan">

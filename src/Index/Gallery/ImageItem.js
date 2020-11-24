@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
     Link,
 } from "react-router-dom";
-import Editor from '../../Pages/Editor/Editor';
 
 class ImageItem extends Component {
     constructor(props) {

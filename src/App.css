@@ -1,3 +1,13 @@
+.upper-canvas, .lower-canvas {
+  top: 40px !important;
+}
+.tui-image-editor-container.top .tui-image-editor-submenu > div {
+  padding-top: 40px !important;
+}
+.tui-image-editor-container .tui-image-editor-checkbox-wrap.fixed-width {
+  width: 287px !important;
+}
+span {font-size: 18px !important;}
 .editor-container{
   position: relative;
   margin: auto;

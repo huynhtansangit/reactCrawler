@@ -8,17 +8,20 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Editor from './Pages/Editor/Editor';
 import Index from './Index/Home';
 import ThuNghiem from './Pages/Editor/ThuNghiem';
+import Login from './Pages/User/Login';
+import Register from './Pages/User/Register';
+
 
 function App() {
   return (
     <Router>
     <div className="App">
     <Switch>
-      <Route path="/Editor" exact component ={Editor}/>
       <Route path="/Testing" exact component={ThuNghiem}></Route>
+      <Route path="/Login" exact component={Login}></Route>
+      <Route path="/Register" exact component={Register}></Route>
       <Route path="/" component ={Index}/>
     </Switch>
     </div>
