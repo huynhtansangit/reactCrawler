@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class UserInsta extends Component {
+class OwnerMedia extends Component {
     constructor(props) {
         super(props);
         this.state={
@@ -27,4 +27,4 @@ class UserInsta extends Component {
         );
     }
 }
-export default UserInsta;
+export default OwnerMedia;
