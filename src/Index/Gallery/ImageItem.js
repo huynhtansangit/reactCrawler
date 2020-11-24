@@ -4,6 +4,8 @@ import {
 } from "react-router-dom";
 import Editor from '../../Pages/Editor/Editor';
 
+import {downloadFromLink} from "../../services/downloadImageByUrl";
+
 class ImageItem extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +19,7 @@ class ImageItem extends Component {
             <div className="img-card">
                 <img src={this.props.itemSrc} alt="Img-error" />
                 <div className="card__text">
-                    <p className="card__title"><button onClick={this.redirect} type="button" className="btn btn-outline-secondary"><i className="fas fa-download" />
+                    <p className="card__title"><button onClick={()=>{downloadFromLink(this.props.itemSrc)}} type="button" className="btn btn-outline-secondary"><i className="fas fa-download" />
                     </button>
                     </p>
                     <p className="card__body">
