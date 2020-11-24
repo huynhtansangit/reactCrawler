@@ -36,21 +36,32 @@ class Index extends Component {
             const data = await response.json();
             let imagesData = [];
             let videosData = [];
-            const userInsta = data['owner'];
+            const ownerMedia = data['owner'];
 
-            data['data'].forEach(ele => {
-                if(ele['isVideo']){
-                    videosData.push(ele);
-                }
-                else{
-                    imagesData.push(ele);
-                }            
+            if(nameNetwork === 'instagram'){
+                data['data'].forEach(ele => {
+                    if(ele['isVideo']){
+                        videosData.push(ele);
+                    }
+                    else{
+                        imagesData.push(ele);
+                    }            
+                });
+            }
+            else{
+                videosData = data['data'];
+            }
+            
+            this.setState({
+                dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null },
+                nameNetwork: nameNetwork
             });
-
-            this.setState({dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, userInsta: userInsta, error: '' }});
         } catch (error) {
             console.log(error);
-            this.setState({dataGallery: {loading: false, error: error}})
+            this.setState({
+                dataGallery: {loading: false, error: error},
+                nameNetwork: nameNetwork
+            })
         }
     }
 
@@ -101,7 +112,7 @@ class Index extends Component {
         if (this.state.clickedBtnSearch) {
             console.log(`Searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
             // Note: if getMedia before setState will search at least twice due to async of js
-            this.setState({clickedBtnSearch:false});
+            await this.setState({clickedBtnSearch:false, dataGallery: {}});
             await this.getMedia(this.state.inputUrlElement, this.state.nameSocialNetwork);
         } else {
             console.log(`Not searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
@@ -120,6 +131,7 @@ class Index extends Component {
                 ></Banner>
                 <Gallery 
                     dataGallery= {this.state.dataGallery}
+                    nameNetwork= {this.state.nameNetwork}
                     getMoreMedia={this.getMoreMedia.bind(this)}>
                 </Gallery>
                 <Storage></Storage>
