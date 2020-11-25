@@ -12,14 +12,17 @@ class Index extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            inputUrlElement: 'https://www.instagram.com/kygomusic/',
+            inputUrlElement: 'https://www.instagram.com/taylorswift/',
             nameSocialNetwork: 'instagram',
+            cursor: '',
+            hasNextPage: true,
             clickedBtnSearch: false,
-            dataGallery: {}
+            dataGallery: {},
+            disableLoadMoreBtn: false
         }
     }
 
-    async getMedia(inputUrl, nameNetwork){
+    async getMedia(inputUrl, nameNetwork, cursor){
         const option = {
             method: 'POST',
             headers: {
@@ -27,7 +30,8 @@ class Index extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "url": inputUrl
+                "url": inputUrl,
+                "cursor": cursor ? cursor : ""
             })
         };
         
@@ -52,47 +56,42 @@ class Index extends Component {
                 videosData = data['data'];
             }
             
-            this.setState({
-                dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null },
-                nameNetwork: nameNetwork
+            await this.setState({
+                dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null, hasNextPage: true},
+                nameNetwork: nameNetwork,
+                cursor: data['cursor'] ? data['cursor'] : "",
+                hasNextPage: data['hasNextPage']
             });
         } catch (error) {
             console.log(error);
-            this.setState({
+            await this.setState({
                 dataGallery: {loading: false, error: error},
                 nameNetwork: nameNetwork
             })
         }
+        return this.state.dataGallery;
     }
 
     async getMoreMedia(){
-        let newDataGallery = this.state.dataGallery;
+        // Temporary disable until load finish
+        // await this.setState({disableLoadMoreBtn: true});
+        
+        let currentDataGallery = this.state.dataGallery;
         // Demo an array of object, will be replaced by response later 
-        let tempArrObj = [{
-            "shortcode": "CBHY1ZaJEx5",
-            "url": "https://scontent-lht6-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/101851983_2598122903839670_5522408425266996950_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com&_nc_cat=1&_nc_ohc=nJynWahi_KUAX9X4-yt&tp=1&oh=06ae19a699da48ccc54c1974209a8ea3&oe=5FE5D413",
-            "isVideo": false,
-            "width": 1080,
-            "height": 1080,
-            "countComment": 24508,
-            "countLike": 1073592
-        },
-        {
-            "shortcode": "CBDB20spoxq",
-            "url": "https://scontent-lht6-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/101717361_250895022906406_2163082289657108531_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com&_nc_cat=1&_nc_ohc=J3m_zRxusX4AX875RkB&tp=1&oh=b880a830d89fad50dc62cf3860385709&oe=5FE48BB8",
-            "isVideo": false,
-            "width": 1080,
-            "height": 1080,
-            "countComment": 1665,
-            "countLike": 760570
-        }];
-        const updatedImagesData = newDataGallery.imagesData.concat(tempArrObj);
-        newDataGallery.imagesData = updatedImagesData;
+        let nextDataGallery = await this.getMedia(this.state.inputUrlElement, this.state.nameSocialNetwork, this.state.cursor)
+        
+        if(!nextDataGallery) 
+            return;
 
-        // const updatedVideosData = newDataGallery.imagesData.concat(tempArrObj);
-        // newDataGallery.videosData = updatedVideosData;
+        const updatedImagesData = currentDataGallery.imagesData.concat(nextDataGallery.imagesData);
+        currentDataGallery.imagesData = updatedImagesData;
 
-        this.setState({dataGallery: newDataGallery});
+        const updatedVideosData = currentDataGallery.videosData.concat(nextDataGallery.videosData);
+        currentDataGallery.videosData = updatedVideosData;
+
+        this.setState({dataGallery: currentDataGallery});
+
+        // if()
     }
 
     onUpdateBannerInput (inputUrlElement, nameSocialNetwork) { 

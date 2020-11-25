@@ -33,8 +33,8 @@ class ImageItem extends Component {
 
     render() {
         function getModalStyle() {
-            const top = 10;
-            const left =10;
+            const top = 0;
+            const left = 0;
             
             return {
                 top: `${top}%`,

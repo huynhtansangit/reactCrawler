@@ -115,18 +115,30 @@ class Gallery extends Component {
         let renderLoadMoreButton = ()=>{
             // Check condition if no more media here.
             if(Object.keys(this.props.dataGallery).length === 0){
-                // Check if data is null => Show loading
                 return('');
             }
             else{
-                return(
-                    <div className="row w-100 mt-3">
-                        <div className="col-lg-8 col-md-8 col-sm-12">
-                            <button
-                                style={{textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                type="button" className="btn btn-danger justify-content-center" onClick={this.props.getMoreMedia}>Load more media </button>
-                        </div>
-                    </div>)
+                if(this.props.disableLoadMoreBtn){
+                    // 
+                    return(
+                        <div className="row w-100 mt-3">
+                            <div className="col-lg-8 col-md-8 col-sm-12">
+                                <button
+                                    style={{textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                                    type="button" className="btn btn-danger justify-content-center" disabled>Load more media </button>
+                            </div>
+                        </div>)
+                }
+                else{
+                    return(
+                        <div className="row w-100 mt-3">
+                            <div className="col-lg-8 col-md-8 col-sm-12">
+                                <button
+                                    style={{textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                                    type="button" className="btn btn-danger justify-content-center" onClick={this.props.getMoreMedia}>Load more media </button>
+                            </div>
+                        </div>)
+                    }
                 }
         }
 
