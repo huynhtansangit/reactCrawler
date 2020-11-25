@@ -24,9 +24,16 @@ class Banner extends Component {
         this.setState({ inputUrlElement: event.target.value })
     }
 
-    updateBannerInput () {
+    updateBannerInput = ()=>{
         console.log("update btn");
         this.props.onUpdateBannerInput(this.state.inputUrlElement ,this.state.nameSocialNetwork)
+    }
+    
+    handleHitEnter = (e)=>{
+        if(e.key === 'Enter'){
+            console.log("entered");
+            this.updateBannerInput();
+        }
     }
 
     render() {
@@ -94,7 +101,8 @@ class Banner extends Component {
                 <div id="form-banner">
                     <div className="form-group input-url-container">
                         <img className="icon-input-url" src="Assets/Images/Banner/urlIcon1x.png" alt="" />
-                        <input style={{ paddingLeft: '55px ' }} type="text" className="form-control input-url-element" id="input-url-banner" aria-describedby="emailHelp" placeholder="Url" onChange={this.updateInputUrlElement} />
+                        <input style={{ paddingLeft: '55px ' }} type="text" className="form-control input-url-element" id="input-url-banner" aria-describedby="emailHelp" placeholder="Url" 
+                        onChange={this.updateInputUrlElement} onKeyDown={this.handleHitEnter}/>
                     </div>
                     <button className="submit-btn btn btn-danger" onClick={this.updateBannerInput.bind(this)}>Submit <img className="icon-search" src="/Assets/Images/Banner/btnIconSearch.png" alt="icon-search" /></button>
                 </div>

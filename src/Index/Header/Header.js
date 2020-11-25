@@ -23,9 +23,16 @@ class Header extends Component {
         this.setState({ inputUrlElement: event.target.value })
     }
 
-    updateBannerInput () {
+    updateBannerInput = () => {
         console.log("update btn header");
         this.props.onUpdateBannerInput(this.state.inputUrlElement ,this.state.nameSocialNetwork)
+    }
+
+    handleHitEnter = (e)=>{
+        if(e.key === 'Enter'){
+            console.log("entered");
+            this.updateBannerInput();
+        }
     }
 
     componentDidMount() {
@@ -128,7 +135,8 @@ class Header extends Component {
                                 <div className=" pt-2">
                                     <div className="form-group input-header-container navbar-nav">
                                         <img className="icon-input-header" src="Assets/Images/Banner/urlIcon1x.png" alt="" />
-                                        <input style={{ paddingLeft: '55px' }} type="text" className="form-control input-header" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Url" onChange={this.updateInputUrlElement}/>
+                                        <input style={{ paddingLeft: '55px' }} type="text" className="form-control input-header" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Url" 
+                                        onChange={this.updateInputUrlElement} onKeyDown={this.handleHitEnter}/>
                                         <button type="button" className="btn btn-dark btn-input-header" onClick={this.updateBannerInput.bind(this)}><i className="fas fa-sign-in-alt" /></button>
                                     </div>
                                 </div>
