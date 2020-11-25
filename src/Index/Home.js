@@ -74,24 +74,29 @@ class Index extends Component {
 
     async getMoreMedia(){
         // Temporary disable until load finish
-        // await this.setState({disableLoadMoreBtn: true});
+        await this.setState({disableLoadMoreBtn: true});
         
         let currentDataGallery = this.state.dataGallery;
         // Demo an array of object, will be replaced by response later 
         let nextDataGallery = await this.getMedia(this.state.inputUrlElement, this.state.nameSocialNetwork, this.state.cursor)
         
-        if(!nextDataGallery) 
-            return;
+        if(!nextDataGallery.error){
+            const updatedImagesData = currentDataGallery.imagesData.concat(nextDataGallery.imagesData);
+            currentDataGallery.imagesData = updatedImagesData;
 
-        const updatedImagesData = currentDataGallery.imagesData.concat(nextDataGallery.imagesData);
-        currentDataGallery.imagesData = updatedImagesData;
-
-        const updatedVideosData = currentDataGallery.videosData.concat(nextDataGallery.videosData);
-        currentDataGallery.videosData = updatedVideosData;
-
+            const updatedVideosData = currentDataGallery.videosData.concat(nextDataGallery.videosData);
+            currentDataGallery.videosData = updatedVideosData;
+        } 
+        else{
+            await this.setState({disableLoadMoreBtn: false})
+        }
+        
         this.setState({dataGallery: currentDataGallery});
 
-        // if()
+        // no more image to load -> disable btn
+        if(this.state.hasNextPage){
+            this.setState({disableLoadMoreBtn: false});
+        }
     }
 
     onUpdateBannerInput (inputUrlElement, nameSocialNetwork) { 
@@ -111,7 +116,7 @@ class Index extends Component {
         if (this.state.clickedBtnSearch) {
             console.log(`Searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
             // Note: if getMedia before setState will search at least twice due to async of js
-            await this.setState({clickedBtnSearch:false, dataGallery: {}});
+            await this.setState({clickedBtnSearch:false, dataGallery: {}, disableLoadMoreBtn: false});
             await this.getMedia(this.state.inputUrlElement, this.state.nameSocialNetwork);
         } else {
             console.log(`Not searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
@@ -131,7 +136,8 @@ class Index extends Component {
                 <Gallery 
                     dataGallery= {this.state.dataGallery}
                     nameNetwork= {this.state.nameNetwork}
-                    getMoreMedia={this.getMoreMedia.bind(this)}>
+                    getMoreMedia={this.getMoreMedia.bind(this)}
+                    disableLoadMoreBtn={this.state.disableLoadMoreBtn}>
                 </Gallery>
                 <Storage></Storage>
                 <AboutUs></AboutUs>

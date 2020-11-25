@@ -44,6 +44,7 @@ class ImageItem extends Component {
         }
         
         return (
+            // NOTE click download below will also pop up modal
             <div className="img-card" onClick={()=>{this.setState({openModal:true})}}>
                 <img src={this.props.itemSrc} alt="Img-error"/>
                 <div className="card__text">
