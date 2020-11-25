@@ -182,7 +182,7 @@
     color: white;
     margin-bottom: 0;
   }
-  .fa-download,.fa-edit{
+  .fa-download,.fa-edit, .fa-eye{
       color: white !important;
       font-size: 24px !important;
   }

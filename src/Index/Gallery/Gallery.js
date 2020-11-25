@@ -5,6 +5,7 @@ import ReactPlayer from 'react-player'
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required components
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import SimpleModal from './Modal'
 
 
 // Import Swiper styles
@@ -111,6 +112,23 @@ class Gallery extends Component {
                 }
             }
         }
+        let renderLoadMoreButton = ()=>{
+            // Check condition if no more media here.
+            if(Object.keys(this.props.dataGallery).length === 0){
+                // Check if data is null => Show loading
+                return('');
+            }
+            else{
+                return(
+                    <div className="row w-100 mt-3">
+                        <div className="col-lg-8 col-md-8 col-sm-12">
+                            <button
+                                style={{textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                                type="button" className="btn btn-danger justify-content-center" onClick={this.props.getMoreMedia}>Load more media </button>
+                        </div>
+                    </div>)
+                }
+        }
 
 
         return (
@@ -130,7 +148,7 @@ class Gallery extends Component {
                         </div>
                     </div>
                     <div id="image-tab-gallery" className="row gallery-tab">
-                        <div className="col-lg-8 col-md-8 col-sm-12 image-video-container ">
+                        <div className="col-lg-8 col-md-8 col-sm-12 image-video-container justify-content-center">
                             { renderImageGallery() }
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1"
@@ -139,10 +157,8 @@ class Gallery extends Component {
                             <button
                                 style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
                                 type="button" className="btn btn-danger">sign in to download</button>
-                            <button
-                                style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                type="button" className="btn btn-danger" onClick={this.props.getMoreMedia}>Test load more media </button>
                         </div>
+                        { renderLoadMoreButton() }
                     </div>
                     <div id="video-tab-gallery" className="row gallery-tab ">
                         <Swiper
