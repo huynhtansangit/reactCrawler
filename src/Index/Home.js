@@ -40,7 +40,7 @@ class Index extends Component {
             const data = await response.json();
             let imagesData = [];
             let videosData = [];
-            const ownerMedia = data['owner'];
+            const ownerMedia = data['owner'] ? data['owner'] : data['user'];
 
             if(nameNetwork === 'instagram'){
                 data['data'].forEach(ele => {
@@ -52,12 +52,19 @@ class Index extends Component {
                     }            
                 });
             }
+            else if(nameNetwork === 'tiktok'){
+                videosData.push({
+                    url: data['url'],
+                    thumbnail: data['thumbnail'],
+                    headers: data['headers']
+                });
+            }
             else{
                 videosData = data['data'];
             }
             
             await this.setState({
-                dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null, hasNextPage: true},
+                dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null},
                 nameNetwork: nameNetwork,
                 cursor: data['cursor'] ? data['cursor'] : "",
                 hasNextPage: data['hasNextPage']

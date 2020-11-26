@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required components
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import SimpleModal from './Modal'
+import PlayerWithHeader from './PlayerWithHeader'
 
 
 // Import Swiper styles
@@ -97,13 +98,24 @@ class Gallery extends Component {
             else{
                 // Else: loaded
                 if(!this.props.dataGallery.error){
-                    // If not error => Show images
-                    return(
-                        (this.props.dataGallery.videosData.map((video, idx) =>
-                            <SwiperSlide><div className="">
-                                <ReactPlayer url={video.url} key={idx} controls={true} width={'60rem'} height={'30rem'} />
-                            </div></SwiperSlide>
-                        )))
+                    // If not error => Show videos
+                    if(this.props.nameNetwork === 'tiktok'){
+                        return(
+                            (this.props.dataGallery.videosData.map((video, idx) =>
+                                <SwiperSlide><div className="">
+                                    <PlayerWithHeader url={video.url} headers={video.headers} key={idx}/>
+                                </div></SwiperSlide>
+                            )))
+                    }
+                    else{
+                        return(
+                            (this.props.dataGallery.videosData.map((video, idx) =>
+                                <SwiperSlide><div className="">
+                                    <ReactPlayer url={video.url} key={idx} controls={true} width={'60rem'} height={'30rem'}/>
+                                </div></SwiperSlide>
+                            )))
+                    }
+                    
                 }
                 else{
                     // else: error occurred => Show pic 500
