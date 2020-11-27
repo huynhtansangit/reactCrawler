@@ -69,6 +69,13 @@
 	border-radius: 2px;
 	transition: 0.3s ease-in-out;
 }
+.videoFrame{
+    width: 100% !important;
+    height: 100% !important;
+}
+.image-video-container .img-card .react-player__preview {
+    display: block;
+}
 .image-video-container .img-card:first-child{
 	grid-column-start: span 2;
 	grid-row-start: span 2;
@@ -77,13 +84,13 @@
 	grid-row-start: span 2;
 }
 .image-video-container .img-card:nth-child(4n+5){
-	grid-row-start: span 2;
+	grid-column-start: span 2;
 }
 .image-video-container .img-card:nth-child(6n+7){
 	grid-row-start: span 1;
 }
 .image-video-container .img-card:nth-child(8n+9){
-	grid-column-start: span 1;
+	grid-column-start: span 2;
 	grid-row-start: span 1;
 }
 .column {

@@ -42,4 +42,12 @@
 	opacity: 0;	
 	transform: scale(0.1, 1);
 }
+.photo-btn.active::after,.video-btn.active::after{
+	opacity: 0;	
+	transform: scale(0.1, 1);
+}
+.photo-btn.active,.video-btn.active{
+	border: 1px solid rgba(128, 128, 128, 0.425);
+	box-shadow: 0px 2px 6px rgba(128, 128, 128, 0.459);
+}
 

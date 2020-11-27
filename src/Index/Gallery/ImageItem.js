@@ -32,9 +32,12 @@ class ImageItem extends Component {
             };
         }
         return (
-            <div className="img-card" variant="primary" onClick={() => { this.handleShow() }}>
+            <div className="img-card" variant="primary">
                 <img src={this.props.itemSrc} alt="Img-error" />
                 <div className="card__text">
+                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary"><i className="fas fa-eye" />
+                    </button>
+                    </p>
                     <p className="card__title"><button onClick={() => { downloadFromLink(this.props.itemSrc) }} type="button" className="btn btn-outline-secondary"><i className="fas fa-download" />
                     </button>
                     </p>
@@ -46,23 +49,25 @@ class ImageItem extends Component {
                 </div>
 
                 <Modal
-                    size="lg"
+                    size="xl"
+                    scrollable={false}
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
-                    show={this.state.isOpenModal} onHide={this.handleClose}>
+                    show={this.state.isOpenModal}
+                    onHide={this.handleShow}>
                     <Modal.Header closeButton>
                         <Modal.Title>Image previewer</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            <img width={800} height={800} src={this.props.itemSrc} alt="Img-error" />
+                            <img width={1100} height={1000} src={this.props.itemSrc} alt="Img-error" />
                         </p>
                     </Modal.Body>
-                    <Modal.Footer>
+                    {/* <Modal.Footer>
                         <Button variant="secondary" onClick={() => { this.handleShow() }}>
                             Close
                         </Button>
-                    </Modal.Footer>
+                    </Modal.Footer> */}
                 </Modal>
             </div>
         );
