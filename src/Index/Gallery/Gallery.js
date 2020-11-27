@@ -5,7 +5,6 @@ import ReactPlayer from 'react-player'
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required components
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import SimpleModal from './Modal'
 
 
 // Import Swiper styles

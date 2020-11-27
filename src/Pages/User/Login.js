@@ -12,11 +12,13 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import bcrypt from 'bcryptjs';
+import { querystring as qs } from 'query-string';
 
 
 
 
-
+const LOGIN_ENDPOINT = "https://dacnhk1.herokuapp.com/login/";
 
 function Copyright() {
   return (
@@ -64,6 +66,40 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+  const [username, setUsername] = React.useState("");
+  const [pwd, setPwd] = React.useState("");
+
+  const submit = async (username, pwd) => {
+
+    const loginForm = qs.stringify({
+      "username": username,
+      "password": bcrypt.hashSync(pwd, 10)
+    })
+
+
+
+    const option = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: loginForm
+    };
+    try {
+      const response = await fetch(LOGIN_ENDPOINT, option);
+      const data= await response.json();
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleLogin = (username, pwd) => {
+    setUsername(username);
+    setPwd(pwd);
+  };
+
 
   return (
     <Grid container component="main" className={classes.root}>
