@@ -75,7 +75,7 @@ class Gallery extends Component {
                     fullname="Loading" countPost="Loading" countFollowedBy="Loading" />)
             }
             else {
-                if (this.props.nameNetwork !== 'facebook') {
+                if (this.props.nameNetwork !== 'tiktok') {
                     return (!this.props.dataGallery.error ?
                         (
                             <OwnerMedia avatar={this.props.dataGallery.ownerMedia.avatar}
@@ -89,6 +89,7 @@ class Gallery extends Component {
                         ))
                 }
                 else {
+                    // FIXME xảy ra trường hợp khi chọn tiktok sau đó chọn 2 cái còn lại sẽ lỗi, sẽ sửa khi mà có data của owner trả về với tiktok
                     return (<OwnerMedia
                         avatar="https://yinyangit.files.wordpress.com/2013/03/question-mark.png?w=346"
                         username="Not Provided" fullname="Not Provided" countPost="Not Provided" countFollowedBy="Not Provided" />)
@@ -105,10 +106,14 @@ class Gallery extends Component {
                 // Else: loaded
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
-                    return (
-                        (this.props.dataGallery.videosData.map((video, idx) =>
-                            <VideoItem url={video.url} key={idx}></VideoItem>
-                        )))
+                    if(this.props.nameNetwork === 'tiktok'){
+                        return(<VideoItem url={`${DOWNLOAD_ENDPOINT}${this.props.nameNetwork}?url=${this.props.inputUrl}`}></VideoItem>)
+                    }
+                    else
+                        return (
+                            (this.props.dataGallery.videosData.map((video, idx) =>
+                                <VideoItem url={video.url} key={idx}></VideoItem>
+                            )))
                 }
                 else {
                     // else: error occurred => Show pic 500
@@ -118,32 +123,37 @@ class Gallery extends Component {
             }
         }
         let renderLoadMoreButton = () => {
-            // Check condition if no more media here.
-            if (Object.keys(this.props.dataGallery).length === 0) {
-                return ('');
-            }
-            else {
-                if (this.props.disableLoadMoreBtn) {
-                    // 
-                    return (
-                        <div className="row w-100 mt-3">
-                            <div className="col-lg-8 col-md-8 col-sm-12">
-                                <button
-                                    style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                    type="button" className="btn btn-danger justify-content-center" disabled>Load more media </button>
-                            </div>
-                        </div>)
+            // Load more only available with instagram
+            if(this.props.nameNetwork === 'instagram'){
+                if (Object.keys(this.props.dataGallery).length === 0) {
+                    return ('');
                 }
                 else {
-                    return (
-                        <div className="row w-100 mt-3">
-                            <div className="col-lg-8 col-md-8 col-sm-12">
-                                <button
-                                    style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                    type="button" className="btn btn-danger justify-content-center" onClick={this.props.getMoreMedia}>Load more media </button>
-                            </div>
-                        </div>)
+                    if (this.props.disableLoadMoreBtn) {
+                        // 
+                        return (
+                            <div className="row w-100 mt-3">
+                                <div className="col-lg-8 col-md-8 col-sm-12">
+                                    <button
+                                        style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                                        type="button" className="btn btn-danger justify-content-center" disabled>Load more media </button>
+                                </div>
+                            </div>)
+                    }
+                    else {
+                        return (
+                            <div className="row w-100 mt-3">
+                                <div className="col-lg-8 col-md-8 col-sm-12">
+                                    <button
+                                        style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                                        type="button" className="btn btn-danger justify-content-center" onClick={this.props.getMoreMedia}>Load more media </button>
+                                </div>
+                            </div>)
+                    }
                 }
+            }
+            else{
+                return("")
             }
         }
 

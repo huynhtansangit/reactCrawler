@@ -12,8 +12,8 @@ class Index extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            inputUrlElement: 'https://www.instagram.com/taylorswift/',
-            nameSocialNetwork: 'instagram',
+            inputUrl: 'https://www.instagram.com/taylorswift/',
+            nameNetwork: 'instagram',
             cursor: '',
             hasNextPage: true,
             clickedBtnSearch: false,
@@ -57,10 +57,11 @@ class Index extends Component {
             }
             
             await this.setState({
-                dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null, hasNextPage: true},
+                dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null},
                 nameNetwork: nameNetwork,
+                inputUrl: inputUrl,
                 cursor: data['cursor'] ? data['cursor'] : "",
-                hasNextPage: data['hasNextPage']
+                hasNextPage: data['hasNextPage'],
             });
         } catch (error) {
             console.log(error);
@@ -78,7 +79,7 @@ class Index extends Component {
         
         let currentDataGallery = this.state.dataGallery;
         // Demo an array of object, will be replaced by response later 
-        let nextDataGallery = await this.getMedia(this.state.inputUrlElement, this.state.nameSocialNetwork, this.state.cursor)
+        let nextDataGallery = await this.getMedia(this.state.inputUrl, this.state.nameNetwork, this.state.cursor)
         
         if(!nextDataGallery.error){
             const updatedImagesData = currentDataGallery.imagesData.concat(nextDataGallery.imagesData);
@@ -99,17 +100,17 @@ class Index extends Component {
         }
     }
 
-    onUpdateBannerInput (inputUrlElement, nameSocialNetwork) { 
+    onUpdateBannerInput (inputUrl, nameNetwork) { 
         console.log("onUpdateBannerInput");
         this.setState({ 
-            inputUrlElement: inputUrlElement,
-            nameSocialNetwork: nameSocialNetwork ,
+            inputUrl: inputUrl,
+            nameNetwork: nameNetwork ,
             clickedBtnSearch: true
         }) 
     }
 
     async componentDidMount(){
-        await this.getMedia(this.state.inputUrlElement, this.state.nameSocialNetwork);
+        await this.getMedia(this.state.inputUrl, this.state.nameNetwork);
     }
 
     async componentDidUpdate(){
@@ -117,7 +118,7 @@ class Index extends Component {
             console.log(`Searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
             // Note: if getMedia before setState will search at least twice due to async of js
             await this.setState({clickedBtnSearch:false, dataGallery: {}, disableLoadMoreBtn: false});
-            await this.getMedia(this.state.inputUrlElement, this.state.nameSocialNetwork);
+            await this.getMedia(this.state.inputUrl, this.state.nameNetwork);
         } else {
             console.log(`Not searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
         }
@@ -136,6 +137,7 @@ class Index extends Component {
                 <Gallery 
                     dataGallery= {this.state.dataGallery}
                     nameNetwork= {this.state.nameNetwork}
+                    inputUrl= {this.state.inputUrl}
                     getMoreMedia={this.getMoreMedia.bind(this)}
                     disableLoadMoreBtn={this.state.disableLoadMoreBtn}>
                 </Gallery>

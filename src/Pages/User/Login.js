@@ -18,7 +18,7 @@ import { querystring as qs } from 'query-string';
 
 
 
-const LOGIN_ENDPOINT = "https://dacnhk1.herokuapp.com/login/";
+const LOGIN_ENDPOINT = "https://dacnhk1.herokuapp.com/token/";
 
 function Copyright() {
   return (
@@ -69,14 +69,12 @@ export default function SignInSide() {
   const [username, setUsername] = React.useState("");
   const [pwd, setPwd] = React.useState("");
 
-  const submit = async (username, pwd) => {
-
+  const submit = async () => {
     const loginForm = qs.stringify({
       "username": username,
-      "password": bcrypt.hashSync(pwd, 10)
+      "password": pwd,
+      "grant_type": 'password'
     })
-
-
 
     const option = {
       method: 'POST',
@@ -89,6 +87,15 @@ export default function SignInSide() {
     try {
       const response = await fetch(LOGIN_ENDPOINT, option);
       const data= await response.json();
+
+      // Handle error: user not exist or wrong password => data {"message": "...."}
+      if(data['message']){
+
+      }
+      // No error.
+      else{
+        handleLogin()
+      }
       
     } catch (error) {
       console.log(error);
