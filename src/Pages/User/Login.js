@@ -12,13 +12,11 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import bcrypt from 'bcryptjs';
-import { querystring as qs } from 'query-string';
+import qs from 'query-string';
+import Cookies from 'universal-cookie'
 
 
-
-
-const LOGIN_ENDPOINT = "https://dacnhk1.herokuapp.com/token/";
+const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
 
 function Copyright() {
   return (
@@ -66,26 +64,37 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
-  const [username, setUsername] = React.useState("");
+  const [phone, setPhone] = React.useState("");
   const [pwd, setPwd] = React.useState("");
 
-  const submit = async () => {
-    const loginForm = qs.stringify({
-      "username": username,
-      "password": pwd,
-      "grant_type": 'password'
-    })
+  const updateInputPhone = (event) =>{
+    setPhone(event.target.value);
+  }
+
+  const updateInputPassword = (event) =>{
+    console.log(event.target.id);
+    setPwd(event.target.value);
+  }
+
+  const handleLogin = async () => {
+    let loginForm = {
+      'phone':phone,
+      'password':pwd,
+      'grant_type':'password'
+    };
+
+    const formData = qs.stringify(loginForm);
 
     const option = {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: loginForm
+      body: formData
     };
     try {
-      const response = await fetch(LOGIN_ENDPOINT, option);
+      const response = await fetch(TOKEN_ENDPOINT, option);
       const data= await response.json();
 
       // Handle error: user not exist or wrong password => data {"message": "...."}
@@ -94,19 +103,17 @@ export default function SignInSide() {
       }
       // No error.
       else{
-        handleLogin()
+        // set cookie.
+        const cookies = new Cookies();
+        cookies.set('accessToken', data['accessToken'], { path: '/' });
+        cookies.set('refreshToken', data['refreshToken'], { path: '/' });
+        cookies.set('expireAt', data['expireAt'], { path: '/' });
       }
       
     } catch (error) {
       console.log(error);
     }
   }
-
-  const handleLogin = (username, pwd) => {
-    setUsername(username);
-    setPwd(pwd);
-  };
-
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -126,11 +133,12 @@ export default function SignInSide() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="phone"
+              label="Phone number"
+              name="phone"
+              autoComplete="phone"
               autoFocus
+              onChange={updateInputPhone}
             />
             <TextField
               variant="outlined"
@@ -142,17 +150,18 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={updateInputPassword}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={()=>{handleLogin()}}
             >
               Sign In
             </Button>

@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import qs from 'query-string';
 
 function Copyright() {
     return (
@@ -49,19 +50,58 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const updateInputRegister = (e)=>{
+    switch (e.target.id) {
+        case 'firstName':
+            console.log("first name");
+            break;
+        case 'lastName':
+            console.log("last");
+        
+            break;
+        case 'phone':
+            console.log("phone");
+        
+            break;
+        case 'birthday':
+            console.log("birthday");
+        
+            break;
+        case 'password1':
+            console.log("pass1");
+        
+            break;
+        case 'password2':
+            console.log("pass2");
+        
+            break;
+        default:
+            break;
+    }
+}
+
+const handleRegister = ()=>{
+    
+}
+
 export default function SignUp() {
     const classes = useStyles();
+
+    const [lastName, setLastName] = React.useState("");
+    const [firstName, setFirstName] = React.useState("");
+    const [birthday, setBirthday] = React.useState("");
+    const [password, setPassword] = React.useState("");
 
     return (
         <Container component="main" maxWidth="sm">
             <CssBaseline />
             <div className={classes.paper}>
             <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
+                <LockOutlinedIcon />
+            </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign up
-        </Typography>
+                </Typography>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
@@ -74,6 +114,7 @@ export default function SignUp() {
                                 id="firstName"
                                 label="First Name"
                                 autoFocus
+                                onChange={updateInputRegister}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -85,9 +126,10 @@ export default function SignUp() {
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="lname"
+                                onChange={updateInputRegister}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
                                 required
@@ -97,7 +139,7 @@ export default function SignUp() {
                                 name="email"
                                 autoComplete="email"
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
@@ -107,18 +149,20 @@ export default function SignUp() {
                                 label="Phone Number"
                                 name="phone"
                                 autoComplete="0000000000"
+                                onChange={updateInputRegister}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                id="datetime-local"
-                                label="Next appointment"
+                                id="birthday"
+                                label="Birthday"
                                 type="date"
-                                defaultValue="2017-05-24T10:30"
+                                defaultValue="2020-02-02T10:30"
                                 className={classes.textField}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                onChange={updateInputRegister}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -129,8 +173,22 @@ export default function SignUp() {
                                 name="password"
                                 label="Password"
                                 type="password"
-                                id="password"
+                                id="password1"
                                 autoComplete="current-password"
+                                onChange={updateInputRegister}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Confirm Password"
+                                type="password"
+                                id="password2"
+                                autoComplete="current-password"
+                                onChange={updateInputRegister}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -141,19 +199,17 @@ export default function SignUp() {
                         </Grid>
                     </Grid>
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}
-                    >
+                        className={classes.submit}>
                         Sign Up
-          </Button>
+                    </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
                             <Link href="/Login" variant="body2">
                                 Already have an account? Sign in
-              </Link>
+                            </Link>
                         </Grid>
                     </Grid>
                 </form>

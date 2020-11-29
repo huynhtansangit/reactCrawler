@@ -60,7 +60,7 @@ class ImageItem extends Component {
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            <img width={1100} height={1000} src={this.props.itemSrc} alt="Img-error" />
+                            <img width={1100} height={1000} style={{objectFit: 'cover'}} src={this.props.itemSrc} alt="Img-error" />
                         </p>
                     </Modal.Body>
                     {/* <Modal.Footer>
