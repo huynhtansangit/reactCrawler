@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import qs from 'query-string';
 import Cookies from 'universal-cookie'
+import axios from 'axios'
 
 
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
@@ -66,18 +67,19 @@ export default function SignInSide() {
   const classes = useStyles();
   const [phone, setPhone] = React.useState("");
   const [pwd, setPwd] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [message, setMessage] = React.useState("");
 
   const updateInputPhone = (event) =>{
     setPhone(event.target.value);
   }
 
   const updateInputPassword = (event) =>{
-    console.log(event.target.id);
     setPwd(event.target.value);
   }
 
   const handleLogin = async () => {
-    let loginForm = {
+    const loginForm = {
       'phone':phone,
       'password':pwd,
       'grant_type':'password'
@@ -86,33 +88,28 @@ export default function SignInSide() {
     const formData = qs.stringify(loginForm);
 
     const option = {
+      url: TOKEN_ENDPOINT,
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: formData
+      data: formData
     };
-    try {
-      const response = await fetch(TOKEN_ENDPOINT, option);
-      const data= await response.json();
 
-      // Handle error: user not exist or wrong password => data {"message": "...."}
-      if(data['message']){
-
-      }
-      // No error.
-      else{
-        // set cookie.
+    axios.request(option)
+      .then(response => response.data)
+      .then(data => {
         const cookies = new Cookies();
         cookies.set('accessToken', data['accessToken'], { path: '/' });
         cookies.set('refreshToken', data['refreshToken'], { path: '/' });
         cookies.set('expireAt', data['expireAt'], { path: '/' });
-      }
-      
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((error) => {
+        console.error('Error:', error.response.data);
+        // setState for showing errors here.
+        setError(error);
+      });
   }
 
   return (

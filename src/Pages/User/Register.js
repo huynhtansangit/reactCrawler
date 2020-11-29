@@ -14,6 +14,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import qs from 'query-string';
 
+
+const REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register";
+const VERIFY_REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register/verify";
+
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -50,47 +55,78 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const updateInputRegister = (e)=>{
-    switch (e.target.id) {
-        case 'firstName':
-            console.log("first name");
-            break;
-        case 'lastName':
-            console.log("last");
-        
-            break;
-        case 'phone':
-            console.log("phone");
-        
-            break;
-        case 'birthday':
-            console.log("birthday");
-        
-            break;
-        case 'password1':
-            console.log("pass1");
-        
-            break;
-        case 'password2':
-            console.log("pass2");
-        
-            break;
-        default:
-            break;
-    }
-}
-
-const handleRegister = ()=>{
-    
-}
-
 export default function SignUp() {
     const classes = useStyles();
 
     const [lastName, setLastName] = React.useState("");
+    const [phone, setPhone] = React.useState("");
     const [firstName, setFirstName] = React.useState("");
     const [birthday, setBirthday] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [password1, setPassword1] = React.useState("");
+    const [password2, setPassword2] = React.useState("");
+    const [error, setError] = React.useState("");
+    const [message, setMessage] = React.useState("");
+
+    const updateInputRegister = (e)=>{
+        switch (e.target.id) {
+            case 'firstName':
+                setFirstName(e.target.value);
+                break;
+            case 'lastName':
+                setLastName(e.target.value);
+                break;
+            case 'phone':
+                setPhone(e.target.value);
+                break;
+            case 'birthday':
+                setBirthday(new Date(e.target.value).getTime() / 1000);
+                break;
+            case 'password1':
+                setPassword1(e.target.value);
+                break;
+            case 'password2':
+                setPassword2(e.target.value);
+                break;
+            default:
+                break;
+        }
+    }
+
+    const handleRegister = async ()=>{
+        const registerForm = {
+            firstname: firstName,
+            lastname: lastName,
+            phone:phone,
+            birthday: birthday,
+            password: password1
+        };
+        const option = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: qs.stringify(registerForm)
+        };
+
+        try {
+            const response = await fetch(REGISTER_ENDPOINT, option);
+            const data= await response.json();
+
+            // Handle error: user not exist or wrong password => data {"message": "...."}
+            if(data['message']){
+                setMessage(data['message']);
+            }
+            // No error.
+            else{
+            }
+            
+        } catch (error) {
+            console.log(error);
+            // setState for showing errors here.
+            setError(error);
+        }
+    }
 
     return (
         <Container component="main" maxWidth="sm">
