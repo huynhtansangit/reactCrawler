@@ -13,11 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import qs from 'query-string';
-
-
+import { Modal } from 'react-bootstrap';
+import './Verify.css';
 const REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register";
 const VERIFY_REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register/verify";
-
 
 function Copyright() {
     return (
@@ -66,8 +65,8 @@ export default function SignUp() {
     const [password2, setPassword2] = React.useState("");
     const [error, setError] = React.useState("");
     const [message, setMessage] = React.useState("");
-
-    const updateInputRegister = (e)=>{
+    const [isOpenModal, setOpenModal] = React.useState(false);
+    const updateInputRegister = (e) => {
         switch (e.target.id) {
             case 'firstName':
                 setFirstName(e.target.value);
@@ -91,12 +90,18 @@ export default function SignUp() {
                 break;
         }
     }
+    const handleShow = () => {
+        setOpenModal(true);
+    }
+    const handleClose = () => {
+        setOpenModal(false);
+    }
 
-    const handleRegister = async ()=>{
+    const handleRegister = async () => {
         const registerForm = {
             firstname: firstName,
             lastname: lastName,
-            phone:phone,
+            phone: phone,
             birthday: birthday,
             password: password1
         };
@@ -111,16 +116,16 @@ export default function SignUp() {
 
         try {
             const response = await fetch(REGISTER_ENDPOINT, option);
-            const data= await response.json();
+            const data = await response.json();
 
             // Handle error: user not exist or wrong password => data {"message": "...."}
-            if(data['message']){
+            if (data['message']) {
                 setMessage(data['message']);
             }
             // No error.
-            else{
+            else {
             }
-            
+
         } catch (error) {
             console.log(error);
             // setState for showing errors here.
@@ -132,9 +137,9 @@ export default function SignUp() {
         <Container component="main" maxWidth="sm">
             <CssBaseline />
             <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
-            </Avatar>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
@@ -238,7 +243,8 @@ export default function SignUp() {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}>
+                        className={classes.submit}
+                        onClick={handleShow}>
                         Sign Up
                     </Button>
                     <Grid container justify="flex-end">
@@ -253,6 +259,45 @@ export default function SignUp() {
             <Box mt={5}>
                 <Copyright />
             </Box>
+            <Modal
+                show={isOpenModal}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+            >
+               
+                <Modal.Body>
+                    <div id="wrapper">
+                        <div id="dialog">
+                            <h3>Please enter the 6-digit verification code we sent via SMS:</h3>
+                            <span>(we want to make sure it's you before we contact our movers)</span>
+                            <div id="form">
+                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
+                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
+                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
+                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
+                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
+                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
+                                <button class="btn btn-primary btn-embossed">Verify</button>
+                            </div>
+
+                            <div>
+                                Didn't receive the code?<br />
+                                <a href="#">Send code again</a><br />
+                            </div>
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button 
+                        color="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button
+                        color="primary" >Submit</Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
+
     );
 }

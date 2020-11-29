@@ -16,14 +16,13 @@ import qs from 'query-string';
 import Cookies from 'universal-cookie'
 import axios from 'axios'
 
-
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link  color="inherit" href="/">
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -164,7 +163,7 @@ export default function SignInSide() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="/reset" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
