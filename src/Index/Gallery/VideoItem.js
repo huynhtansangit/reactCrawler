@@ -43,12 +43,12 @@ class VideoItem extends Component {
                     </Modal.Header>
                     <Modal.Body>
                         <p>
-                            <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} playing />
+                            <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} controls={true} playing />
                         </p>
                     </Modal.Body>
                     {/* <Modal.Footer>
-                        <Button variant="secondary" onClick={() => { this.handleShow() }}>
-                            Close
+                        <Button variant="secondary" onClick={() => { downloadVideoFromLink(this.props.itemSrc) }}>
+                            Download this video
                         </Button>
                     </Modal.Footer> */}
                 </Modal>

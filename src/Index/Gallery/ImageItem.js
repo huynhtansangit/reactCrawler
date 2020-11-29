@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
     Link,
 } from "react-router-dom";
-import { downloadFromLink } from "../../services/downloadImageByUrl";
+import { downloadImageFromLink } from "../../services/downloadImageByUrl";
 import { Button, Modal } from 'react-bootstrap';
 
 class ImageItem extends Component {
@@ -38,7 +38,7 @@ class ImageItem extends Component {
                     <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary"><i className="fas fa-eye" />
                     </button>
                     </p>
-                    <p className="card__title"><button onClick={() => { downloadFromLink(this.props.itemSrc) }} type="button" className="btn btn-outline-secondary"><i className="fas fa-download" />
+                    <p className="card__title"><button onClick={() => { downloadImageFromLink(this.props.itemSrc) }} type="button" className="btn btn-outline-secondary"><i className="fas fa-download" />
                     </button>
                     </p>
                     <p className="card__body">
@@ -63,11 +63,16 @@ class ImageItem extends Component {
                             <img width={1100} height={1000} style={{objectFit: 'cover'}} src={this.props.itemSrc} alt="Img-error" />
                         </p>
                     </Modal.Body>
-                    {/* <Modal.Footer>
-                        <Button variant="secondary" onClick={() => { this.handleShow() }}>
-                            Close
+                    <Modal.Footer>
+                        <Link to={{ pathname: '/Testing', state: { imgSrc: this.props.itemSrc } }}>
+                            <Button variant="secondary">
+                                Edit
+                            </Button>
+                        </Link>
+                        <Button variant="secondary" onClick={() => { downloadImageFromLink(this.props.itemSrc) }}>
+                            Download
                         </Button>
-                    </Modal.Footer> */}
+                    </Modal.Footer>
                 </Modal>
             </div>
         );

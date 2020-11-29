@@ -141,7 +141,7 @@ class Index extends Component {
                     getMoreMedia={this.getMoreMedia.bind(this)}
                     disableLoadMoreBtn={this.state.disableLoadMoreBtn}>
                 </Gallery>
-                <Storage></Storage>
+                {/* <Storage></Storage> */}
                 <AboutUs></AboutUs>
                 <Footer></Footer>
             </div>
