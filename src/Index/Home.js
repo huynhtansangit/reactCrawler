@@ -70,6 +70,15 @@ class Index extends Component {
                 nameNetwork: nameNetwork
             })
         }
+
+        // No more image to load -> disable btn
+        if(!this.state.hasNextPage){
+            this.setState({disableLoadMoreBtn: true});
+        }
+        else{
+            this.setState({disableLoadMoreBtn: false});
+        }
+
         return this.state.dataGallery;
     }
 
@@ -93,11 +102,6 @@ class Index extends Component {
         }
         
         this.setState({dataGallery: currentDataGallery});
-
-        // no more image to load -> disable btn
-        if(this.state.hasNextPage){
-            this.setState({disableLoadMoreBtn: false});
-        }
     }
 
     onUpdateBannerInput (inputUrl, nameNetwork) { 
