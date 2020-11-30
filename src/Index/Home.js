@@ -101,7 +101,7 @@ class Index extends Component {
     }
 
     onUpdateBannerInput (inputUrl, nameNetwork) { 
-        console.log("onUpdateBannerInput");
+        // console.log("onUpdateBannerInput");
         this.setState({ 
             inputUrl: inputUrl,
             nameNetwork: nameNetwork ,
@@ -115,12 +115,12 @@ class Index extends Component {
 
     async componentDidUpdate(){
         if (this.state.clickedBtnSearch) {
-            console.log(`Searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
+            // console.log(`Searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
             // Note: if getMedia before setState will search at least twice due to async of js
             await this.setState({clickedBtnSearch:false, dataGallery: {}, disableLoadMoreBtn: false});
             await this.getMedia(this.state.inputUrl, this.state.nameNetwork);
         } else {
-            console.log(`Not searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
+            // console.log(`Not searching because clickedBtnSearch is ${this.state.clickedBtnSearch}`);
         }
     }
 
