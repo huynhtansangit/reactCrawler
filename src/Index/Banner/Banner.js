@@ -31,7 +31,6 @@ class Banner extends Component {
     
     handleHitEnter = (e)=>{
         if(e.key === 'Enter'){
-            console.log("entered");
             this.updateBannerInput();
         }
     }

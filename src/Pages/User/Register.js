@@ -15,6 +15,10 @@ import Container from '@material-ui/core/Container';
 import qs from 'query-string';
 import { Modal } from 'react-bootstrap';
 import './Verify.css';
+import axios from 'axios';
+
+
+
 const REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register";
 const VERIFY_REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register/verify";
 
@@ -63,9 +67,14 @@ export default function SignUp() {
     const [birthday, setBirthday] = React.useState("");
     const [password1, setPassword1] = React.useState("");
     const [password2, setPassword2] = React.useState("");
+    const [disableRegisterBtn, setDisableRegisterBtn] = React.useState(false);
+    const [disableVerifyBtn, setDisableVerifyBtn] = React.useState(false);
+    const [otp, setOtp] = React.useState("");
     const [error, setError] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [isOpenModal, setOpenModal] = React.useState(false);
+
+
     const updateInputRegister = (e) => {
         switch (e.target.id) {
             case 'firstName':
@@ -86,18 +95,18 @@ export default function SignUp() {
             case 'password2':
                 setPassword2(e.target.value);
                 break;
+            case 'otp':
+                setOtp(e.target.value);
+                break;
             default:
                 break;
         }
     }
-    const handleShow = () => {
-        setOpenModal(true);
-    }
-    const handleClose = () => {
-        setOpenModal(false);
+    const handleShowAndCloseModal = () => {
+        setOpenModal(!isOpenModal);
     }
 
-    const handleRegister = async () => {
+    const handleRegister = async (resendOtp) => {
         const registerForm = {
             firstname: firstName,
             lastname: lastName,
@@ -105,31 +114,73 @@ export default function SignUp() {
             birthday: birthday,
             password: password1
         };
-        const option = {
+        const config = {
+            url: REGISTER_ENDPOINT,
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: qs.stringify(registerForm)
+            data: qs.stringify(registerForm)
         };
 
-        try {
-            const response = await fetch(REGISTER_ENDPOINT, option);
-            const data = await response.json();
+        // Temporary disable btn after clicked.
+        setDisableRegisterBtn(true);
 
-            // Handle error: user not exist or wrong password => data {"message": "...."}
-            if (data['message']) {
-                setMessage(data['message']);
-            }
-            // No error.
-            else {
-            }
+        axios.request(config)
+            .then(response => response.data)
+            .then(data => {
+                if(data['status'] === 'success'){
+                    if(!resendOtp){
+                        handleShowAndCloseModal();
+                    }
+                    setMessage(data['message']);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error.response.data);
+                // setState for showing errors here.
+                setError(error.response.data['message']);
+                setDisableRegisterBtn(false);
+                // Sẽ disable nút resend code ở đây, sử dụng lại cái setDisableRegisterBtn cũng được, dùng setTimeOut các kiểu.
+            });
+    }
 
-        } catch (error) {
-            console.log(error);
-            // setState for showing errors here.
-            setError(error);
+    const handleConfirmOtp = async () =>{
+        const verifyForm = {
+            phone: phone,
+            otp: otp
+        };
+        const config = {
+            url: VERIFY_REGISTER_ENDPOINT,
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: qs.stringify(verifyForm)
+        };
+
+        setDisableVerifyBtn(true);
+
+        axios.request(config)
+            .then(response => response.data)
+            .then(data => {
+                if(data['status'] === 'success'){
+                    console.log("success");
+                    console.log(`Server msg: ${data['message']}`);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error.response.data);
+                // setState for showing errors here.
+                setError(error.response.data['message']);
+                setDisableVerifyBtn(false);
+            });
+    }
+    const handleHitEnter = (e)=>{
+        if(e.key === 'Enter'){
+            handleConfirmOtp();
         }
     }
 
@@ -244,7 +295,8 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={handleShow}>
+                        onClick={()=>{handleRegister(false)}}
+                        disabled={disableRegisterBtn}>
                         Sign Up
                     </Button>
                     <Grid container justify="flex-end">
@@ -261,17 +313,16 @@ export default function SignUp() {
             </Box>
             <Modal
                 show={isOpenModal}
-                onHide={handleClose}
+                onHide={handleShowAndCloseModal}
                 backdrop="static"
                 keyboard={false}
             >
-               
                 <Modal.Body>
                     <div id="wrapper">
                         <div id="dialog">
                             <h3>Please enter the 6-digit verification code we sent via SMS:</h3>
                             <span>(we want to make sure it's you before we contact our movers)</span>
-                            <div id="form">
+                            {/* <div id="form">
                                 <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
                                 <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
                                 <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
@@ -279,23 +330,40 @@ export default function SignUp() {
                                 <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
                                 <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
                                 <button class="btn btn-primary btn-embossed">Verify</button>
+                            </div> */}
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="otp"
+                                    label="Verify Phone Number"
+                                    id="otp"
+                                    onChange={updateInputRegister}
+                                    onKeyDown={handleHitEnter}
+                                />
+                            </Grid>
+                            <div id="form" style={{margin: '0px auto 0'}}>
+                                <button style={{margin: '20px auto 30px'}} class="btn btn-primary btn-embossed" 
+                                    onClick={handleConfirmOtp} disabled={disableVerifyBtn}>
+                                        Verify
+                                </button>
                             </div>
-
                             <div>
                                 Didn't receive the code?<br />
-                                <a href="#">Send code again</a><br />
+                                <p style={{marginBottom: 0}} className="btn" onClick={()=>{handleRegister(true)}} disabled={setDisableRegisterBtn}>Send code again</p><br />
                             </div>
                         </div>
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                     <Button 
-                        color="secondary" onClick={handleClose}>
+                        color="secondary" onClick={handleShowAndCloseModal}>
                         Close
                     </Button>
                     <Button
-                        color="primary" >Submit</Button>
-                </Modal.Footer>
+                        color="primary" onClick={handleConfirmOtp} disabled={disableVerifyBtn}>Verify</Button>
+                </Modal.Footer> */}
             </Modal>
         </Container>
 
