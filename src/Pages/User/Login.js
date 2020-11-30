@@ -15,6 +15,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import qs from 'query-string';
 import Cookies from 'universal-cookie'
 import axios from 'axios'
+import { Redirect } from 'react-router';
+
 
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
 
@@ -66,8 +68,10 @@ export default function SignInSide() {
   const classes = useStyles();
   const [phone, setPhone] = React.useState("");
   const [pwd, setPwd] = React.useState("");
+  const [disableLoginBtn, setDisableLoginBtn] = React.useState(false);
   const [error, setError] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   const updateInputPhone = (event) =>{
     setPhone(event.target.value);
@@ -96,6 +100,9 @@ export default function SignInSide() {
       data: formData
     };
 
+    // Temporary disable btn after clicked.
+    setDisableLoginBtn(true);
+    
     axios.request(option)
       .then(response => response.data)
       .then(data => {
@@ -103,11 +110,18 @@ export default function SignInSide() {
         cookies.set('accessToken', data['accessToken'], { path: '/' });
         cookies.set('refreshToken', data['refreshToken'], { path: '/' });
         cookies.set('expireAt', data['expireAt'], { path: '/' });
+
+        setIsLoggedIn(true);
+        return(<Redirect to={{pathname: "/"}}/>)
       })
       .catch((error) => {
         console.error('Error:', error.response.data);
         // setState for showing errors here.
-        setError(error);
+        if(error.response.status === 401 || error.response.status === 404)
+          setError("Phone and/or password is incorrect.")
+        else
+          setError(error);
+        setDisableLoginBtn(false);
       });
   }
 
@@ -158,6 +172,7 @@ export default function SignInSide() {
               color="primary"
               className={classes.submit}
               onClick={()=>{handleLogin()}}
+              disabled={disableLoginBtn}
             >
               Sign In
             </Button>
