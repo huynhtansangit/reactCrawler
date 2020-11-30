@@ -22,7 +22,7 @@ function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
+            <Link color="inherit" href="/">
                 Your Website
       </Link>{' '}
             {new Date().getFullYear()}
@@ -52,6 +52,15 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    resize: {
+        fontSize: 18,
+    },
+    labelRoot:{
+        fontSize: 16,
+    },
+    labelFocused:{
+        fontSize: 20,
+    }
 }));
 
 export default function SignUp() {
@@ -65,6 +74,11 @@ export default function SignUp() {
     const [password2, setPassword2] = React.useState("");
     const [error, setError] = React.useState("");
     const [message, setMessage] = React.useState("");
+    //  Error configuration
+    const [errorPhone, setErrorPhone] = React.useState(false);
+    const [errorPwd, setErrorPwd] = React.useState(false);
+    const [errorRetypePwd, setErrorRetypePwd] = React.useState(false);
+    // -------
     const [isOpenModal, setOpenModal] = React.useState(false);
     const updateInputRegister = (e) => {
         switch (e.target.id) {
@@ -76,14 +90,38 @@ export default function SignUp() {
                 break;
             case 'phone':
                 setPhone(e.target.value);
+                if (e.target.value.match(/^0(1\d{9}|9\d{8})$/)) {
+                    setErrorPhone(false);
+                    setError("");
+                }
+                else {
+                    setErrorPhone(true);
+                    setError("Invalid format: ###-###-####");
+                }
                 break;
             case 'birthday':
                 setBirthday(new Date(e.target.value).getTime() / 1000);
                 break;
             case 'password1':
+                if (e.target.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
+                    setErrorPwd(false);
+                    setError("");
+                }
+                else {
+                    setErrorPwd(true);
+                    setError("Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase");
+                }
                 setPassword1(e.target.value);
                 break;
             case 'password2':
+                if (e.target.value == password1) {
+                    setErrorRetypePwd(false);
+                    setError("");
+                }
+                else {
+                    setErrorRetypePwd(true);
+                    setError("Password not matched");
+                }
                 setPassword2(e.target.value);
                 break;
             default:
@@ -156,6 +194,19 @@ export default function SignUp() {
                                 label="First Name"
                                 autoFocus
                                 onChange={updateInputRegister}
+                                size="normal"
+                                InputProps={{
+                                    classes: {
+                                        input: classes.resize,
+                                        label: classes.resize,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    classes: {
+                                        root: classes.labelRoot,
+                                        focused: classes.labelFocused
+                                    }
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -168,6 +219,19 @@ export default function SignUp() {
                                 name="lastName"
                                 autoComplete="lname"
                                 onChange={updateInputRegister}
+                                size="normal"
+                                InputProps={{
+                                    classes: {
+                                        input: classes.resize,
+                                        label: classes.resize,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    classes: {
+                                        root: classes.labelRoot,
+                                        focused: classes.labelFocused
+                                    }
+                                }}
                             />
                         </Grid>
                         {/* <Grid item xs={12}>
@@ -191,6 +255,21 @@ export default function SignUp() {
                                 name="phone"
                                 autoComplete="0000000000"
                                 onChange={updateInputRegister}
+                                error={errorPhone}
+                                helperText={error}
+                                size="normal"
+                                InputProps={{
+                                    classes: {
+                                        input: classes.resize,
+                                        label: classes.resize,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    classes: {
+                                        root: classes.labelRoot,
+                                        focused: classes.labelFocused
+                                    }
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -204,6 +283,19 @@ export default function SignUp() {
                                     shrink: true,
                                 }}
                                 onChange={updateInputRegister}
+                                size="normal"
+                                InputProps={{
+                                    classes: {
+                                        input: classes.resize,
+                                        label: classes.resize,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    classes: {
+                                        root: classes.labelRoot,
+                                        focused: classes.labelFocused
+                                    }
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -217,6 +309,21 @@ export default function SignUp() {
                                 id="password1"
                                 autoComplete="current-password"
                                 onChange={updateInputRegister}
+                                error={errorPwd}
+                                helperText={error}
+                                size="normal"
+                                InputProps={{
+                                    classes: {
+                                        input: classes.resize,
+                                        label: classes.resize,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    classes: {
+                                        root: classes.labelRoot,
+                                        focused: classes.labelFocused
+                                    }
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -230,6 +337,21 @@ export default function SignUp() {
                                 id="password2"
                                 autoComplete="current-password"
                                 onChange={updateInputRegister}
+                                error={errorRetypePwd}
+                                helperText={error}
+                                size="normal"
+                                InputProps={{
+                                    classes: {
+                                        input: classes.resize,
+                                        label: classes.resize,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    classes: {
+                                        root: classes.labelRoot,
+                                        focused: classes.labelFocused
+                                    }
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -265,7 +387,7 @@ export default function SignUp() {
                 backdrop="static"
                 keyboard={false}
             >
-               
+
                 <Modal.Body>
                     <div id="wrapper">
                         <div id="dialog">
@@ -289,7 +411,7 @@ export default function SignUp() {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button 
+                    <Button
                         color="secondary" onClick={handleClose}>
                         Close
                     </Button>
