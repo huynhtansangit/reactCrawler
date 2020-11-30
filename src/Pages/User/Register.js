@@ -8,6 +8,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import CloseIcon from '@material-ui/icons/Close';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -59,14 +63,16 @@ const useStyles = makeStyles((theme) => ({
     resize: {
         fontSize: 18,
     },
-    labelRoot:{
+    labelRoot: {
         fontSize: 16,
     },
-    labelFocused:{
+    labelFocused: {
         fontSize: 20,
     }
 }));
-
+function isEmptyOrSpaces(str){
+    return str === null || str.match(/^ *$/) !== null;
+}
 export default function SignUp() {
     const classes = useStyles();
 
@@ -85,21 +91,38 @@ export default function SignUp() {
     const [errorPhone, setErrorPhone] = React.useState(false);
     const [errorPwd, setErrorPwd] = React.useState(false);
     const [errorRetypePwd, setErrorRetypePwd] = React.useState(false);
+    const [errorLastName, setErrorLastName] = React.useState(false);
+    const [errorFirstName, setErrorFirstName] = React.useState(false);
+    const [isValidInput, setIsValidInput]=React.useState(false);
     // -------
     const [isOpenModal, setOpenModal] = React.useState(false);
-
+    const [isOpenAlert, setOpenAlert] = React.useState(false);
 
     const updateInputRegister = (e) => {
         switch (e.target.id) {
             case 'firstName':
-                setFirstName(e.target.value);
+                let firstname = e.target.value;
+                if(!isEmptyOrSpaces(firstname))
+                {
+                    setErrorFirstName(false);
+                }
+                else setErrorFirstName(true);
+                setFirstName(firstname);
                 break;
             case 'lastName':
-                setLastName(e.target.value);
+                let lastname = e.target.value;
+                setLastName(lastname);
+                if(!isEmptyOrSpaces(lastname))
+                {
+                    setErrorLastName(false);
+                }
+                else setErrorLastName(true);
                 break;
             case 'phone':
-                setPhone(e.target.value);
-                if (e.target.value.match(/^0(1\d{9}|9\d{8})$/)) {
+                let phone = e.target.value;
+                setPhone(phone);
+                let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+                if (phone.match(vnf_regex)&& !isEmptyOrSpaces(phone)) {
                     setErrorPhone(false);
                     setError("");
                 }
@@ -112,7 +135,8 @@ export default function SignUp() {
                 setBirthday(new Date(e.target.value).getTime() / 1000);
                 break;
             case 'password1':
-                if (e.target.value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
+                let password =e.target.value;
+                if (password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/) & !isEmptyOrSpaces(password)) {
                     setErrorPwd(false);
                     setError("");
                 }
@@ -120,10 +144,11 @@ export default function SignUp() {
                     setErrorPwd(true);
                     setError("Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase");
                 }
-                setPassword1(e.target.value);
+                setPassword1(password);
                 break;
             case 'password2':
-                if (e.target.value == password1) {
+                let rePwd=e.target.value;
+                if (rePwd == password1 & !isEmptyOrSpaces(rePwd)) {
                     setErrorRetypePwd(false);
                     setError("");
                 }
@@ -131,7 +156,7 @@ export default function SignUp() {
                     setErrorRetypePwd(true);
                     setError("Password not matched");
                 }
-                setPassword2(e.target.value);
+                setPassword2(rePwd);
                 break;
             case 'otp':
                 setOtp(e.target.value);
@@ -168,8 +193,8 @@ export default function SignUp() {
         axios.request(config)
             .then(response => response.data)
             .then(data => {
-                if(data['status'] === 'success'){
-                    if(!resendOtp){
+                if (data['status'] === 'success') {
+                    if (!resendOtp) {
                         handleShowAndCloseModal();
                     }
                     setMessage(data['message']);
@@ -180,11 +205,14 @@ export default function SignUp() {
                 // setState for showing errors here.
                 setError(error.response.data['message']);
                 setDisableRegisterBtn(false);
+                setOpenAlert(true);
                 // Sẽ disable nút resend code ở đây, sử dụng lại cái setDisableRegisterBtn cũng được, dùng setTimeOut các kiểu.
             });
     }
+    const renderAlert = () => {
 
-    const handleConfirmOtp = async () =>{
+    }
+    const handleConfirmOtp = async () => {
         const verifyForm = {
             phone: phone,
             otp: otp
@@ -204,7 +232,7 @@ export default function SignUp() {
         axios.request(config)
             .then(response => response.data)
             .then(data => {
-                if(data['status'] === 'success'){
+                if (data['status'] === 'success') {
                     console.log("success");
                     console.log(`Server msg: ${data['message']}`);
                 }
@@ -216,14 +244,15 @@ export default function SignUp() {
                 setDisableVerifyBtn(false);
             });
     }
-    const handleHitEnter = (e)=>{
-        if(e.key === 'Enter'){
+    const handleHitEnter = (e) => {
+        if (e.key === 'Enter') {
             handleConfirmOtp();
         }
     }
 
     return (
         <Container component="main" maxWidth="sm">
+
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -412,12 +441,19 @@ export default function SignUp() {
                             />
                         </Grid>
                     </Grid>
+                    <Collapse in={isOpenAlert}>
+                        <Alert severity="error"
+                        >
+                        <AlertTitle>Error</AlertTitle>
+                        {error} — <strong>check it out!</strong>
+                        </Alert>
+                    </Collapse>
                     <Button
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={()=>{handleRegister(false)}}
+                        onClick={() => { handleRegister(false) }}
                         disabled={disableRegisterBtn}>
                         Sign Up
                     </Button>
@@ -444,15 +480,6 @@ export default function SignUp() {
                         <div id="dialog">
                             <h3>Please enter the 6-digit verification code we sent via SMS:</h3>
                             <span>(we want to make sure it's you before we contact our movers)</span>
-                            {/* <div id="form">
-                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
-                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
-                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
-                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
-                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
-                                <input type="number" maxLength="1" size="1" min="0" max="9" pattern="[0-9]{1}" />
-                                <button class="btn btn-primary btn-embossed">Verify</button>
-                            </div> */}
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
@@ -465,27 +492,19 @@ export default function SignUp() {
                                     onKeyDown={handleHitEnter}
                                 />
                             </Grid>
-                            <div id="form" style={{margin: '0px auto 0'}}>
-                                <button style={{margin: '20px auto 30px'}} class="btn btn-primary btn-embossed" 
+                            <div id="form" style={{ margin: '0px auto 0' }}>
+                                <button style={{ margin: '20px auto 30px' }} class="btn btn-primary btn-embossed"
                                     onClick={handleConfirmOtp} disabled={disableVerifyBtn}>
-                                        Verify
+                                    Verify
                                 </button>
                             </div>
                             <div>
                                 Didn't receive the code?<br />
-                                <p style={{marginBottom: 0}} className="btn" onClick={()=>{handleRegister(true)}} disabled={setDisableRegisterBtn}>Send code again</p><br />
+                                <p style={{ marginBottom: 0 }} className="btn" onClick={() => { handleRegister(true) }} disabled={setDisableRegisterBtn}>Send code again</p><br />
                             </div>
                         </div>
                     </div>
                 </Modal.Body>
-                {/* <Modal.Footer>
-                    <Button 
-                        color="secondary" onClick={handleShowAndCloseModal}>
-                        Close
-                    </Button>
-                    <Button
-                        color="primary" onClick={handleConfirmOtp} disabled={disableVerifyBtn}>Verify</Button>
-                </Modal.Footer> */}
             </Modal>
         </Container>
 
