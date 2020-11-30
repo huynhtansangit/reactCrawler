@@ -125,7 +125,8 @@ class Gallery extends Component {
         let renderLoadMoreButton = () => {
             // Load more only available with instagram
             if(this.props.nameNetwork === 'instagram'){
-                if (Object.keys(this.props.dataGallery).length === 0) {
+                if (Object.keys(this.props.dataGallery).length === 0 ||
+                    !this.props.dataGallery.videosData || !this.props.dataGallery.imagesData) {
                     return ('');
                 }
                 else {
