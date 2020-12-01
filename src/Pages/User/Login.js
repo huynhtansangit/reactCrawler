@@ -27,7 +27,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link  color="inherit" href="/">
+      <Link color="inherit" href="/">
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -66,7 +66,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
+function isEmptyOrSpaces(str) {
+  return str === null || str.match(/^ *$/) !== null;
+}
 export default function SignInSide() {
   const classes = useStyles();
   const [phone, setPhone] = React.useState("");
@@ -77,36 +79,68 @@ export default function SignInSide() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isShowAlert, setShowAlert] = React.useState(false);
 
-  const [isRememberChecked, setRemember] = React.useState(cookies.get('phone')? true: false);
+  const [isValidatePhone, setIsValidatePhone] = React.useState(false);
+  const [messagePhone, setMessagePhone] = React.useState("Phone must not be empty");
 
-  const updateInputPhone = (event) =>{
+  const [isValidatePwd, setIsValidatePwd] = React.useState(false);
+  const [messagePwd, setMessagePwd] = React.useState("Password must not be empty");
+
+  const [isRememberChecked, setRemember] = React.useState(cookies.get('phone') ? true : false);
+
+  const updateInputPhone = (event) => {
+    let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+    let phone =event.target.value;
+    if (isEmptyOrSpaces(phone)| !phone.match(vnf_regex)) {
+      setIsValidatePhone(false);
+      if (isEmptyOrSpaces(phone)){
+        setMessagePhone("Phone must not be empty");
+
+      }
+      else {
+      setMessagePhone("Wrong format phone number");
+      }
+    }
+    else {
+      setIsValidatePhone(true);
+      setMessagePhone("");
+    }
     setPhone(event.target.value);
   }
 
-  const updateInputPassword = (event) =>{
+  const updateInputPassword = (event) => {
+    if (isEmptyOrSpaces(event.target.value)) {
+      setIsValidatePwd(false);
+      setMessagePwd("Password must not be empty");
+    }
+    else {
+      setIsValidatePwd(true);
+      setMessagePwd("");
+    }
     setPwd(event.target.value);
   }
 
-  const checkRemember = ()=>{
+  const checkRemember = () => {
     setRemember(!isRememberChecked);
   }
 
-  const validateInputLogin = ()=>{
+  const validateInputLogin = () => {
     const checkPhone = phone ? phone : cookies.get("phone");
     const checkPassword = pwd ? pwd : cookies.get("password");
-    if(!checkPhone || !checkPassword){
+    if (!checkPhone || !checkPassword) {
       setDisableLoginBtn(true);
     }
-    else{
+    else {
       setDisableLoginBtn(false);
     }
   }
 
   const handleLogin = async () => {
+    console.log(messagePhone);
+    console.log(messagePwd);
     const loginForm = {
-      'phone':phone ? phone : cookies.get("phone"),
-      'password':pwd ? pwd : cookies.get("password"),
-      'grant_type':'password'
+      'phone': phone ? phone : cookies.get("phone"),
+      'password': pwd ? pwd : cookies.get("password"),
+      'grant_type': 'password'
     };
 
     const formData = qs.stringify(loginForm);
@@ -122,44 +156,49 @@ export default function SignInSide() {
     };
 
     // Temporary disable btn after clicked.
-    setDisableLoginBtn(true);
-    
-    axios.request(option)
-      .then(response => response.data)
-      .then(data => {
-        if(data){
-          cookies.set('accessToken', data['accessToken'], { path: '/' });
-          cookies.set('refreshToken', data['refreshToken'], { path: '/' });
-          cookies.set('expireAt', data['expireAt'], { path: '/' });
-          
-          setIsLoggedIn(true);
+    // setDisableLoginBtn(true);
+    if (isValidatePhone & isValidatePwd) {
+      setShowAlert(false);
+      axios.request(option)
+        .then(response => response.data)
+        .then(data => {
+          if (data) {
+            cookies.set('accessToken', data['accessToken'], { path: '/' });
+            cookies.set('refreshToken', data['refreshToken'], { path: '/' });
+            cookies.set('expireAt', data['expireAt'], { path: '/' });
 
-          if(isRememberChecked){
-            cookies.set('phone', phone, { path: '/login' });
-            cookies.set('password', pwd, { path: '/login' });
+            setIsLoggedIn(true);
+
+            if (isRememberChecked) {
+              cookies.set('phone', phone, { path: '/login' });
+              cookies.set('password', pwd, { path: '/login' });
+            }
+            else {
+              cookies.set('phone', "", { path: '/login' });
+              cookies.set('password', "", { path: '/login' });
+            }
+            // return(<Redirect to={{pathname: "/"}}/>)
           }
-          else{
-            cookies.set('phone', "", { path: '/login' });
-            cookies.set('password', "", { path: '/login' }); 
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error('Error:', error.response.data);
+            // setState for showing errors here.
+            if (error.response.status === 401 || error.response.status === 404)
+              setError("Phone and/or password is incorrect.")
+            else
+              setError(error);
           }
-          // return(<Redirect to={{pathname: "/"}}/>)
-        }
-      })
-      .catch((error) => {
-        if(error.response){
-          console.error('Error:', error.response.data);
-          // setState for showing errors here.
-          if(error.response.status === 401 || error.response.status === 404)
-            setError("Phone and/or password is incorrect.")
-          else
-            setError(error);
-        }
-        else{
-          setError("Something went wrong. Please check your internet connection.");
-        }
-        setDisableLoginBtn(false);
-        setShowAlert(true);
-      });
+          else {
+            setError("Something went wrong. Please check your internet connection.");
+          }
+          setDisableLoginBtn(false);
+          setShowAlert(true);
+        });
+    }
+    else {
+      setShowAlert(true);
+    }
   }
 
   return (
@@ -187,6 +226,8 @@ export default function SignInSide() {
               autoFocus
               onChange={updateInputPhone}
               value={cookies.get("phone") ? cookies.get("phone") : phone}
+              error={isValidatePhone}
+              helperText={messagePhone}
             />
             <TextField
               variant="outlined"
@@ -200,24 +241,25 @@ export default function SignInSide() {
               autoComplete="current-password"
               onChange={updateInputPassword}
               value={cookies.get("password") ? cookies.get("password") : pwd}
+              error={isValidatePwd}
+              helperText={messagePwd}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" checked={isRememberChecked} onClick={checkRemember}/>}
+              control={<Checkbox value="remember" color="primary" checked={isRememberChecked} onClick={checkRemember} />}
               label="Remember me"
             />
             <Collapse in={isShowAlert}>
-                <Alert severity="error"
-                >
+              <Alert severity="error">
                 <AlertTitle>Error</AlertTitle>
-                  {error}
-                </Alert>
+                <p> {messagePhone} <br/> {messagePwd} — <strong>check it out!</strong></p> 
+              </Alert>
             </Collapse>
             <Button
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={()=>{handleLogin()}}
+              onClick={() => { handleLogin() }}
               disabled={disableLoginBtn}
             >
               Sign In
