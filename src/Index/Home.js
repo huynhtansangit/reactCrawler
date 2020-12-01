@@ -23,20 +23,27 @@ class Index extends Component {
     }
 
     async getMedia(inputUrl, nameNetwork, cursor){
-        const option = {
+        let option = {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "url": inputUrl,
-                "cursor": cursor ? cursor : ""
-            })
+            }
         };
         
         try {
-            const response = await fetch(DOWNLOAD_ENDPOINT+nameNetwork, option);
+            let response;
+            if(nameNetwork === 'tiktok'){
+                option['method']='GET';
+                response = await fetch(DOWNLOAD_ENDPOINT+nameNetwork+"/info?url="+inputUrl, option);
+            }
+            else{
+                option['body'] = JSON.stringify({
+                    "url": inputUrl,
+                    "cursor": cursor ? cursor : ""
+                })
+                response = await fetch(DOWNLOAD_ENDPOINT+nameNetwork, option);
+            }
             const data = await response.json();
             let imagesData = [];
             let videosData = [];
