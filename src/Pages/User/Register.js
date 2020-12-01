@@ -32,7 +32,7 @@ function Copyright() {
             {'Copyright © '}
             <Link color="inherit" href="/">
                 Your Website
-      </Link>{' '}
+            </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
@@ -96,7 +96,7 @@ export default function SignUp() {
     const [isValidInput, setIsValidInput]=React.useState(false);
     // -------
     const [isOpenModal, setOpenModal] = React.useState(false);
-    const [isOpenAlert, setOpenAlert] = React.useState(false);
+    const [isShowAlert, setShowAlert] = React.useState(false);
 
     const updateInputRegister = (e) => {
         switch (e.target.id) {
@@ -201,17 +201,20 @@ export default function SignUp() {
                 }
             })
             .catch((error) => {
-                console.error('Error:', error.response.data);
-                // setState for showing errors here.
-                setError(error.response.data['message']);
+                if(error.response){
+                    console.error('Error:', error.response.data);
+
+                    setError(error.response.data['message']);
+                    // Sẽ disable nút resend code ở đây, sử dụng lại cái setDisableRegisterBtn cũng được, dùng setTimeOut các kiểu.
+                }
+                else{
+                    setError("Something went wrong. Please check your internet connection.");
+                }
                 setDisableRegisterBtn(false);
-                setOpenAlert(true);
-                // Sẽ disable nút resend code ở đây, sử dụng lại cái setDisableRegisterBtn cũng được, dùng setTimeOut các kiểu.
+                setShowAlert(true);
             });
     }
-    const renderAlert = () => {
-
-    }
+    
     const handleConfirmOtp = async () => {
         const verifyForm = {
             phone: phone,
@@ -232,15 +235,22 @@ export default function SignUp() {
         axios.request(config)
             .then(response => response.data)
             .then(data => {
-                if (data['status'] === 'success') {
-                    console.log("success");
-                    console.log(`Server msg: ${data['message']}`);
+                if(data){
+                    if (data['status'] === 'success') {
+                        console.log("success");
+                        console.log(`Server msg: ${data['message']}`);
+                    }
                 }
             })
             .catch((error) => {
-                console.error('Error:', error.response.data);
-                // setState for showing errors here.
-                setError(error.response.data['message']);
+                if(error.response){
+                    console.error('Error:', error.response.data);
+                    // setState for showing errors here.
+                    setError(error.response.data['message']);
+                }
+                else{
+                    setError("Something went wrong. Please check your internet connection.");
+                }
                 setDisableVerifyBtn(false);
             });
     }
@@ -314,17 +324,7 @@ export default function SignUp() {
                                 }}
                             />
                         </Grid>
-                        {/* <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                            />
-                        </Grid> */}
+                        
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
@@ -441,7 +441,7 @@ export default function SignUp() {
                             />
                         </Grid>
                     </Grid>
-                    <Collapse in={isOpenAlert}>
+                    <Collapse in={isShowAlert}>
                         <Alert severity="error"
                         >
                         <AlertTitle>Error</AlertTitle>

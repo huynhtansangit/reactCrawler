@@ -16,9 +16,12 @@ import qs from 'query-string';
 import Cookies from 'universal-cookie'
 import axios from 'axios'
 import { Redirect } from 'react-router';
+import Collapse from '@material-ui/core/Collapse';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
+const cookies = new Cookies();
 
 function Copyright() {
   return (
@@ -72,6 +75,9 @@ export default function SignInSide() {
   const [error, setError] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isShowAlert, setShowAlert] = React.useState(false);
+
+  const [isRememberChecked, setRemember] = React.useState(cookies.get('phone')? true: false);
 
   const updateInputPhone = (event) =>{
     setPhone(event.target.value);
@@ -81,10 +87,25 @@ export default function SignInSide() {
     setPwd(event.target.value);
   }
 
+  const checkRemember = ()=>{
+    setRemember(!isRememberChecked);
+  }
+
+  const validateInputLogin = ()=>{
+    const checkPhone = phone ? phone : cookies.get("phone");
+    const checkPassword = pwd ? pwd : cookies.get("password");
+    if(!checkPhone || !checkPassword){
+      setDisableLoginBtn(true);
+    }
+    else{
+      setDisableLoginBtn(false);
+    }
+  }
+
   const handleLogin = async () => {
     const loginForm = {
-      'phone':phone,
-      'password':pwd,
+      'phone':phone ? phone : cookies.get("phone"),
+      'password':pwd ? pwd : cookies.get("password"),
       'grant_type':'password'
     };
 
@@ -106,22 +127,38 @@ export default function SignInSide() {
     axios.request(option)
       .then(response => response.data)
       .then(data => {
-        const cookies = new Cookies();
-        cookies.set('accessToken', data['accessToken'], { path: '/' });
-        cookies.set('refreshToken', data['refreshToken'], { path: '/' });
-        cookies.set('expireAt', data['expireAt'], { path: '/' });
+        if(data){
+          cookies.set('accessToken', data['accessToken'], { path: '/' });
+          cookies.set('refreshToken', data['refreshToken'], { path: '/' });
+          cookies.set('expireAt', data['expireAt'], { path: '/' });
+          
+          setIsLoggedIn(true);
 
-        setIsLoggedIn(true);
-        return(<Redirect to={{pathname: "/"}}/>)
+          if(isRememberChecked){
+            cookies.set('phone', phone, { path: '/login' });
+            cookies.set('password', pwd, { path: '/login' });
+          }
+          else{
+            cookies.set('phone', "", { path: '/login' });
+            cookies.set('password', "", { path: '/login' }); 
+          }
+          // return(<Redirect to={{pathname: "/"}}/>)
+        }
       })
       .catch((error) => {
-        console.error('Error:', error.response.data);
-        // setState for showing errors here.
-        if(error.response.status === 401 || error.response.status === 404)
-          setError("Phone and/or password is incorrect.")
-        else
-          setError(error);
+        if(error.response){
+          console.error('Error:', error.response.data);
+          // setState for showing errors here.
+          if(error.response.status === 401 || error.response.status === 404)
+            setError("Phone and/or password is incorrect.")
+          else
+            setError(error);
+        }
+        else{
+          setError("Something went wrong. Please check your internet connection.");
+        }
         setDisableLoginBtn(false);
+        setShowAlert(true);
       });
   }
 
@@ -149,6 +186,7 @@ export default function SignInSide() {
               autoComplete="phone"
               autoFocus
               onChange={updateInputPhone}
+              value={cookies.get("phone") ? cookies.get("phone") : phone}
             />
             <TextField
               variant="outlined"
@@ -161,11 +199,19 @@ export default function SignInSide() {
               id="password"
               autoComplete="current-password"
               onChange={updateInputPassword}
+              value={cookies.get("password") ? cookies.get("password") : pwd}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember" color="primary" checked={isRememberChecked} onClick={checkRemember}/>}
               label="Remember me"
             />
+            <Collapse in={isShowAlert}>
+                <Alert severity="error"
+                >
+                <AlertTitle>Error</AlertTitle>
+                  {error}
+                </Alert>
+            </Collapse>
             <Button
               fullWidth
               variant="contained"
