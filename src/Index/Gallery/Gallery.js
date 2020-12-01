@@ -75,26 +75,19 @@ class Gallery extends Component {
                     fullname="Loading" countPost="Loading" countFollowedBy="Loading" />)
             }
             else {
-                if (this.props.nameNetwork !== 'tiktok') {
-                    return (!this.props.dataGallery.error ?
-                        (
-                            <OwnerMedia avatar={this.props.dataGallery.ownerMedia.avatar}
-                                username={this.props.dataGallery.ownerMedia.username}
-                                fullname={this.props.dataGallery.ownerMedia.fullname}
-                                countPost={this.props.dataGallery.ownerMedia.countPost}
-                                countFollowedBy={this.props.dataGallery.ownerMedia.countFollowedBy} />) : (
-                            <OwnerMedia
-                                avatar="https://bizflyportal.mediacdn.vn/bizflyportal/461/347/2020/06/02/22/54/nhi15910916872906.jpg"
-                                username="Error" fullname="Error" countPost="Error" countFollowedBy="Error" />
-                        ))
-                }
-                else {
-                    // FIXME xảy ra trường hợp khi chọn tiktok sau đó chọn 2 cái còn lại sẽ lỗi, sẽ sửa khi mà có data của owner trả về với tiktok
-                    return (<OwnerMedia
-                        avatar="https://yinyangit.files.wordpress.com/2013/03/question-mark.png?w=346"
-                        username="Not Provided" fullname="Not Provided" countPost="Not Provided" countFollowedBy="Not Provided" />)
-                }
-
+                return (!this.props.dataGallery.error ?
+                    (
+                        <OwnerMedia avatar={this.props.dataGallery.ownerMedia.avatar}
+                            username={this.props.dataGallery.ownerMedia.username}
+                            fullname={this.props.dataGallery.ownerMedia.fullname}
+                            countPost={this.props.dataGallery.ownerMedia.countPost}
+                            countFollowedBy={this.props.dataGallery.ownerMedia.countFollowedBy} 
+                            nameNetwork={this.props.nameNetwork}/>) : (
+                        <OwnerMedia
+                            avatar="https://bizflyportal.mediacdn.vn/bizflyportal/461/347/2020/06/02/22/54/nhi15910916872906.jpg"
+                            username="Error" fullname="Error" countPost="Error" countFollowedBy="Error" 
+                            nameNetwork={this.props.nameNetwork}/>
+                    ))
             }
         }
         let renderVideoGallery = () => {
@@ -109,11 +102,13 @@ class Gallery extends Component {
                     if(this.props.nameNetwork === 'tiktok'){
                         return(<VideoItem url={`${DOWNLOAD_ENDPOINT}${this.props.nameNetwork}?url=${this.props.inputUrl}`}></VideoItem>)
                     }
-                    else
+                    else{
+                        if(this.props.dataGallery.videosData)
                         return (
                             (this.props.dataGallery.videosData.map((video, idx) =>
                                 <VideoItem url={video.url} key={idx}></VideoItem>
                             )))
+                    }
                 }
                 else {
                     // else: error occurred => Show pic 500
