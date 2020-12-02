@@ -6,32 +6,6 @@ $(document).ready(function () {
     $(".storage-tab").attr( "style", "display: none !important;" ); 
     $("#picture-storage-container").show();
     
-    // For swiper, tạm thời đang bỏ, nếu trong tương lai không cần nữa sẽ xóa.
-    // new Swiper('.swiper-container', {
-    //     // Optional parameters
-    //     direction: 'vertical',
-    //     loop: true,
-
-    //     // If we need pagination
-    //     pagination: {
-    //         el: '.swiper-pagination',
-    //     },
-
-    //     // Navigation arrows
-    //     navigation: {
-    //         nextEl: '.swiper-button-next',
-    //         prevEl: '.swiper-button-prev',
-    //     },
-
-    //     // And if we need scrollbar
-    //     scrollbar: {
-    //         el: '.swiper-scrollbar',
-    //     },
-
-    //     // Prevent not changing width anymore
-    //     slidesPerView:'auto'
-    // })
-
 
     // DECLARE HELPER FUNCTION
     function showStorageTab(clickedBtn){

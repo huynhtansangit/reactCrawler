@@ -18,17 +18,23 @@ class Gallery extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isImg: false,
+            isImg: true,
             isVideo: false,
         }
     }
 
     componentDidMount() {
-        console.log(this.props.dataGallery.videosData);
+        
     }
 
     componentDidUpdate() {
 
+    }
+
+    componentWillReceiveProps = (props)=> {
+        if(props.nameNetwork !== 'instagram'){
+            this.activeVideo();
+        }
     }
 
     activePhoto = () => {
@@ -162,7 +168,8 @@ class Gallery extends Component {
                             <span>VIDEO TAB</span>
                         </div>
                     </div>
-                    <div id="image-tab-gallery" className="row gallery-tab">
+
+                    <div id="image-tab-gallery" className="row gallery-tab" style={{display: this.state.isImg ? "" : "none"}}>
                         <div className="col-lg-8 col-md-8 col-sm-12 image-video-container justify-content-center">
                             {renderImageGallery()}
                         </div>
@@ -175,7 +182,8 @@ class Gallery extends Component {
                         </div>
                         {renderLoadMoreButton()}
                     </div>
-                    <div id="video-tab-gallery" className="row gallery-tab ">
+                    
+                    <div id="video-tab-gallery" className="row gallery-tab " style={{display: this.state.isVideo ? "" : "none"}}>
                         <div className="col-lg-8 col-md-8 col-sm-12 image-video-container justify-content-center">
                             {renderVideoGallery()}
                         </div>
