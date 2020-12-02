@@ -73,10 +73,9 @@ nav div ul li a {
  }
 .input-header{
     position: relative;
-    left: -25px;
     font-family: MuseoSlab700;
     height: 44px !important;
-    width: 390px;
+    width: 396px;
     color: black !important;
     background-color: #FFFFFF;
     border-bottom:#FF0000 4px solid !important;

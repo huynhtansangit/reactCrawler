@@ -1,8 +1,51 @@
 import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import { Modal } from 'react-bootstrap';
+import { makeStyles } from '@material-ui/core/styles';
 
+let classes= makeStyles((theme) => ({
+    container: {
+        maxWidth: 'lg'
+    },
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(3),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+    resize: {
+        fontSize: 18,
+    },
+    labelRoot: {
+        fontSize: 16,
+    },
+    labelFocused: {
+        fontSize: 20,
+    }
+}));;
 class Reset_Password extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isOpenModal: false,
+        }
+    }
+    openModal = () => {
+        this.setState({ isOpenModal: true });
+    }
     render() {
         return (
             <table align="center" cellPadding={0} style={{ borderSpacing: 0, fontFamily: '"Muli",Arial,sans-serif', color: '#333333', margin: '0 auto', width: '100%', maxWidth: '600px' }}>
@@ -21,35 +64,91 @@ class Reset_Password extends Component {
                                 <tbody>
                                     <tr>
                                         <td align="center" className="inner" style={{ paddingTop: '15px', paddingBottom: '15px', paddingRight: '30px', paddingLeft: '30px' }} valign="middle"><span className="sg-image" data-imagelibrary="%7B%22width%22%3A%22255%22%2C%22height%22%3A93%2C%22alt_text%22%3A%22Forgot%20Password%22%2C%22alignment%22%3A%22%22%2C%22border%22%3A0%2C%22src%22%3A%22https%3A//marketing-image-production.s3.amazonaws.com/uploads/35c763626fdef42b2197c1ef7f6a199115df7ff779f7c2d839bd5c6a8c2a6375e92a28a01737e4d72f42defcac337682878bf6b71a5403d2ff9dd39d431201db.png%22%2C%22classes%22%3A%7B%22sg-image%22%3A1%7D%7D">
-                                            <img alt="Forgot Password" className="banner" height={120} src="https://marketing-image-production.s3.amazonaws.com/uploads/35c763626fdef42b2197c1ef7f6a199115df7ff779f7c2d839bd5c6a8c2a6375e92a28a01737e4d72f42defcac337682878bf6b71a5403d2ff9dd39d431201db.png" style={{ borderWidth: '0px', marginTop: '30px', width: '355px', height: '153px' }} width={255} /></span></td>
+                                            <img alt="Forgot Password" className="banner-reset" height={120} src="https://marketing-image-production.s3.amazonaws.com/uploads/35c763626fdef42b2197c1ef7f6a199115df7ff779f7c2d839bd5c6a8c2a6375e92a28a01737e4d72f42defcac337682878bf6b71a5403d2ff9dd39d431201db.png" style={{ borderWidth: '0px', marginTop: '30px', width: '355px', height: '153px' }} width={255} /></span></td>
                                     </tr>
                                     <tr>
                                         <td className="inner contents center" style={{ paddingTop: '15px', paddingBottom: '15px', paddingRight: '30px', paddingLeft: '30px', textAlign: 'left' }}>
                                             <center>
                                                 <p className="h1 center" style={{ margin: 0, textAlign: 'center', fontFamily: '"flama-condensed","Arial Narrow",Arial', fontWeight: 100, fontSize: '30px', marginBottom: '26px' }}>Forgot your password?</p>
                                                 {/*[if (gte mso 9)|(IE)]><![endif]*/}
-                                               
-                                                <Grid item xs={12}>
-                                                <TextField
-                                                    id="outlined-textarea"
-                                                    label="Multiline Placeholder"
-                                                    placeholder="Placeholder"
-                                                    multiline
-                                                    variant="outlined"
-                                                    required
-                                                    name="password"
-                                                    type="password"
-                                                    autoComplete="new-password"
 
-                                                />
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        id="phone-textarea"
+                                                        label="Phone number"
+                                                        placeholder="0xxxxxxxxx"
+                                                        multiline
+                                                        variant="outlined"
+                                                        required
+                                                        name="Phone"
+                                                        autoComplete="0000000000"
+
+                                                    />
                                                 </Grid>
-                                                {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}<span className="sg-image" data-imagelibrary="%7B%22width%22%3A%22260%22%2C%22height%22%3A54%2C%22alt_text%22%3A%22Reset%20your%20Password%22%2C%22alignment%22%3A%22%22%2C%22border%22%3A0%2C%22src%22%3A%22https%3A//marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png%22%2C%22link%22%3A%22%23%22%2C%22classes%22%3A%7B%22sg-image%22%3A1%7D%7D"><a href="#" target="_blank">
-                                                    <img alt="Reset your Password" height={54} src="https://marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png" style={{ borderWidth: '0px', marginTop: '30px', marginBottom: '50px', width: '355px', height: '54px' }} width={260} /></a></span>
+                                                {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}<span className="sg-image" data-imagelibrary="%7B%22width%22%3A%22260%22%2C%22height%22%3A54%2C%22alt_text%22%3A%22Reset%20your%20Password%22%2C%22alignment%22%3A%22%22%2C%22border%22%3A0%2C%22src%22%3A%22https%3A//marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png%22%2C%22link%22%3A%22%23%22%2C%22classes%22%3A%7B%22sg-image%22%3A1%7D%7D">
+                                                    <a onClick={this.openModal}>
+                                                        <img alt="Reset your Password" height={54} src="https://marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png" style={{ borderWidth: '0px', marginTop: '30px', marginBottom: '50px', width: '355px', height: '54px' }} width={260} /></a></span>
                                                 {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}</center>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <Modal
+                                show={this.state.isOpenModal}
+                                // onHide={handleShowAndCloseModal}
+                                backdrop="static"
+                                keyboard={false}
+                            >
+                                <Modal.Body>
+                                    <div id="wrapper">
+                                        <div id="dialog">
+                                            <h3>Please enter the 6-digit verification code we sent via SMS:</h3>
+                                            <span>(we want to make sure it's you before we contact our movers)</span>
+                                            <form className={classes.form} noValidate>
+                                                <Grid container spacing={2}>
+                                                    <Grid item xs={12}>
+                                                        <TextField
+                                                            variant="outlined"
+                                                            required
+                                                            fullWidth
+                                                            name="otp"
+                                                            label="Verify Phone Number"
+                                                            id="otp"
+                                                        // onChange={updateInputRegister}
+                                                        // onKeyDown={handleHitEnter}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12}>
+                                                        <TextField
+                                                            variant="outlined"
+                                                            required
+                                                            fullWidth
+                                                            name="new-password"
+                                                            label="New password"
+                                                            id="new-password"
+                                                        // onChange={updateInputRegister}
+                                                        // onKeyDown={handleHitEnter}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </form>
+                                            <div id="form" style={{ margin: '0px auto 0' }}>
+                                                <button style={{ margin: '20px auto 30px' }} class="btn btn-primary btn-embossed"
+                                                // onClick={}
+                                                >
+                                                    Verify
+                                </button>
+                                            </div>
+                                            <div>
+                                                Didn't receive the code?<br />
+                                                <p style={{ marginBottom: 0 }} className="btn"
+                                                // onClick={}
+                                                >Send code again</p><br />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Modal.Body>
+                            </Modal>
                             {/*[if (gte mso 9)|(IE)]>
                     </td></tr></table>
                     </center>
