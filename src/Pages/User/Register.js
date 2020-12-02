@@ -9,7 +9,9 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import CloseIcon from '@material-ui/icons/Close';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,12 +20,7 @@ import qs from 'query-string';
 import { Modal } from 'react-bootstrap';
 import './Verify.css';
 import axios from 'axios';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+
 
 
 const REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register";
@@ -73,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 20,
     }
 }));
-function isEmptyOrSpaces(str) {
+function isEmptyOrSpaces(str){
     return str === null || str.match(/^ *$/) !== null;
 }
 export default function SignUp() {
@@ -96,16 +93,17 @@ export default function SignUp() {
     const [errorRetypePwd, setErrorRetypePwd] = React.useState(false);
     const [errorLastName, setErrorLastName] = React.useState(false);
     const [errorFirstName, setErrorFirstName] = React.useState(false);
-    const [isValidInput, setIsValidInput] = React.useState(false);
+    const [isValidInput, setIsValidInput]=React.useState(false);
     // -------
     const [isOpenModal, setOpenModal] = React.useState(false);
     const [isShowAlert, setShowAlert] = React.useState(false);
-    const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+
     const updateInputRegister = (e) => {
         switch (e.target.id) {
             case 'firstName':
                 let firstname = e.target.value;
-                if (!isEmptyOrSpaces(firstname)) {
+                if(!isEmptyOrSpaces(firstname))
+                {
                     setErrorFirstName(false);
                 }
                 else setErrorFirstName(true);
@@ -114,7 +112,8 @@ export default function SignUp() {
             case 'lastName':
                 let lastname = e.target.value;
                 setLastName(lastname);
-                if (!isEmptyOrSpaces(lastname)) {
+                if(!isEmptyOrSpaces(lastname))
+                {
                     setErrorLastName(false);
                 }
                 else setErrorLastName(true);
@@ -123,7 +122,7 @@ export default function SignUp() {
                 let phone = e.target.value;
                 setPhone(phone);
                 let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
-                if (phone.match(vnf_regex) && !isEmptyOrSpaces(phone)) {
+                if (phone.match(vnf_regex)&& !isEmptyOrSpaces(phone)) {
                     setErrorPhone(false);
                     setError("");
                 }
@@ -136,7 +135,7 @@ export default function SignUp() {
                 setBirthday(new Date(e.target.value).getTime() / 1000);
                 break;
             case 'password1':
-                let password = e.target.value;
+                let password =e.target.value;
                 if (password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/) & !isEmptyOrSpaces(password)) {
                     setErrorPwd(false);
                     setError("");
@@ -148,7 +147,7 @@ export default function SignUp() {
                 setPassword1(password);
                 break;
             case 'password2':
-                let rePwd = e.target.value;
+                let rePwd=e.target.value;
                 if (rePwd == password1 & !isEmptyOrSpaces(rePwd)) {
                     setErrorRetypePwd(false);
                     setError("");
@@ -202,20 +201,20 @@ export default function SignUp() {
                 }
             })
             .catch((error) => {
-                if (error.response) {
+                if(error.response){
                     console.error('Error:', error.response.data);
 
                     setError(error.response.data['message']);
                     // Sẽ disable nút resend code ở đây, sử dụng lại cái setDisableRegisterBtn cũng được, dùng setTimeOut các kiểu.
                 }
-                else {
+                else{
                     setError("Something went wrong. Please check your internet connection.");
                 }
                 setDisableRegisterBtn(false);
                 setShowAlert(true);
             });
     }
-
+    
     const handleConfirmOtp = async () => {
         const verifyForm = {
             phone: phone,
@@ -236,7 +235,7 @@ export default function SignUp() {
         axios.request(config)
             .then(response => response.data)
             .then(data => {
-                if (data) {
+                if(data){
                     if (data['status'] === 'success') {
                         console.log("success");
                         console.log(`Server msg: ${data['message']}`);
@@ -244,12 +243,12 @@ export default function SignUp() {
                 }
             })
             .catch((error) => {
-                if (error.response) {
+                if(error.response){
                     console.error('Error:', error.response.data);
                     // setState for showing errors here.
                     setError(error.response.data['message']);
                 }
-                else {
+                else{
                     setError("Something went wrong. Please check your internet connection.");
                 }
                 setDisableVerifyBtn(false);
@@ -273,7 +272,7 @@ export default function SignUp() {
                     Sign up
                 </Typography>
                 <form className={classes.form} noValidate>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={4}>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 autoComplete="fname"
@@ -325,7 +324,7 @@ export default function SignUp() {
                                 }}
                             />
                         </Grid>
-
+                        
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
@@ -354,19 +353,30 @@ export default function SignUp() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <KeyboardDatePicker
-                                disableToolbar
-                                variant="inline"
-                                format="MM/dd/yyyy"
-                                margin="normal"
-                                id="date-picker-inline"
-                                label="Date picker inline"
-                                value={selectedDate}
-                                onChange={updateInputRegister}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
+                            <TextField
+                                id="birthday"
+                                label="Birthday"
+                                type="date"
+                                defaultValue="2020-02-02T10:30"
+                                InputLabelProps={{
+                                    shrink: true,
                                 }}
+                                onChange={updateInputRegister}
+                                size="normal"
+                                InputProps={{
+                                    classes: {
+                                        input: classes.resize,
+                                        label: classes.resize,
+                                    },
+                                }}
+                                // InputLabelProps={{
+                                //     classes: {
+                                //         root: classes.labelRoot,
+                                //         focused: classes.labelFocused
+                                //     }
+                                // }}
                             />
+                            
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -434,8 +444,8 @@ export default function SignUp() {
                     <Collapse in={isShowAlert}>
                         <Alert severity="error"
                         >
-                            <AlertTitle>Error</AlertTitle>
-                            {error} — <strong>check it out!</strong>
+                        <AlertTitle>Error</AlertTitle>
+                        {error} — <strong>check it out!</strong>
                         </Alert>
                     </Collapse>
                     <Button
