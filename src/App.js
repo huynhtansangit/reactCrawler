@@ -1,23 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 import Index from './Index/Home';
 import ThuNghiem from './Pages/Editor/ThuNghiem';
 import Login from './Pages/User/Login';
 import Register from './Pages/User/Register';
 import Reset_Password from './Pages/User/Reset_Password';
-
+import history from '../src/utils/history'
 
 function App() {
   return (
-    <Router>
+    <Router history={history}>
     <div className="App">
     <Switch>
       <Route path="/Testing" exact component={ThuNghiem}></Route>

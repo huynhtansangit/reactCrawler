@@ -6,7 +6,6 @@ $(document).ready(function () {
 
     // DECLARE EVENT HANDLER
     $(".video-btn, .photo-btn").on("click", function () {
-        console.log("clicked");
         $(".gallery-tab").hide();
         if($(this).attr("id") === 'btn-video-gallery'){
             $("#video-tab-gallery").show();

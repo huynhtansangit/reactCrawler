@@ -9,9 +9,7 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import CloseIcon from '@material-ui/icons/Close';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -93,7 +91,6 @@ export default function SignUp() {
     const [errorRetypePwd, setErrorRetypePwd] = React.useState(false);
     const [errorLastName, setErrorLastName] = React.useState(false);
     const [errorFirstName, setErrorFirstName] = React.useState(false);
-    const [isValidInput, setIsValidInput]=React.useState(false);
     // -------
     const [isOpenModal, setOpenModal] = React.useState(false);
     const [isShowAlert, setShowAlert] = React.useState(false);
@@ -148,7 +145,7 @@ export default function SignUp() {
                 break;
             case 'password2':
                 let rePwd=e.target.value;
-                if (rePwd == password1 & !isEmptyOrSpaces(rePwd)) {
+                if (rePwd === password1 & !isEmptyOrSpaces(rePwd)) {
                     setErrorRetypePwd(false);
                     setError("");
                 }

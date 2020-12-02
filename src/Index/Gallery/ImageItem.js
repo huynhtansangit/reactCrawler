@@ -6,8 +6,6 @@ import { downloadImageFromLink } from "../../services/downloadImageByUrl";
 import { Button, Modal } from 'react-bootstrap';
 
 class ImageItem extends Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -21,16 +19,6 @@ class ImageItem extends Component {
         this.setState({ isOpenModal: !this.state.isOpenModal })
     }
     render() {
-        function getModalStyle() {
-            const top = 10;
-            const left = 10;
-
-            return {
-                top: `${top}%`,
-                left: `${left}%`,
-                transform: `translate(${top}%, ${left}%)`,
-            };
-        }
         return (
             <div className="img-card" variant="primary">
                 <img src={this.props.itemSrc} alt="Img-error" />

@@ -15,9 +15,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import qs from 'query-string';
 import Cookies from 'universal-cookie'
 import axios from 'axios'
-import { Redirect } from 'react-router';
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
+// import history from '../../utils/history'
 
 
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
@@ -69,13 +69,12 @@ const useStyles = makeStyles((theme) => ({
 function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
 }
-export default function SignInSide() {
+export default function SignInSide(props) {
   const classes = useStyles();
   const [phone, setPhone] = React.useState("");
   const [pwd, setPwd] = React.useState("");
   const [disableLoginBtn, setDisableLoginBtn] = React.useState(false);
   const [error, setError] = React.useState("");
-  const [message, setMessage] = React.useState("");
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isShowAlert, setShowAlert] = React.useState(false);
 
@@ -148,7 +147,7 @@ export default function SignInSide() {
 
       // Temporary disable btn after clicked.
       setDisableLoginBtn(true);
-
+      
       axios.request(option)
         .then(response => response.data)
         .then(data => {
@@ -167,7 +166,7 @@ export default function SignInSide() {
               cookies.set('phone', "", { path: '/login' });
               cookies.set('password', "", { path: '/login' });
             }
-            // return(<Redirect to={{pathname: "/"}}/>)
+            props.history.push("/")
           }
         })
         .catch((error) => {

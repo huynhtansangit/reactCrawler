@@ -10,14 +10,6 @@ import 'swiper/swiper.scss';
 import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
-
-
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
 import VideoItem from './VideoItem';
 
 const DOWNLOAD_ENDPOINT = "https://dacnhk1.herokuapp.com/download/";
@@ -195,18 +187,6 @@ class Gallery extends Component {
                                 type="button" className="btn btn-danger">sign in to download</button>
                         </div>
                         {renderLoadMoreButton()}
-                        {/* <Swiper
-                            id="main"
-                            tag="section"
-                            spaceBetween={50}
-                            slidesPerView={3}
-                            navigation
-                            pagination
-                            scrollbar={{ draggable: true }}
-                            onSwiper={(swiper) => console.log(swiper)}
-                            onSlideChange={() => console.log('slide change')}>
-                            { renderVideoGallery() }
-                        </Swiper> */}
                     </div>
                 </div>
             </section>

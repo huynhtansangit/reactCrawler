@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 class VideoItem extends Component {
     constructor(props) {

@@ -5,7 +5,7 @@ class Storage extends Component {
         return (
             <section id="storage-section">
                 <div className="storage-container">
-                    <img id="you-can-find-downloaded-stuff-here" src="Assets/Images/Store/Mask-Group-2-Copy.png" alt="All downloaded picture here" />
+                    <img id="you-can-find-downloaded-stuff-here" src="Assets/Images/Store/Mask-Group-2-Copy.png" alt="All downloaded here" />
                     <div className="row horizontal-wrapper-customized-btn">
                         <div className="profile-customized-btn customized-btn col">
                             <img className="icon-customized-btn" src="Assets/Images/Store/Rectangle -2.png" alt="profile" />
