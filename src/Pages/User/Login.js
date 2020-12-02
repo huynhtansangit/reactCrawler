@@ -15,9 +15,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import qs from 'query-string';
 import Cookies from 'universal-cookie'
 import axios from 'axios'
-import { Redirect } from 'react-router';
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
+// import history from '../../utils/history'
 
 
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
@@ -69,13 +69,12 @@ const useStyles = makeStyles((theme) => ({
 function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
 }
-export default function SignInSide() {
+export default function SignInSide(props) {
   const classes = useStyles();
   const [phone, setPhone] = React.useState("");
   const [pwd, setPwd] = React.useState("");
   const [disableLoginBtn, setDisableLoginBtn] = React.useState(false);
   const [error, setError] = React.useState("");
-  const [message, setMessage] = React.useState("");
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isShowAlert, setShowAlert] = React.useState(false);
 
@@ -123,20 +122,7 @@ export default function SignInSide() {
     setRemember(!isRememberChecked);
   }
 
-  const validateInputLogin = () => {
-    const checkPhone = phone ? phone : cookies.get("phone");
-    const checkPassword = pwd ? pwd : cookies.get("password");
-    if (!checkPhone || !checkPassword) {
-      setDisableLoginBtn(true);
-    }
-    else {
-      setDisableLoginBtn(false);
-    }
-  }
-
   const handleLogin = async () => {
-    console.log(messagePhone);
-    console.log(messagePwd);
     const loginForm = {
       'phone': phone ? phone : cookies.get("phone"),
       'password': pwd ? pwd : cookies.get("password"),
@@ -155,10 +141,13 @@ export default function SignInSide() {
       data: formData
     };
 
-    // Temporary disable btn after clicked.
-    // setDisableLoginBtn(true);
     if (isValidatePhone & isValidatePwd) {
       setShowAlert(false);
+      setError("");
+
+      // Temporary disable btn after clicked.
+      setDisableLoginBtn(true);
+      
       axios.request(option)
         .then(response => response.data)
         .then(data => {
@@ -177,7 +166,7 @@ export default function SignInSide() {
               cookies.set('phone', "", { path: '/login' });
               cookies.set('password', "", { path: '/login' });
             }
-            // return(<Redirect to={{pathname: "/"}}/>)
+            props.history.push("/")
           }
         })
         .catch((error) => {
@@ -187,13 +176,12 @@ export default function SignInSide() {
             if (error.response.status === 401 || error.response.status === 404)
               setError("Phone and/or password is incorrect.")
             else
-              setError(error);
+              setError(error.response.data['message']);
           }
           else {
             setError("Something went wrong. Please check your internet connection.");
           }
           setDisableLoginBtn(false);
-          setShowAlert(true);
         });
     }
     else {
@@ -248,10 +236,16 @@ export default function SignInSide() {
               control={<Checkbox value="remember" color="primary" checked={isRememberChecked} onClick={checkRemember} />}
               label="Remember me"
             />
-            <Collapse in={isShowAlert}>
+            <Collapse in={((messagePhone || messagePwd) && isShowAlert)? true: false}>
               <Alert severity="error">
                 <AlertTitle>Error</AlertTitle>
-                <p> {messagePhone} <br/> {messagePwd} — <strong>check it out!</strong></p> 
+                <p> {messagePhone} <br/> {messagePwd}</p> 
+              </Alert>
+            </Collapse>
+            <Collapse in={error ? true: false}>
+              <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                <p> {error} </p> 
               </Alert>
             </Collapse>
             <Button
