@@ -11,7 +11,7 @@ class Index extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            inputUrl: 'https://www.instagram.com/taylorswift/',
+            inputUrl: 'https://www.instagram.com/selenagomez/',
             nameNetwork: 'instagram',
             cursor: '',
             hasNextPage: true,

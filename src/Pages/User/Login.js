@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -71,8 +71,8 @@ function isEmptyOrSpaces(str) {
 }
 export default function SignInSide(props) {
   const classes = useStyles();
-  const [phone, setPhone] = React.useState("");
-  const [pwd, setPwd] = React.useState("");
+  const [phone, setPhone] = React.useState(localStorage.getItem('phone') ? localStorage.getItem('phone') : "");
+  const [pwd, setPwd] = React.useState(localStorage.getItem('password') ? localStorage.getItem('password') : "");
   const [disableLoginBtn, setDisableLoginBtn] = React.useState(false);
   const [error, setError] = React.useState("");
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -84,11 +84,11 @@ export default function SignInSide(props) {
   const [isValidatePwd, setIsValidatePwd] = React.useState(false);
   const [messagePwd, setMessagePwd] = React.useState("Password must not be empty");
 
-  const [isRememberChecked, setRemember] = React.useState(cookies.get('phone') ? true : false);
+  const [isRememberChecked, setRemember] = React.useState(localStorage.getItem('phone') ? true : false);
 
-  const updateInputPhone = (event) => {
+  const validatePhone = ()=>{
     let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
-    let phone =event.target.value;
+    // let phone = event.target.value ? event.target.value : cookies.get('phone');
     if (isEmptyOrSpaces(phone)| !phone.match(vnf_regex)) {
       setIsValidatePhone(false);
       if (isEmptyOrSpaces(phone)){
@@ -103,11 +103,10 @@ export default function SignInSide(props) {
       setIsValidatePhone(true);
       setMessagePhone("");
     }
-    setPhone(event.target.value);
   }
 
-  const updateInputPassword = (event) => {
-    if (isEmptyOrSpaces(event.target.value)) {
+  const validatePassword = ()=>{
+    if (isEmptyOrSpaces(pwd)) {
       setIsValidatePwd(false);
       setMessagePwd("Password must not be empty");
     }
@@ -115,7 +114,16 @@ export default function SignInSide(props) {
       setIsValidatePwd(true);
       setMessagePwd("");
     }
+  };
+
+  const updateInputPhone = (event) => {
+    setPhone(event.target.value);
+    validatePhone();
+  }
+
+  const updateInputPassword = (event) => {
     setPwd(event.target.value);
+    validatePassword();
   }
 
   const checkRemember = () => {
@@ -141,7 +149,7 @@ export default function SignInSide(props) {
       data: formData
     };
 
-    if (isValidatePhone & isValidatePwd) {
+    if (isValidatePhone && isValidatePwd) {
       setShowAlert(false);
       setError("");
 
@@ -152,24 +160,25 @@ export default function SignInSide(props) {
         .then(response => response.data)
         .then(data => {
           if (data) {
-            cookies.set('accessToken', data['accessToken'], { path: '/' });
-            cookies.set('refreshToken', data['refreshToken'], { path: '/' });
-            cookies.set('expireAt', data['expireAt'], { path: '/' });
+            cookies.set('accessToken', data['accessToken'], { path: '/'});
+            cookies.set('refreshToken', data['refreshToken'], { path: '/'});
+            cookies.set('expireAt', data['expireAt'], { path: '/'});
 
             setIsLoggedIn(true);
 
             if (isRememberChecked) {
-              cookies.set('phone', phone, { path: '/login' });
-              cookies.set('password', pwd, { path: '/login' });
+              localStorage.setItem('phone', phone);
+              localStorage.setItem('password', pwd);
             }
             else {
-              cookies.set('phone', "", { path: '/login' });
-              cookies.set('password', "", { path: '/login' });
+              localStorage.setItem('phone', "");
+              localStorage.setItem('password', "");
             }
             props.history.push("/")
           }
         })
         .catch((error) => {
+          console.log(error);
           if (error.response) {
             console.error('Error:', error.response.data);
             // setState for showing errors here.
@@ -188,6 +197,11 @@ export default function SignInSide(props) {
       setShowAlert(true);
     }
   }
+
+  useEffect(()=>{
+    validatePhone();
+    validatePassword();
+  })
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -213,7 +227,7 @@ export default function SignInSide(props) {
               autoComplete="phone"
               autoFocus
               onChange={updateInputPhone}
-              value={cookies.get("phone") ? cookies.get("phone") : phone}
+              value={phone}
               error={isValidatePhone}
               helperText={messagePhone}
             />
@@ -228,7 +242,7 @@ export default function SignInSide(props) {
               id="password"
               autoComplete="current-password"
               onChange={updateInputPassword}
-              value={cookies.get("password") ? cookies.get("password") : pwd}
+              value={pwd}
               error={isValidatePwd}
               helperText={messagePwd}
             />
