@@ -3,15 +3,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import CloseIcon from '@material-ui/icons/Close';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -70,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 20,
     }
 }));
-function isEmptyOrSpaces(str){
+function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
 }
 export default function SignUp() {
@@ -88,73 +85,118 @@ export default function SignUp() {
     const [error, setError] = React.useState("");
     const [message, setMessage] = React.useState("");
     //  Error configuration
-    const [errorPhone, setErrorPhone] = React.useState(false);
-    const [errorPwd, setErrorPwd] = React.useState(false);
-    const [errorRetypePwd, setErrorRetypePwd] = React.useState(false);
-    const [errorLastName, setErrorLastName] = React.useState(false);
-    const [errorFirstName, setErrorFirstName] = React.useState(false);
-    const [isValidInput, setIsValidInput]=React.useState(false);
+    const [errorPhone, setErrorPhone] = React.useState({
+        message: "",
+        isValid: false,
+    });
+    const [errorPwd, setErrorPwd] = React.useState({
+        message: "",
+        isValid: false,
+    });
+    const [errorRetypePwd, setErrorRetypePwd] = React.useState({
+        message: "",
+        isValid: false,
+    });
+    const [errorLastName, setErrorLastName] = React.useState({
+        message: "",
+        isValid: false,
+    });
+    const [errorFirstName, setErrorFirstName] = React.useState({
+        message: "",
+        isValid: false,
+    });
+    const [isValidInput, setIsValidInput] = React.useState({
+        message: "",
+        isValid: false,
+    });
     // -------
     const [isOpenModal, setOpenModal] = React.useState(false);
     const [isShowAlert, setShowAlert] = React.useState(false);
 
-    const updateInputRegister = (e) => {
+    const [values, setValues] = React.useState({
+        amount: '',
+        password: '',
+        weight: '',
+        weightRange: '',
+        showPassword: false,
+    });
+    const updateInputRegister = async (e) => {
         switch (e.target.id) {
             case 'firstName':
                 let firstname = e.target.value;
-                if(!isEmptyOrSpaces(firstname))
-                {
-                    setErrorFirstName(false);
-                }
-                else setErrorFirstName(true);
                 setFirstName(firstname);
+                if (isEmptyOrSpaces(firstname)) {
+                    await setErrorFirstName({ ...errorFirstName, message: "Not allow empty" });
+                    await setErrorFirstName({ ...errorFirstName, isValid: false });
+                }
+                else if(!isEmptyOrSpaces(firstname)){
+                    await setErrorFirstName({ ...errorFirstName, message: "" });
+                    await setErrorFirstName({ ...errorFirstName, isValid: true });
+                };
+                console.log(errorFirstName.isValid);
+                console.log(errorFirstName.message);
+
                 break;
             case 'lastName':
+                console.log(errorFirstName.message);
                 let lastname = e.target.value;
                 setLastName(lastname);
-                if(!isEmptyOrSpaces(lastname))
-                {
-                    setErrorLastName(false);
+                if (isEmptyOrSpaces(lastname)) {
+                    setErrorLastName({ ...errorLastName, message: "Not allow empty" }, { ...errorLastName, isValid: false });
+
                 }
-                else setErrorLastName(true);
+                else
+                    setErrorLastName({ ...errorLastName, message: "" }, { ...errorLastName, isValid: true });
+
                 break;
             case 'phone':
                 let phone = e.target.value;
                 setPhone(phone);
                 let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
-                if (phone.match(vnf_regex)&& !isEmptyOrSpaces(phone)) {
-                    setErrorPhone(false);
-                    setError("");
+                if (phone.match(vnf_regex) && !isEmptyOrSpaces(phone)) {
+                    setErrorPhone({ ...errorPhone, message: '' }, { ...errorPhone, isValid: true });
                 }
                 else {
-                    setErrorPhone(true);
-                    setError("Invalid format: ###-###-####");
+                    setErrorPhone({ ...errorPhone, isValid: false });
+
+                    if (isEmptyOrSpaces(phone)) {
+                        setErrorPhone({ ...errorPhone, massage: 'Not allow empty' });
+                    }
+                    else {
+                        setErrorPhone({ ...errorPhone, massage: 'Wrong format phone' });
+                    }
                 }
                 break;
             case 'birthday':
                 setBirthday(new Date(e.target.value).getTime() / 1000);
                 break;
             case 'password1':
-                let password =e.target.value;
-                if (password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/) & !isEmptyOrSpaces(password)) {
-                    setErrorPwd(false);
-                    setError("");
+                let password = e.target.value;
+                if (password.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/) && !isEmptyOrSpaces(password)) {
+                    setErrorPwd(errorPwd['message'] = '', errorPwd['isValid'] = true);
                 }
                 else {
-                    setErrorPwd(true);
-                    setError("Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase");
+                    setErrorPwd(errorPwd['isValid'] = false);
+                    if (isEmptyOrSpaces(password)) {
+                        setErrorPwd(errorPwd['message'] = 'Not allow empty');
+
+                    }
+                    else {
+                        setErrorPwd(errorPwd['message'] = 'Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase');
+                    }
                 }
                 setPassword1(password);
                 break;
             case 'password2':
-                let rePwd=e.target.value;
-                if (rePwd == password1 & !isEmptyOrSpaces(rePwd)) {
-                    setErrorRetypePwd(false);
-                    setError("");
+                let rePwd = e.target.value;
+                if (rePwd == password1 && !isEmptyOrSpaces(rePwd)) {
+                    setErrorRetypePwd(errorRetypePwd['message'] = '', errorRetypePwd['isValid'] = true);
                 }
                 else {
-                    setErrorRetypePwd(true);
-                    setError("Password not matched");
+                    if (isEmptyOrSpaces(rePwd)) {
+                        setErrorRetypePwd(errorRetypePwd['message'] = 'Not allow empty', errorRetypePwd['isValid'] = false);
+                    }
+                    else setErrorRetypePwd(errorRetypePwd['message'] = 'Re-type password not match', errorRetypePwd['isValid'] = false);
                 }
                 setPassword2(rePwd);
                 break;
@@ -201,20 +243,20 @@ export default function SignUp() {
                 }
             })
             .catch((error) => {
-                if(error.response){
+                if (error.response) {
                     console.error('Error:', error.response.data);
 
                     setError(error.response.data['message']);
                     // Sẽ disable nút resend code ở đây, sử dụng lại cái setDisableRegisterBtn cũng được, dùng setTimeOut các kiểu.
                 }
-                else{
+                else {
                     setError("Something went wrong. Please check your internet connection.");
                 }
                 setDisableRegisterBtn(false);
                 setShowAlert(true);
             });
     }
-    
+
     const handleConfirmOtp = async () => {
         const verifyForm = {
             phone: phone,
@@ -235,7 +277,7 @@ export default function SignUp() {
         axios.request(config)
             .then(response => response.data)
             .then(data => {
-                if(data){
+                if (data) {
                     if (data['status'] === 'success') {
                         console.log("success");
                         console.log(`Server msg: ${data['message']}`);
@@ -243,12 +285,12 @@ export default function SignUp() {
                 }
             })
             .catch((error) => {
-                if(error.response){
+                if (error.response) {
                     console.error('Error:', error.response.data);
                     // setState for showing errors here.
                     setError(error.response.data['message']);
                 }
-                else{
+                else {
                     setError("Something went wrong. Please check your internet connection.");
                 }
                 setDisableVerifyBtn(false);
@@ -285,18 +327,8 @@ export default function SignUp() {
                                 autoFocus
                                 onChange={updateInputRegister}
                                 size="normal"
-                                InputProps={{
-                                    classes: {
-                                        input: classes.resize,
-                                        label: classes.resize,
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    classes: {
-                                        root: classes.labelRoot,
-                                        focused: classes.labelFocused
-                                    }
-                                }}
+                                error={errorFirstName.isValid}
+                                helperText={errorFirstName.message}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -310,21 +342,13 @@ export default function SignUp() {
                                 autoComplete="lname"
                                 onChange={updateInputRegister}
                                 size="normal"
-                                InputProps={{
-                                    classes: {
-                                        input: classes.resize,
-                                        label: classes.resize,
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    classes: {
-                                        root: classes.labelRoot,
-                                        focused: classes.labelFocused
-                                    }
-                                }}
+                                error={errorLastName.isValid}
+                                helperText={errorLastName.message}
+                                
+
                             />
                         </Grid>
-                        
+
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
@@ -335,21 +359,11 @@ export default function SignUp() {
                                 name="phone"
                                 autoComplete="0000000000"
                                 onChange={updateInputRegister}
-                                error={errorPhone}
-                                helperText={error}
+                                error={errorPhone.isValid}
+                                helperText={errorPhone.message}
                                 size="normal"
-                                InputProps={{
-                                    classes: {
-                                        input: classes.resize,
-                                        label: classes.resize,
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    classes: {
-                                        root: classes.labelRoot,
-                                        focused: classes.labelFocused
-                                    }
-                                }}
+                               
+
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -363,20 +377,9 @@ export default function SignUp() {
                                 }}
                                 onChange={updateInputRegister}
                                 size="normal"
-                                InputProps={{
-                                    classes: {
-                                        input: classes.resize,
-                                        label: classes.resize,
-                                    },
-                                }}
-                                // InputLabelProps={{
-                                //     classes: {
-                                //         root: classes.labelRoot,
-                                //         focused: classes.labelFocused
-                                //     }
-                                // }}
+                                
                             />
-                            
+
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -389,21 +392,11 @@ export default function SignUp() {
                                 id="password1"
                                 autoComplete="current-password"
                                 onChange={updateInputRegister}
-                                error={errorPwd}
-                                helperText={error}
+                                error={errorPwd.isValid}
+                                helperText={errorPwd.message}
                                 size="normal"
-                                InputProps={{
-                                    classes: {
-                                        input: classes.resize,
-                                        label: classes.resize,
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    classes: {
-                                        root: classes.labelRoot,
-                                        focused: classes.labelFocused
-                                    }
-                                }}
+                                
+
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -417,35 +410,17 @@ export default function SignUp() {
                                 id="password2"
                                 autoComplete="current-password"
                                 onChange={updateInputRegister}
-                                error={errorRetypePwd}
-                                helperText={error}
+                                error={errorRetypePwd.isValid}
+                                helperText={errorRetypePwd.message}
                                 size="normal"
-                                InputProps={{
-                                    classes: {
-                                        input: classes.resize,
-                                        label: classes.resize,
-                                    },
-                                }}
-                                InputLabelProps={{
-                                    classes: {
-                                        root: classes.labelRoot,
-                                        focused: classes.labelFocused
-                                    }
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                label="I want to receive inspiration, marketing promotions and updates via email."
                             />
                         </Grid>
                     </Grid>
                     <Collapse in={isShowAlert}>
                         <Alert severity="error"
                         >
-                        <AlertTitle>Error</AlertTitle>
-                        {error} — <strong>check it out!</strong>
+                            <AlertTitle>Error</AlertTitle>
+                            {error} — <strong>check it out!</strong>
                         </Alert>
                     </Collapse>
                     <Button
