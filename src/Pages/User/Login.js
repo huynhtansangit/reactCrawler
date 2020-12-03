@@ -183,7 +183,7 @@ export default function SignInSide(props) {
             console.error('Error:', error.response.data);
             // setState for showing errors here.
             if (error.response.status === 401 || error.response.status === 404)
-              setError("Phone and/or password is incorrect.")
+              setError("Phone or password is incorrect.")
             else
               setError(error.response.data['message']);
           }
@@ -228,7 +228,7 @@ export default function SignInSide(props) {
               autoFocus
               onChange={updateInputPhone}
               value={phone}
-              error={isValidatePhone}
+              error={!isValidatePhone}
               helperText={messagePhone}
             />
             <TextField
@@ -243,7 +243,7 @@ export default function SignInSide(props) {
               autoComplete="current-password"
               onChange={updateInputPassword}
               value={pwd}
-              error={isValidatePwd}
+              error={!isValidatePwd}
               helperText={messagePwd}
             />
             <FormControlLabel

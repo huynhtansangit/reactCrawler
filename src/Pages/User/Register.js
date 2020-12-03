@@ -22,6 +22,22 @@ import axios from 'axios';
 
 const REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register";
 const VERIFY_REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register/verify";
+const errorsMessage = {
+    firstNameError: "First name can not be empty",
+    lastNameError: "Last name can not be empty",
+    phoneError: {
+        valid: "Wrong format phone number",
+        empty: "Phone can not be empty"
+    },
+    password1: {
+        valid: "Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase",
+        empty: "Password can not be empty"
+    },
+    password2: {
+        valid: "Re-type password not match",
+        empty: "Re-type password can not be empty"
+    }
+}
 
 function Copyright() {
     return (
@@ -85,85 +101,51 @@ export default function SignUp() {
     const [error, setError] = React.useState("");
     const [message, setMessage] = React.useState("");
     //  Error configuration
-    const [errorPhone, setErrorPhone] = React.useState({
-        message: "",
-        isValid: false,
-    });
-    const [errorPwd, setErrorPwd] = React.useState({
-        message: "",
-        isValid: false,
-    });
-    const [errorRetypePwd, setErrorRetypePwd] = React.useState({
-        message: "",
-        isValid: false,
-    });
-    const [errorLastName, setErrorLastName] = React.useState({
-        message: "",
-        isValid: false,
-    });
-    const [errorFirstName, setErrorFirstName] = React.useState({
-        message: "",
-        isValid: false,
-    });
-    const [isValidInput, setIsValidInput] = React.useState({
-        message: "",
-        isValid: false,
-    });
+    const [errorFirstName, setErrorFirstName] = React.useState("");
+    const [errorLastName, setErrorLastName] = React.useState("");
+    const [errorPhone, setErrorPhone] = React.useState("");
+    const [errorPwd, setErrorPwd] = React.useState("");
+    const [errorRetypePwd, setErrorRetypePwd] = React.useState("");
     // -------
     const [isOpenModal, setOpenModal] = React.useState(false);
     const [isShowAlert, setShowAlert] = React.useState(false);
 
-    const [values, setValues] = React.useState({
-        amount: '',
-        password: '',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-    });
     const updateInputRegister = async (e) => {
         switch (e.target.id) {
             case 'firstName':
                 let firstname = e.target.value;
                 setFirstName(firstname);
-                if (isEmptyOrSpaces(firstname)) {
-                    await setErrorFirstName({ ...errorFirstName, message: "Not allow empty" });
-                    await setErrorFirstName({ ...errorFirstName, isValid: false });
-                }
-                else if(!isEmptyOrSpaces(firstname)){
-                    await setErrorFirstName({ ...errorFirstName, message: "" });
-                    await setErrorFirstName({ ...errorFirstName, isValid: true });
-                };
-                console.log(errorFirstName.isValid);
-                console.log(errorFirstName.message);
+                
+                if (isEmptyOrSpaces(firstname)) 
+                    setErrorFirstName("Not allow empty");
+                else
+                    setErrorFirstName("");
 
                 break;
             case 'lastName':
                 console.log(errorFirstName.message);
                 let lastname = e.target.value;
                 setLastName(lastname);
-                if (isEmptyOrSpaces(lastname)) {
-                    setErrorLastName({ ...errorLastName, message: "Not allow empty" }, { ...errorLastName, isValid: false });
-
-                }
+                
+                if (isEmptyOrSpaces(lastname)) 
+                    setErrorLastName("Not allow empty");
                 else
-                    setErrorLastName({ ...errorLastName, message: "" }, { ...errorLastName, isValid: true });
-
+                    setErrorLastName("");
                 break;
             case 'phone':
                 let phone = e.target.value;
                 setPhone(phone);
+                
                 let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
                 if (phone.match(vnf_regex) && !isEmptyOrSpaces(phone)) {
-                    setErrorPhone({ ...errorPhone, message: '' }, { ...errorPhone, isValid: true });
+                    setErrorPhone('');
                 }
                 else {
-                    setErrorPhone({ ...errorPhone, isValid: false });
-
                     if (isEmptyOrSpaces(phone)) {
-                        setErrorPhone({ ...errorPhone, massage: 'Not allow empty' });
+                        setErrorPhone('Not allow empty');
                     }
                     else {
-                        setErrorPhone({ ...errorPhone, massage: 'Wrong format phone' });
+                        setErrorPhone('Wrong format phone');
                     }
                 }
                 break;
@@ -172,33 +154,33 @@ export default function SignUp() {
                 break;
             case 'password1':
                 let password = e.target.value;
+                setPassword1(password);
+                
                 if (password.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/) && !isEmptyOrSpaces(password)) {
-                    setErrorPwd(errorPwd['message'] = '', errorPwd['isValid'] = true);
+                    setErrorPwd('');
                 }
                 else {
-                    setErrorPwd(errorPwd['isValid'] = false);
                     if (isEmptyOrSpaces(password)) {
-                        setErrorPwd(errorPwd['message'] = 'Not allow empty');
-
+                        setErrorPwd('Not allow empty');
                     }
                     else {
-                        setErrorPwd(errorPwd['message'] = 'Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase');
+                        setErrorPwd('Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase');
                     }
                 }
-                setPassword1(password);
                 break;
             case 'password2':
                 let rePwd = e.target.value;
-                if (rePwd == password1 && !isEmptyOrSpaces(rePwd)) {
-                    setErrorRetypePwd(errorRetypePwd['message'] = '', errorRetypePwd['isValid'] = true);
+                setPassword2(rePwd);
+                
+                if (rePwd === password1 && !isEmptyOrSpaces(rePwd)) {
+                    setErrorRetypePwd('');
                 }
                 else {
                     if (isEmptyOrSpaces(rePwd)) {
-                        setErrorRetypePwd(errorRetypePwd['message'] = 'Not allow empty', errorRetypePwd['isValid'] = false);
+                        setErrorRetypePwd('Not allow empty');
                     }
-                    else setErrorRetypePwd(errorRetypePwd['message'] = 'Re-type password not match', errorRetypePwd['isValid'] = false);
+                    else setErrorRetypePwd('Re-type password not match');
                 }
-                setPassword2(rePwd);
                 break;
             case 'otp':
                 setOtp(e.target.value);
@@ -207,11 +189,16 @@ export default function SignUp() {
                 break;
         }
     }
+
     const handleShowAndCloseModal = () => {
         setOpenModal(!isOpenModal);
     }
 
     const handleRegister = async (resendOtp) => {
+        if(errorFirstName || errorLastName || errorPhone || errorRetypePwd || errorPwd){
+            return;
+        }
+
         const registerForm = {
             firstname: firstName,
             lastname: lastName,
@@ -296,6 +283,7 @@ export default function SignUp() {
                 setDisableVerifyBtn(false);
             });
     }
+
     const handleHitEnter = (e) => {
         if (e.key === 'Enter') {
             handleConfirmOtp();
@@ -304,7 +292,6 @@ export default function SignUp() {
 
     return (
         <Container component="main" maxWidth="sm">
-
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -327,8 +314,8 @@ export default function SignUp() {
                                 autoFocus
                                 onChange={updateInputRegister}
                                 size="normal"
-                                error={errorFirstName.isValid}
-                                helperText={errorFirstName.message}
+                                error={errorFirstName ? true: false }
+                                helperText={errorFirstName}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -342,10 +329,8 @@ export default function SignUp() {
                                 autoComplete="lname"
                                 onChange={updateInputRegister}
                                 size="normal"
-                                error={errorLastName.isValid}
-                                helperText={errorLastName.message}
-                                
-
+                                error={errorLastName ? true : false}
+                                helperText={errorLastName}
                             />
                         </Grid>
 
@@ -359,11 +344,9 @@ export default function SignUp() {
                                 name="phone"
                                 autoComplete="0000000000"
                                 onChange={updateInputRegister}
-                                error={errorPhone.isValid}
-                                helperText={errorPhone.message}
+                                error={errorPhone ? true : false}
+                                helperText={errorPhone}
                                 size="normal"
-                               
-
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -377,7 +360,6 @@ export default function SignUp() {
                                 }}
                                 onChange={updateInputRegister}
                                 size="normal"
-                                
                             />
 
                         </Grid>
@@ -392,11 +374,9 @@ export default function SignUp() {
                                 id="password1"
                                 autoComplete="current-password"
                                 onChange={updateInputRegister}
-                                error={errorPwd.isValid}
-                                helperText={errorPwd.message}
+                                error={errorPwd ? true : false}
+                                helperText={errorPwd}
                                 size="normal"
-                                
-
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -410,8 +390,8 @@ export default function SignUp() {
                                 id="password2"
                                 autoComplete="current-password"
                                 onChange={updateInputRegister}
-                                error={errorRetypePwd.isValid}
-                                helperText={errorRetypePwd.message}
+                                error={errorRetypePwd ? true : false}
+                                helperText={errorRetypePwd}
                                 size="normal"
                             />
                         </Grid>
@@ -420,7 +400,7 @@ export default function SignUp() {
                         <Alert severity="error"
                         >
                             <AlertTitle>Error</AlertTitle>
-                            {error} — <strong>check it out!</strong>
+                            {errorFirstName ? errorFirstName : error} — <strong>check it out!</strong>
                         </Alert>
                     </Collapse>
                     <Button
