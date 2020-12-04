@@ -12,6 +12,7 @@ import Login from './Pages/User/Login';
 import Register from './Pages/User/Register';
 import Reset_Password from './Pages/User/Reset_Password';
 import history from '../src/utils/history'
+import { ProtectedRoute } from './auth/protectedRoute' // This one for middleware
 
 function App() {
   return (

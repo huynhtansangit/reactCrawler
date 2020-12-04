@@ -13,15 +13,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import qs from 'query-string';
-import Cookies from 'universal-cookie'
 import axios from 'axios'
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
-// import history from '../../utils/history'
+import cookies from '../../utils/cookie'
 
 
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
-const cookies = new Cookies();
 
 function Copyright() {
   return (
