@@ -172,7 +172,7 @@ export default function SignInSide(props) {
               localStorage.setItem('phone', "");
               localStorage.setItem('password', "");
             }
-            props.history.push("/")
+            props.history.goBack();
           }
         })
         .catch((error) => {

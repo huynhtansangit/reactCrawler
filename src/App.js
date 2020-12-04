@@ -19,7 +19,7 @@ function App() {
     <Router history={history}>
     <div className="App">
     <Switch>
-      <Route path="/Testing" exact component={ThuNghiem}></Route>
+      <ProtectedRoute path="/Testing" exact component={ThuNghiem}></ProtectedRoute>
       <Route path="/Login" exact component={Login}></Route>
       <Route path="/Register" exact component={Register}></Route>
       <Route path="/reset" exact component={Reset_Password}></Route>
