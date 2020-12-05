@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import './Storage.css';
 class Storage extends Component {
     render() {
         return (
