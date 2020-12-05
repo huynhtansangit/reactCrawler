@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import Customized_Menu from './Customized_Menu'
 class Banner extends Component {
     constructor(props) {
         super(props);
@@ -67,9 +67,11 @@ class Banner extends Component {
                     <div className="girl-circle-decor" id="girl-6">
                     </div>
                 </div>
+                <div class="dropdown-menu-container">
+                    <Customized_Menu> </Customized_Menu>
+                </div>
                 <Link to="/login">
                 <button type="button" className=" btn btn-outline-dark">Sign-in <i className="fas fa-key" /></button>
-                    
                 </Link>
                 <Link to="/register">
                 <button type="button" className=" btn btn-outline-danger">Sign-up<i style={{ marginLeft: '10px' }} className="fas fa-chevron-right" /></button>

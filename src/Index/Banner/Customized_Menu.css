@@ -1,0 +1,8 @@
+.dropdown-menu-container{
+    position: absolute;
+    top: 70px !important;
+    left: 77% !important;
+}
+#dropdownMenuButton {
+    border-radius: 10px !important;
+}
