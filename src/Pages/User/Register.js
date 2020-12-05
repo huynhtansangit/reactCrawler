@@ -22,22 +22,7 @@ import axios from 'axios';
 
 const REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register";
 const VERIFY_REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register/verify";
-const errorsMessage = {
-    firstNameError: "First name can not be empty",
-    lastNameError: "Last name can not be empty",
-    phoneError: {
-        valid: "Wrong format phone number",
-        empty: "Phone can not be empty"
-    },
-    password1: {
-        valid: "Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase",
-        empty: "Password can not be empty"
-    },
-    password2: {
-        valid: "Re-type password not match",
-        empty: "Re-type password can not be empty"
-    }
-}
+
 
 function Copyright() {
     return (

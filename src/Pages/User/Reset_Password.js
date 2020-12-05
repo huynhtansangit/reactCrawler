@@ -3,6 +3,25 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { Modal } from 'react-bootstrap';
 import { makeStyles } from '@material-ui/core/styles';
+import Collapse from '@material-ui/core/Collapse';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import axios from 'axios'
+import qs from 'querystring'
+
+import {RESET_PASSWORD_URL, VERIFY_RESET_PASSWORD_URL} from '../../utils/config.url'
+import { request } from 'http';
+
+
+
+let configRequest = {
+    url: null,
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: null
+};
 
 let classes = makeStyles((theme) => ({
     container: {
@@ -34,18 +53,104 @@ let classes = makeStyles((theme) => ({
     labelFocused: {
         fontSize: 20,
     }
-}));;
+}));
 class Reset_Password extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            // Open and close modal
             isOpenModal: false,
+            disableRequestOtpBtn: false,
+            
+            // Input data
+            phone: "",
+            otp: "",
+            pwd1: "",
+            pwd2: "",
+
+            // Stage of resetting password: "request" otp and "verify" otp
+            stage: "request",
+
+            // Errors
+            error: ""
         }
     }
+
     openModal = () => {
         this.setState({ isOpenModal: true });
     }
+
+    updateInputResetPassword = (e)=>{
+        const target = e.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
+    handleHitEnter = (e) => {
+        if (e.key === 'Enter') {
+            if(this.state.stage === 'request'){
+                this.requestOtp();
+            }
+            else if (this.state.stage === 'verify'){
+                this.verifyOtp();
+            }
+        }
+    }
+
+    handleRequestOtp = async ()=>{
+        const requestOtpForm = {
+            phone: this.state.phone
+        };
+        
+        configRequest['url'] = RESET_PASSWORD_URL;
+        configRequest['data']= qs.stringify(requestOtpForm)
+
+        this.setState({disableRequestOtpBtn: true});
+
+        // When request otp succeed, set stage to verify and show modal verify otp.
+        axios.request(configRequest)
+            .then(response => response.data)
+            .then(data => {
+                if (data) {
+                    if (data['status'] === 'pending') {
+                        console.log("Waiting for verify OTP.");
+                        console.log(`Server msg: ${data['message']}`);
+                        
+                        this.setState({ isOpenModal: true });
+                    }
+                }
+            })
+            .catch((error) => {
+                if (error.response) {
+                    console.error('Error:', error.response.data);
+                    // setState for showing errors here.
+                    this.setState({error: error.response.data['message']})
+                }
+                else {
+                    // Net work connection.
+                    this.setState({error: "Something went wrong. Please check your internet connection."})
+                }
+                this.setState({disableRequestOtpBtn: false});
+            });
+    }
+
+    handleVerifyOtp = ()=>{
+        const verifyOtpForm = {
+            phone: this.state.phone,
+            otp: this.state.otp,
+            password: this.state.pwd1
+        };
+
+        configRequest['url'] = VERIFY_RESET_PASSWORD_URL;
+        configRequest['data']= qs.stringify(verifyOtpForm)
+    }
+
+
     render() {
         return (
             <table align="center" cellPadding={0} style={{ borderSpacing: 0, fontFamily: '"Muli",Arial,sans-serif', color: '#333333', margin: '0 auto', width: '100%', maxWidth: '600px' }}>
@@ -83,7 +188,7 @@ class Reset_Password extends Component {
                                                                 label="Phone Number"
                                                                 name="phone"
                                                                 autoComplete="0000000000"
-                                                                // onChange={updateInputRegister}
+                                                                onChange={this.updateInputResetPassword}
                                                                 // error={errorPhone}
                                                                 // helperText={error}
                                                                 size="normal"
@@ -105,9 +210,18 @@ class Reset_Password extends Component {
                                                     </Grid>
                                                 </form>
                                                 {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}<span className="sg-image" data-imagelibrary="%7B%22width%22%3A%22260%22%2C%22height%22%3A54%2C%22alt_text%22%3A%22Reset%20your%20Password%22%2C%22alignment%22%3A%22%22%2C%22border%22%3A0%2C%22src%22%3A%22https%3A//marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png%22%2C%22link%22%3A%22%23%22%2C%22classes%22%3A%7B%22sg-image%22%3A1%7D%7D">
-                                                    <a onClick={this.openModal}>
-                                                        <img alt="Reset your Password" height={54} src="https://marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png" style={{ borderWidth: '0px', marginTop: '30px', marginBottom: '50px', width: '355px', height: '54px' }} width={260} /></a></span>
-                                                {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}</center>
+                                                    <button onClick={this.handleRequestOtp}>
+                                                        <img alt="Reset your Password" height={54} src="https://marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png" style={{ borderWidth: '0px', marginTop: '30px', marginBottom: '50px', width: '355px', height: '54px' }} width={260} /></button></span>
+                                                {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}
+                                                <Collapse in={this.state.error ? true : false }>
+                                                    <Alert severity="error"
+                                                    >
+                                                        <AlertTitle>Error</AlertTitle>
+                                                        { this.state.message }
+                                                        {/* {errorFirstName ? errorFirstName : error} — <strong>check it out!</strong> */}
+                                                    </Alert>
+                                                </Collapse>
+                                            </center>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -131,10 +245,10 @@ class Reset_Password extends Component {
                                                             required
                                                             fullWidth
                                                             name="otp"
-                                                            label="Verify Phone Number"
+                                                            label="OTP"
                                                             id="otp"
-                                                        // onChange={updateInputRegister}
-                                                        // onKeyDown={handleHitEnter}
+                                                            onChange={this.updateInputResetPassword}
+                                                            onKeyDown={this.handleHitEnter}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={12}>
@@ -142,11 +256,23 @@ class Reset_Password extends Component {
                                                             variant="outlined"
                                                             required
                                                             fullWidth
-                                                            name="new-password"
+                                                            name="pwd1"
                                                             label="New password"
-                                                            id="new-password"
-                                                        // onChange={updateInputRegister}
-                                                        // onKeyDown={handleHitEnter}
+                                                            id="pwd1"
+                                                            onChange={this.updateInputResetPassword}
+                                                            onKeyDown={this.handleHitEnter}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12}>
+                                                        <TextField
+                                                            variant="outlined"
+                                                            required
+                                                            fullWidth
+                                                            name="pwd2"
+                                                            label="Confirm password"
+                                                            id="pwd2"
+                                                            onChange={this.updateInputResetPassword}
+                                                            onKeyDown={this.handleHitEnter}
                                                         />
                                                     </Grid>
                                                 </Grid>
@@ -200,7 +326,7 @@ class Reset_Password extends Component {
                         <td style={{ paddingTop: 0, paddingBottom: 0, paddingRight: '30px', paddingLeft: '30px', textAlign: 'center', marginRight: 'auto', marginLeft: 'auto' }}>
                             <center>
                                 <p style={{ fontFamily: '"Muli",Arial,sans-serif', margin: 0, textAlign: 'center', marginRight: 'auto', marginLeft: 'auto', fontSize: '15px', color: '#a1a8ad', lineHeight: '23px' }}>Problems or questions? Call us at
-                  <nobr><a className="tel" href="tel:2128102899" style={{ color: '#a1a8ad', textDecoration: 'none' }} target="_blank"><span style={{ whiteSpace: 'nowrap' }}>212.810.2899</span></a></nobr>
+                                <nobr><a className="tel" href="tel:2128102899" style={{ color: '#a1a8ad', textDecoration: 'none' }} target="_blank"><span style={{ whiteSpace: 'nowrap' }}>212.810.2899</span></a></nobr>
                                 </p>
                                 <p style={{ fontFamily: '"Muli",Arial,sans-serif', margin: 0, textAlign: 'center', marginRight: 'auto', marginLeft: 'auto', fontSize: '15px', color: '#a1a8ad', lineHeight: '23px' }}>or email <a href="mailto:hello@vervewine.com" style={{ color: '#a1a8ad', textDecoration: 'underline' }} target="_blank">hello@vervewine.com</a></p>
                                 <p style={{ fontFamily: '"Muli",Arial,sans-serif', margin: 0, textAlign: 'center', marginRight: 'auto', marginLeft: 'auto', paddingTop: '10px', paddingBottom: '0px', fontSize: '15px', color: '#a1a8ad', lineHeight: '23px' }}>© Verve Wine <span style={{ whiteSpace: 'nowrap' }}>24 ​Hubert S​t​</span>, <span style={{ whiteSpace: 'nowrap' }}>Ne​w Yor​k,</span> <span style={{ whiteSpace: 'nowrap' }}>N​Y 1​0013</span></p>
