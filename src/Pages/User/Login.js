@@ -13,15 +13,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import qs from 'query-string';
-import Cookies from 'universal-cookie'
 import axios from 'axios'
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
-// import history from '../../utils/history'
+import cookies from '../../utils/cookie'
 
 
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
-const cookies = new Cookies();
 
 function Copyright() {
   return (
@@ -174,7 +172,7 @@ export default function SignInSide(props) {
               localStorage.setItem('phone', "");
               localStorage.setItem('password', "");
             }
-            props.history.push("/")
+            props.history.goBack();
           }
         })
         .catch((error) => {
@@ -183,7 +181,7 @@ export default function SignInSide(props) {
             console.error('Error:', error.response.data);
             // setState for showing errors here.
             if (error.response.status === 401 || error.response.status === 404)
-              setError("Phone and/or password is incorrect.")
+              setError("Phone or password is incorrect.")
             else
               setError(error.response.data['message']);
           }
@@ -228,7 +226,7 @@ export default function SignInSide(props) {
               autoFocus
               onChange={updateInputPhone}
               value={phone}
-              error={isValidatePhone}
+              error={!isValidatePhone}
               helperText={messagePhone}
             />
             <TextField
@@ -243,7 +241,7 @@ export default function SignInSide(props) {
               autoComplete="current-password"
               onChange={updateInputPassword}
               value={pwd}
-              error={isValidatePwd}
+              error={!isValidatePwd}
               helperText={messagePwd}
             />
             <FormControlLabel
