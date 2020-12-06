@@ -9,7 +9,6 @@ import axios from 'axios'
 import qs from 'querystring'
 
 import {RESET_PASSWORD_URL, VERIFY_RESET_PASSWORD_URL} from '../../utils/config.url'
-import { request } from 'http';
 
 
 

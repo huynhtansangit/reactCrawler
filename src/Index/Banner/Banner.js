@@ -1,17 +1,35 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Customized_Menu from './Customized_Menu'
+import auth from '../../auth/auth'
+
 class Banner extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             inputUrlElement: '',
-            nameSocialNetwork: ''
+            nameSocialNetwork: '',
+            isAuth: false,
+            fullname: "User"
         }
 
         this.updateInputUrlElement = this.updateInputUrlElement.bind(this);
         this.selectSocialNetwork = this.selectSocialNetwork.bind(this);
+    }
+
+    async componentDidMount(){
+        // Authenticating process.
+        const authProcess = await auth.verifyAccessToken();
+        if(authProcess){
+            this.setState({isAuth: true});
+
+            const firstName = localStorage.getItem('firstname');
+            const lastName = localStorage.getItem('lastname');
+            if(firstName && lastName)
+                this.setState({fullname: `${firstName} ${lastName}`}); 
+        }
+
     }
 
     selectSocialNetwork = (event)=>{
@@ -36,6 +54,29 @@ class Banner extends Component {
     }
 
     render() {
+        //Helper function
+        const renderUserInfo = ()=>{
+            if(this.state.isAuth){
+                return (
+                    <div className="dropdown-menu-container">
+                        <Customized_Menu fullname={this.state.fullname}/>
+                    </div>
+                )
+            }
+            else{
+                return(
+                    <>
+                        <Link to="/login">
+                            <button type="button" className=" btn btn-outline-dark">Sign-in <i className="fas fa-key" /></button>
+                        </Link>
+                        <Link to="/register">
+                            <button type="button" className=" btn btn-outline-danger">Sign-up<i style={{ marginLeft: '10px' }} className="fas fa-chevron-right" /></button>
+                        </Link>
+                    </>
+                )
+            }
+        }
+
         return (
             <section id="banner-section">
                 <div className="logo-app">
@@ -67,15 +108,9 @@ class Banner extends Component {
                     <div className="girl-circle-decor" id="girl-6">
                     </div>
                 </div>
-                <div class="dropdown-menu-container">
-                    <Customized_Menu> </Customized_Menu>
-                </div>
-                <Link to="/login">
-                <button type="button" className=" btn btn-outline-dark">Sign-in <i className="fas fa-key" /></button>
-                </Link>
-                <Link to="/register">
-                <button type="button" className=" btn btn-outline-danger">Sign-up<i style={{ marginLeft: '10px' }} className="fas fa-chevron-right" /></button>
-                </Link>
+
+                { renderUserInfo() }
+
                 <div className="pink-circle-decor" id="circle-1">
                 </div>
                 <div className="big-slogan">

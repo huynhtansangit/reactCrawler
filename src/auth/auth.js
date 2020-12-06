@@ -57,6 +57,18 @@ class Auth {
         }
         return false;
     }
+
+    logout = (callback)=>{
+        // localStorage.setItem('firstname', '');
+        // localStorage.setItem('lastname', '');
+
+        // cookies.set('accessToken', '', { path: '/'});
+        // cookies.set('refreshToken', '', { path: '/'});
+        // cookies.set('expireAt', '', { path: '/'});
+
+        // Callback function below not work.
+        callback();
+    }
 }
 
 export default new Auth();

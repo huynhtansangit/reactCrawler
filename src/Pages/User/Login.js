@@ -17,9 +17,8 @@ import axios from 'axios'
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import cookies from '../../utils/cookie'
+import { TOKEN_URL } from "../../utils/config.url";
 
-
-const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
 
 function Copyright() {
   return (
@@ -138,7 +137,7 @@ export default function SignInSide(props) {
     const formData = qs.stringify(loginForm);
 
     const option = {
-      url: TOKEN_ENDPOINT,
+      url: TOKEN_URL,
       method: 'POST',
       headers: {
         'Accept': 'application/json',

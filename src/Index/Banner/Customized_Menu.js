@@ -7,6 +7,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import './Customized_Menu.css';
 import Icon from '@material-ui/core/Icon';
+import auth from "../../auth/auth";
+import {Redirect} from 'react-router-dom'
 
 const StyledMenu = withStyles({
   paper: {
@@ -15,7 +17,7 @@ const StyledMenu = withStyles({
 })((props) => (
   <Menu
     elevation={0}
-    getContentAnchorEl={null}y
+    getContentAnchorEl={null} y
     anchorOrigin={{
       vertical: 'bottom',
       horizontal: 'center',
@@ -39,7 +41,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function CustomizedMenus() {
+export default function CustomizedMenus(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -50,6 +52,13 @@ export default function CustomizedMenus() {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    auth.logout(()=>{
+      // Editing here, trying to redirect after logout.
+      return <Redirect to="/"></Redirect>
+    });
+  }
+
   return (
     <div>
       <Button
@@ -58,8 +67,7 @@ export default function CustomizedMenus() {
         aria-haspopup="true"
         variant="contained"
         color="secondary"
-        onClick={handleClick}
-      >
+        onClick={handleClick}>
         Open Menu
       </Button>
       <StyledMenu
@@ -67,17 +75,16 @@ export default function CustomizedMenus() {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
+        onClose={handleClose}>
         <StyledMenuItem>
           <ListItemIcon>
             <Icon className="fas fa-user" />
           </ListItemIcon>
-          <ListItemText primary="Hello, ... !" />
+          <ListItemText primary={`Hello,  ${props.fullname}!`} />
         </StyledMenuItem>
-        <StyledMenuItem>
+        <StyledMenuItem onClick={handleLogout}>
           <ListItemIcon>
-          <Icon className="fas fa-sign-out-alt" />
+            <Icon className="fas fa-sign-out-alt" />
           </ListItemIcon>
           <ListItemText primary="Log out" />
         </StyledMenuItem>
