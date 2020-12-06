@@ -73,31 +73,86 @@ class Reset_Password extends Component {
             stage: "request",
 
             // Errors
-            error: ""
+            error: "",
+            errorVerify: "",
+            errorOtp:"",
+            errorPwd1: "",
+            errorPwd2: ""
         }
     }
 
     openModal = () => {
         this.setState({ isOpenModal: true });
     }
+    isEmptyOrSpaces = (str)=>{
+        return str === null || str.match(/^ *$/) !== null;
+    }
 
-    updateInputResetPassword = (e)=>{
+    validateInputResetPassword = async (name)=>{
+        const otp = this.state.otp;
+        const pwd1 = this.state.pwd1;
+        const pwd2 = this.state.pwd2;
+
+        if(name.includes('otp')){
+                if (otp.length === 6 && !this.isEmptyOrSpaces(otp)) {
+                    await this.setState({errorOtp: ""});
+            }
+            else{
+                if (this.isEmptyOrSpaces(otp)) {
+                    await this.setState({errorOtp: "Not allow empty"});
+                }
+                else if(otp.length !== 6){
+                    await this.setState({errorOtp: "Enter 6-digits of verification code sent to your SMS."});
+                }
+            }
+        }
+
+        if(name.includes("pwd1")){
+            if (pwd1.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/) && !this.isEmptyOrSpaces(pwd1)) {
+                await this.setState({errorPwd1: ""});
+            }
+            else {
+                if (this.isEmptyOrSpaces(pwd1)) {
+                    await this.setState({errorPwd1: "Not allow empty"});
+                }
+                else {
+                    await this.setState({errorPwd1: "Password must contain at least 8 characters, 1 number, 1 upper and 1 lowercase"});
+                }
+            }
+        }
+        
+        if(name.includes("pwd2")){
+            if (pwd2 === pwd1 && !this.isEmptyOrSpaces(pwd2)) {
+                await this.setState({errorPwd2: ""});
+            }
+            else {
+                if (this.isEmptyOrSpaces(pwd2)) {
+                    await this.setState({errorPwd2: "Not allow empty"});
+                }
+                await this.setState({errorPwd2: "Re-type password not match"});
+            }
+        }
+    }
+
+    updateInputResetPassword = async (e)=>{
         const target = e.target;
         const value = target.value;
         const name = target.name;
 
-        this.setState({
+        await this.setState({
             [name]: value
         });
+
+        this.validateInputResetPassword(name);
     }
 
     handleHitEnter = (e) => {
         if (e.key === 'Enter') {
             if(this.state.stage === 'request'){
-                this.requestOtp();
+                this.handleRequestOtp();
             }
             else if (this.state.stage === 'verify'){
-                this.verifyOtp();
+                this.handleVerifyOtp();
             }
         }
     }
@@ -111,8 +166,9 @@ class Reset_Password extends Component {
         configRequest['data']= qs.stringify(requestOtpForm)
 
         this.setState({disableRequestOtpBtn: true});
+        this.setState({error: ""});
 
-        // When request otp succeed, set stage to verify and show modal verify otp.
+        // When request otp succeed, change stage to verify and show modal verify otp.
         axios.request(configRequest)
             .then(response => response.data)
             .then(data => {
@@ -122,24 +178,31 @@ class Reset_Password extends Component {
                         console.log(`Server msg: ${data['message']}`);
                         
                         this.setState({ isOpenModal: true });
+                        this.setState({ stage: 'verify' });
                     }
                 }
             })
-            .catch((error) => {
+            .catch(async (error) => {
                 if (error.response) {
                     console.error('Error:', error.response.data);
                     // setState for showing errors here.
-                    this.setState({error: error.response.data['message']})
+                    await this.setState({error: error.response.data['message']})
                 }
                 else {
                     // Net work connection.
-                    this.setState({error: "Something went wrong. Please check your internet connection."})
+                    await this.setState({error: "Something went wrong. Please check your internet connection."})
                 }
                 this.setState({disableRequestOtpBtn: false});
             });
     }
 
-    handleVerifyOtp = ()=>{
+    handleVerifyOtp = async ()=>{
+        // Validate before allow to verify otp
+        await this.validateInputResetPassword("otp, pwd1, pwd2");
+
+        if(this.state.errorOtp || this.state.errorPwd1 || this.state.errorPwd2)
+            return;
+
         const verifyOtpForm = {
             phone: this.state.phone,
             otp: this.state.otp,
@@ -147,7 +210,32 @@ class Reset_Password extends Component {
         };
 
         configRequest['url'] = VERIFY_RESET_PASSWORD_URL;
-        configRequest['data']= qs.stringify(verifyOtpForm)
+        configRequest['data']= qs.stringify(verifyOtpForm);
+
+        this.setState({errorVerify: ""});
+
+        axios.request(configRequest)
+            .then(response => response.data)
+            .then(data => {
+                if (data) {
+                    if (data['status'] === 'success') {
+                        console.log(`Server msg: ${data['message']}`);
+                        
+                        this.props.history.push('/login');
+                    }
+                }
+            })
+            .catch((error) => {
+                if (error.response) {
+                    console.error('Error:', error.response.data);
+                    // setState for showing errors here.
+                    this.setState({errorVerify: error.response.data['message']})
+                }
+                else {
+                    // Net work connection.
+                    this.setState({errorVerify: "Something went wrong. Please check your internet connection."})
+                }
+            });
     }
 
 
@@ -177,7 +265,7 @@ class Reset_Password extends Component {
                                                 <p className="h1 center" style={{ margin: 0, textAlign: 'center', fontFamily: '"flama-condensed","Arial Narrow",Arial', fontWeight: 100, fontSize: '30px', marginBottom: '26px' }}>Forgot your password?</p>
                                                 {/*[if (gte mso 9)|(IE)]><![endif]*/}
 
-                                                <form className={classes.form} noValidate>
+                                                <div className={classes.form} noValidate>
                                                     <Grid container spacing={4}>
                                                         <Grid item xs={12}>
                                                             <TextField
@@ -189,7 +277,7 @@ class Reset_Password extends Component {
                                                                 name="phone"
                                                                 autoComplete="0000000000"
                                                                 onChange={this.updateInputResetPassword}
-                                                                // error={errorPhone}
+                                                                // error={this.state.phone ? true : false}
                                                                 // helperText={error}
                                                                 size="normal"
                                                                 InputProps={{
@@ -204,24 +292,22 @@ class Reset_Password extends Component {
                                                                         focused: classes.labelFocused
                                                                     }
                                                                 }}
+                                                                onKeyDown={this.handleHitEnter}
                                                             />
                                                         </Grid>
-
                                                     </Grid>
-                                                </form>
+                                                </div>
                                                 {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}<span className="sg-image" data-imagelibrary="%7B%22width%22%3A%22260%22%2C%22height%22%3A54%2C%22alt_text%22%3A%22Reset%20your%20Password%22%2C%22alignment%22%3A%22%22%2C%22border%22%3A0%2C%22src%22%3A%22https%3A//marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png%22%2C%22link%22%3A%22%23%22%2C%22classes%22%3A%7B%22sg-image%22%3A1%7D%7D">
-                                                    <button onClick={this.handleRequestOtp}>
-                                                        <img alt="Reset your Password" height={54} src="https://marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png" style={{ borderWidth: '0px', marginTop: '30px', marginBottom: '50px', width: '355px', height: '54px' }} width={260} /></button></span>
+                                                    <a onClick={this.handleRequestOtp} disabled={this.disableRequestOtpBtn}>
+                                                        <img alt="Reset your Password" height={54} src="https://marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png" style={{ borderWidth: '0px', marginTop: '30px', marginBottom: '50px', width: '355px', height: '54px' }} width={260} /></a></span>
                                                 {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}
-                                                <Collapse in={this.state.error ? true : false }>
-                                                    <Alert severity="error"
-                                                    >
-                                                        <AlertTitle>Error</AlertTitle>
-                                                        { this.state.message }
-                                                        {/* {errorFirstName ? errorFirstName : error} — <strong>check it out!</strong> */}
-                                                    </Alert>
-                                                </Collapse>
                                             </center>
+                                            <Collapse in={this.state.error ? true : false }>
+                                                <Alert severity="error">
+                                                    <AlertTitle>Error</AlertTitle>
+                                                    { this.state.error }
+                                                </Alert>
+                                            </Collapse>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -247,8 +333,11 @@ class Reset_Password extends Component {
                                                             name="otp"
                                                             label="OTP"
                                                             id="otp"
+                                                            type="number"
                                                             onChange={this.updateInputResetPassword}
                                                             onKeyDown={this.handleHitEnter}
+                                                            error={this.state.errorOtp ? true : false}
+                                                            helperText={this.state.errorOtp}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={12}>
@@ -261,6 +350,8 @@ class Reset_Password extends Component {
                                                             id="pwd1"
                                                             onChange={this.updateInputResetPassword}
                                                             onKeyDown={this.handleHitEnter}
+                                                            error={this.state.errorPwd1 ? true : false}
+                                                            helperText={this.state.errorPwd1}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={12}>
@@ -273,21 +364,30 @@ class Reset_Password extends Component {
                                                             id="pwd2"
                                                             onChange={this.updateInputResetPassword}
                                                             onKeyDown={this.handleHitEnter}
+                                                            error={this.state.errorPwd2 ? true : false}
+                                                            helperText={this.state.errorPwd2}
                                                         />
                                                     </Grid>
                                                 </Grid>
                                             </form>
+                                            <div className="mt-2 text-justify">
+                                                <Collapse in={this.state.errorVerify ? true : false }>
+                                                    <Alert severity="error">
+                                                        <AlertTitle>Error</AlertTitle>
+                                                        { this.state.errorVerify }
+                                                    </Alert>
+                                                </Collapse>
+                                            </div>
                                             <div id="form" style={{ margin: '0px auto 0' }}>
-                                                <button style={{ margin: '20px auto 30px' }} class="btn btn-primary btn-embossed"
-                                                // onClick={}
-                                                >
+                                                <button style={{ margin: '20px auto 30px' }} className="btn btn-primary btn-embossed"
+                                                onClick={this.handleVerifyOtp}>
                                                     Verify
-                                </button>
+                                                </button>
                                             </div>
                                             <div>
                                                 Didn't receive the code?<br />
                                                 <p style={{ marginBottom: 0 }} className="btn"
-                                                // onClick={}
+                                                onClick={this.handleRequestOtp}
                                                 >Send code again</p><br />
                                             </div>
                                         </div>
