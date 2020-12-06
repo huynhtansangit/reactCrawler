@@ -13,6 +13,7 @@ import Register from './Pages/User/Register';
 import Reset_Password from './Pages/User/Reset_Password';
 import history from '../src/utils/history'
 import { ProtectedRoute } from './auth/protectedRoute' // This one for middleware
+import Storage from './Index/Storage/Storage';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
       <Route path="/Login" exact component={Login}></Route>
       <Route path="/Register" exact component={Register}></Route>
       <Route path="/reset" exact component={Reset_Password}></Route>
-
+      <Route path="/personality" exact component ={Storage}></Route>
       <Route path="/" component ={Index}/>
     </Switch>
     </div>
