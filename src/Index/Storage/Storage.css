@@ -2,11 +2,13 @@ section{
     position: relative !important;
 }
 
-.storage-container,.profile-container {
+.storage-container {
     position: relative;
-    /* background-image: url("../Images/Store/colorGradient\ \(2\).png"); */
+    background-image: url("./colorGradient.png");
     background-repeat: no-repeat;
     background-size: cover;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 #you-can-find-downloaded-stuff-here{

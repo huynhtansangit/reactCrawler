@@ -4,7 +4,10 @@ import {
 } from "react-router-dom";
 import { downloadImageFromLink } from "../../services/downloadImageByUrl";
 import { Button, Modal } from 'react-bootstrap';
-
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 class ImageItem extends Component {
     constructor(props) {
         super(props);
@@ -23,16 +26,21 @@ class ImageItem extends Component {
             <div className="img-card" variant="primary">
                 <img src={this.props.itemSrc} alt="Img-error" />
                 <div className="card__text">
-                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary"><i className="fas fa-eye" />
+                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary">
+                    <VisibilityOutlinedIcon/>
                     </button>
                     </p>
-                    <p className="card__title"><button onClick={() => { downloadImageFromLink(this.props.itemSrc) }} type="button" className="btn btn-outline-secondary"><i className="fas fa-download" />
+                    <p className="card__title"><button onClick={() => { downloadImageFromLink(this.props.itemSrc) }} type="button" className="btn btn-outline-secondary">
+                    <GetAppOutlinedIcon/>
                     </button>
                     </p>
-                    <p className="card__body">
+                    <p className="card__title">
                         <Link to={{ pathname: '/Testing', state: { imgSrc: this.props.itemSrc } }}>
-                            <button type="button" className="btn btn-outline-secondary"><i className="far fa-edit" /></button>
+                            <button type="button" className="btn btn-outline-secondary"><EditOutlinedIcon/></button>
                         </Link>
+                    </p>
+                    <p className="card__title">
+                            <button type="button" className="btn btn-outline-secondary"><FavoriteTwoToneIcon/></button>
                     </p>
                 </div>
 

@@ -1,0 +1,59 @@
+.MuiImageListItem-root{
+    background: black;
+}
+.MuiImageListItem-root::before, .MuiImageListItem-root::after {
+    content: '';
+    position: absolute;
+    top: 1.25em;
+    bottom: 1.25em;
+    left: 1.25em;
+    right: 1.25em;
+    opacity: 1;
+    transition: transform ease-out 250ms;
+    z-index: 0;
+}
+.MuiImageListItem-root::before {
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    transform: scale(0, 1);
+}
+.MuiImageListItem-root::after {
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    transform: scale(1, 0);
+}
+.MuiImageListItem-root:hover::before {
+    transform: scale(1.05, 1);
+}
+.MuiImageListItem-root:hover::after {
+    transform: scale(1, 1.05);
+}
+.MuiImageListItem-root:hover img{
+    opacity: 0.4;
+}
+.card__text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    opacity: 0;
+    transition: opacity ease-out 250ms;
+    z-index: 10;
+}
+.card__text .btn-outline-secondary {
+    transform: scale(1);
+    margin: 4px !important;
+}
+.MuiImageListItem-root:hover .card__text {
+    opacity: 1 !important;
+}
+.card__title {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 0;
+  }
+  .fa-download,.fa-edit, .fa-eye{
+      color: white !important;
+      font-size: 16px !important;
+  }

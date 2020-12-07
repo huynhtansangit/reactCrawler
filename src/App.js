@@ -24,7 +24,7 @@ function App() {
       <Route path="/Login" exact component={Login}></Route>
       <Route path="/Register" exact component={Register}></Route>
       <Route path="/reset" exact component={Reset_Password}></Route>
-      <Route path="/personality" exact component ={Storage}></Route>
+      <Route path="/personal" exact component ={Storage}></Route>
       <Route path="/" component ={Index}/>
     </Switch>
     </div>
