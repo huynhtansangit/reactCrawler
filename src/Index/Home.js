@@ -37,10 +37,17 @@ class Index extends Component {
                 response = await fetch(DOWNLOAD_ENDPOINT+nameNetwork+"/info?url="+inputUrl, option);
             }
             else{
-                option['body'] = JSON.stringify({
-                    "url": inputUrl,
-                    "cursor": cursor ? cursor : ""
-                })
+                if(cursor){
+                    option['body'] = JSON.stringify({
+                        "url": inputUrl,
+                        "cursor": cursor
+                    })
+                }
+                else{
+                    option['body'] = JSON.stringify({
+                        "url": inputUrl,
+                    })
+                }
                 response = await fetch(DOWNLOAD_ENDPOINT+nameNetwork, option);
             }
             const data = await response.json();
