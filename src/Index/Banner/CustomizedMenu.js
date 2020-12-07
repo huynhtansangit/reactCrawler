@@ -5,10 +5,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import './Customized_Menu.css';
+import './CustomizedMenu.css';
 import Icon from '@material-ui/core/Icon';
 import auth from "../../auth/auth";
-import {Redirect} from 'react-router-dom'
 
 const StyledMenu = withStyles({
   paper: {
@@ -53,10 +52,7 @@ export default function CustomizedMenus(props) {
   };
 
   const handleLogout = () => {
-    auth.logout(()=>{
-      // Editing here, trying to redirect after logout.
-      return <Redirect to="/"></Redirect>
-    });
+    auth.logout(()=>{props.history.push("/login")});
   }
 
   return (

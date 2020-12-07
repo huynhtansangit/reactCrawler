@@ -143,6 +143,7 @@ class Index extends Component {
                 ></Header>
                 <Banner 
                     onUpdateBannerInput={this.onUpdateBannerInput.bind(this)}
+                    history={this.props.history}
                 ></Banner>
                 <Gallery 
                     dataGallery= {this.state.dataGallery}

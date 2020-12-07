@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Customized_Menu from './Customized_Menu'
+import CustomizedMenu from './CustomizedMenu'
 import auth from '../../auth/auth'
 
 class Banner extends Component {
@@ -59,7 +59,10 @@ class Banner extends Component {
             if(this.state.isAuth){
                 return (
                     <div className="dropdown-menu-container">
-                        <Customized_Menu fullname={this.state.fullname}/>
+                        <CustomizedMenu 
+                            fullname={this.state.fullname}
+                            history={this.props.history}
+                        />
                     </div>
                 )
             }

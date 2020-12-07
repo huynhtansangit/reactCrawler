@@ -10,7 +10,7 @@ import Index from './Index/Home';
 import ThuNghiem from './Pages/Editor/ThuNghiem';
 import Login from './Pages/User/Login';
 import Register from './Pages/User/Register';
-import Reset_Password from './Pages/User/Reset_Password';
+import ResetPassword from './Pages/User/ResetPassword';
 import history from '../src/utils/history'
 import { ProtectedRoute } from './auth/protectedRoute' // This one for middleware
 import Storage from './Index/Storage/Storage';
@@ -23,7 +23,7 @@ function App() {
       <ProtectedRoute path="/Testing" exact component={ThuNghiem}></ProtectedRoute>
       <Route path="/Login" exact component={Login}></Route>
       <Route path="/Register" exact component={Register}></Route>
-      <Route path="/reset" exact component={Reset_Password}></Route>
+      <Route path="/reset" exact component={ResetPassword}></Route>
       <Route path="/personality" exact component ={Storage}></Route>
       <Route path="/" component ={Index}/>
     </Switch>

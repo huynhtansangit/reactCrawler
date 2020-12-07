@@ -17,7 +17,7 @@ import axios from 'axios'
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import cookies from '../../utils/cookie'
-import { TOKEN_URL } from "../../utils/config.url";
+import { TOKEN_URL, MY_ACCOUNT_URL } from "../../utils/config.url";
 
 
 function Copyright() {
@@ -136,7 +136,7 @@ export default function SignInSide(props) {
 
     const formData = qs.stringify(loginForm);
 
-    const option = {
+    const configRequest = {
       url: TOKEN_URL,
       method: 'POST',
       headers: {
@@ -153,7 +153,7 @@ export default function SignInSide(props) {
       // Temporary disable btn after clicked.
       setDisableLoginBtn(true);
       
-      axios.request(option)
+      axios.request(configRequest)
         .then(response => response.data)
         .then(data => {
           if (data) {
@@ -172,7 +172,38 @@ export default function SignInSide(props) {
               localStorage.setItem('password', "");
             }
             props.history.goBack();
+            return data['accessToken'];
           }
+        })
+        .then((accessToken)=>{
+          const config = {
+            url: MY_ACCOUNT_URL,
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `bearer ${accessToken}`
+            },
+            data: formData
+          };
+          
+          axios.request(config)
+            .then(res=> res.data)
+            .then(data =>{
+              if(data){
+                localStorage.setItem('firstname', data['firstname'])
+                localStorage.setItem('lastname', data['lastname'])
+              }
+            })
+            .catch(error =>{
+              console.log("Error occurred when get user's info.");
+              if(error.response){
+                console.log(error.response.data);
+              }
+              else{
+                console.log("Something went wrong. Please check your internet connection.");
+              }
+            })
         })
         .catch((error) => {
           console.log(error);
