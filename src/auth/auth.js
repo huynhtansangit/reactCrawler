@@ -2,6 +2,7 @@ import cookies from '../utils/cookie'
 import axios from 'axios'
 import qs from 'querystring'
 
+
 const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
 
 
@@ -59,14 +60,13 @@ class Auth {
     }
 
     logout = (callback)=>{
-        // localStorage.setItem('firstname', '');
-        // localStorage.setItem('lastname', '');
+        localStorage.setItem('firstname', '');
+        localStorage.setItem('lastname', '');
 
-        // cookies.set('accessToken', '', { path: '/'});
-        // cookies.set('refreshToken', '', { path: '/'});
-        // cookies.set('expireAt', '', { path: '/'});
+        cookies.set('accessToken', '', { path: '/'});
+        cookies.set('refreshToken', '', { path: '/'});
+        cookies.set('expireAt', '', { path: '/'});
 
-        // Callback function below not work.
         callback();
     }
 }

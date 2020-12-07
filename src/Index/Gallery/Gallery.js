@@ -47,7 +47,7 @@ class Gallery extends Component {
     }
     render() {
         // Helper functions
-        let renderImageGallery = () => {
+        const renderImageGallery = () => {
             let res;
             if (Object.keys(this.props.dataGallery).length === 0) {
                 // Check if data is null => Show loading
@@ -67,7 +67,16 @@ class Gallery extends Component {
             }
             return (res);
         }
-        let renderOwnerMedia = () => {
+        // FIXME CẦN XỬ LÝ KHI MÀ DATA VỀ NULL THÌ KHÔNG SẬP LUÔN FE.
+        const handleCountPost = () =>{
+            if(this.props.dataGallery.ownerMedia.countPost)
+                return this.props.dataGallery.ownerMedia.countPost;
+            else if(this.props.dataGallery.ownerMedia.count_video)
+                return this.props.dataGallery.ownerMedia.count_video;
+            else    
+                return 1;
+        }
+        const renderOwnerMedia = () => {
             if (Object.keys(this.props.dataGallery).length === 0) {
                 return (<OwnerMedia avatar="https://img.idesign.vn/2018/10/23/id-loading-1.gif" username="Loading"
                     fullname="Loading" countPost="Loading" countFollowedBy="Loading" />)
@@ -78,7 +87,7 @@ class Gallery extends Component {
                         <OwnerMedia avatar={this.props.dataGallery.ownerMedia.avatar}
                             username={this.props.dataGallery.ownerMedia.username}
                             fullname={this.props.dataGallery.ownerMedia.fullname}
-                            countPost={this.props.dataGallery.ownerMedia.countPost}
+                            countPost={ handleCountPost() }
                             countFollowedBy={this.props.dataGallery.ownerMedia.countFollowedBy} 
                             nameNetwork={this.props.nameNetwork}/>) : (
                         <OwnerMedia
@@ -88,7 +97,7 @@ class Gallery extends Component {
                     ))
             }
         }
-        let renderVideoGallery = () => {
+        const renderVideoGallery = () => {
             if (Object.keys(this.props.dataGallery).length === 0) {
                 // Check if data is null => Show loading
                 return (<img className="justify-item-center" src="https://img.idesign.vn/2018/10/23/id-loading-1.gif" alt="loading" />)
@@ -115,9 +124,9 @@ class Gallery extends Component {
                 }
             }
         }
-        let renderLoadMoreButton = () => {
+        const renderLoadMoreButton = () => {
             // Load more only available with instagram
-            if(this.props.nameNetwork === 'instagram'){
+            if(this.props.nameNetwork !== 'tiktok'){
                 if (Object.keys(this.props.dataGallery).length === 0 ||
                     !this.props.dataGallery.videosData || !this.props.dataGallery.imagesData) {
                     return ('');

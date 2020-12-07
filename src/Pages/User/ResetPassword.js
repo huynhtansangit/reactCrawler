@@ -53,7 +53,7 @@ let classes = makeStyles((theme) => ({
         fontSize: 20,
     }
 }));
-class Reset_Password extends Component {
+class ResetPassword extends Component {
 
     constructor(props) {
         super(props);
@@ -346,6 +346,7 @@ class Reset_Password extends Component {
                                                             fullWidth
                                                             name="pwd1"
                                                             label="New password"
+                                                            type="password"
                                                             id="pwd1"
                                                             onChange={this.updateInputResetPassword}
                                                             onKeyDown={this.handleHitEnter}
@@ -360,6 +361,7 @@ class Reset_Password extends Component {
                                                             fullWidth
                                                             name="pwd2"
                                                             label="Confirm password"
+                                                            type="password"
                                                             id="pwd2"
                                                             onChange={this.updateInputResetPassword}
                                                             onKeyDown={this.handleHitEnter}
@@ -445,4 +447,4 @@ class Reset_Password extends Component {
     }
 }
 
-export default Reset_Password;
+export default ResetPassword;
