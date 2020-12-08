@@ -12,3 +12,6 @@ span {font-size: 18px !important;}
   position: relative;
   margin: auto;
 }
+.btn-outline-secondary .MuiSvgIcon-root{
+  color: white ;
+}

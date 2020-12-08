@@ -23,7 +23,7 @@ function App() {
       <ProtectedRoute path="/Testing" exact component={ThuNghiem}></ProtectedRoute>
       <Route path="/Login" exact component={Login}></Route>
       <Route path="/Register" exact component={Register}></Route>
-      <Route path="/reset" exact component={Reset_Password}></Route>
+      <Route path="/reset" exact component={ResetPassword}></Route>
       <Route path="/personal" exact component ={Storage}></Route>
       <Route path="/" component ={Index}/>
     </Switch>
