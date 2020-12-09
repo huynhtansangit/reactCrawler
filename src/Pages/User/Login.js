@@ -72,7 +72,6 @@ export default function SignInSide(props) {
   const [pwd, setPwd] = React.useState(localStorage.getItem('password') ? localStorage.getItem('password') : "");
   const [disableLoginBtn, setDisableLoginBtn] = React.useState(false);
   const [error, setError] = React.useState("");
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isShowAlert, setShowAlert] = React.useState(false);
 
   const [isValidatePhone, setIsValidatePhone] = React.useState(false);
@@ -160,8 +159,6 @@ export default function SignInSide(props) {
             cookies.set('accessToken', data['accessToken'], { path: '/'});
             cookies.set('refreshToken', data['refreshToken'], { path: '/'});
             cookies.set('expireAt', data['expireAt'], { path: '/'});
-
-            setIsLoggedIn(true);
 
             if (isRememberChecked) {
               localStorage.setItem('phone', phone);

@@ -4,8 +4,8 @@ import Banner from './Banner/Banner';
 import Gallery from './Gallery/Gallery';
 import AboutUs from './Aboutus/Aboutus';
 import Footer from './Footer/Footer';
+import {DOWNLOAD_URL} from '../utils/config.url'
 
-const DOWNLOAD_ENDPOINT = "https://dacnhk1.herokuapp.com/download/";
 
 class Index extends Component {
     constructor(props) {
@@ -34,7 +34,7 @@ class Index extends Component {
             let response;
             if(nameNetwork === 'tiktok'){
                 option['method']='GET';
-                response = await fetch(DOWNLOAD_ENDPOINT+nameNetwork+"/info?url="+inputUrl, option);
+                response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`, option);
             }
             else{
                 if(cursor){
@@ -48,7 +48,7 @@ class Index extends Component {
                         "url": inputUrl,
                     })
                 }
-                response = await fetch(DOWNLOAD_ENDPOINT+nameNetwork, option);
+                response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}`, option);
             }
             const data = await response.json();
             let imagesData = [];

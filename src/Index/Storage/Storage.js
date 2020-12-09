@@ -7,7 +7,7 @@ class Storage extends Component {
             <section id="storage-section">
                 <div className="storage-container">
                     <img id="you-can-find-downloaded-stuff-here" src="Assets/Images/Store/Mask-Group-2-Copy.png" alt="All downloaded here" />
-                   <TabMenu/>
+                    <TabMenu/>
                 </div>
             </section>
         );

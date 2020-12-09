@@ -41,12 +41,8 @@ export default function MasonryImageList() {
               alt={item.title}
             />
             <div className="card__text">
-              <p className="card__title"><button onClick={()=>handleShow(item.img)} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon />
-              </button>
-              </p>
-              <p className="card__title"><button onClick={() => { downloadImageFromLink(item.img) }} type="button" className="btn btn-outline-secondary"><GetAppOutlinedIcon />
-              </button>
-              </p>
+              <p className="card__title"><button onClick={() => handleShow(item.img)} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon/></button></p>
+              <p className="card__title"><button onClick={() => { downloadImageFromLink(item.img) }} type="button" className="btn btn-outline-secondary"><GetAppOutlinedIcon /></button></p>
               <p className="card__body">
                 <Link to={{ pathname: '/Testing', state: { imgSrc: item.img } }}>
                   <button type="button" className="btn btn-outline-secondary"><EditOutlinedIcon /></button>
@@ -56,31 +52,31 @@ export default function MasonryImageList() {
           </ImageListItem>
         ))}
         <Modal
-              size="xl"
-              scrollable={false}
-              aria-labelledby="contained-modal-title-vcenter"
-              centered
-              show={isShowModal}
-              onHide={handleShow}>
-              <Modal.Header closeButton>
-                <Modal.Title>Image previewer</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <p>
-                  <img className='img-fluid' width={1100} height={1000} style={{ objectFit: 'cover' }} src={imgSrc} alt="Img-error" />
-                </p>
-              </Modal.Body>
-              <Modal.Footer>
-                <Link to={{ pathname: '/Testing', state: { imgSrc: imgSrc } }}>
-                  <Button variant="secondary">
-                    Edit
-                            </Button>
-                </Link>
-                <Button variant="secondary" onClick={() => { downloadImageFromLink(imgSrc) }}>
-                  Download
+          size="xl"
+          scrollable={false}
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          show={isShowModal}
+          onHide={handleShow}>
+          <Modal.Header closeButton>
+            <Modal.Title>Image previewer</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              <img className='img-fluid' width={1100} height={1000} style={{ objectFit: 'cover' }} src={imgSrc} alt="Img-error" />
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Link to={{ pathname: '/Testing', state: { imgSrc: imgSrc } }}>
+              <Button variant="secondary">
+                Edit
+                  </Button>
+            </Link>
+            <Button variant="secondary" onClick={() => { downloadImageFromLink(imgSrc) }}>
+              Download
                         </Button>
-              </Modal.Footer>
-            </Modal>
+          </Modal.Footer>
+        </Modal>
       </ImageList>
     </div>
   );

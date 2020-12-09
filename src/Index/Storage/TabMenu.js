@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -61,10 +61,15 @@ const useStyles = makeStyles((theme) => ({
 export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [dataStorage, setDataStorage] = React.useState({});
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(()=>{
+
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -75,24 +80,23 @@ export default function ScrollableTabsButtonForce() {
           indicatorColor="primary"
           textColor="primary"
           aria-label="scrollable force tabs example"
-          centered
-        >
+          centered>
           <Tab label="Your Images" icon={<FavoriteIcon />} {...a11yProps(0)} />
           <Tab label="Your Videos" icon={<VideoLibraryOutlinedIcon />} {...a11yProps(1)} />
-
           <Tab label="Your Information" icon={<PersonPinIcon />} {...a11yProps(2)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={2}>
-        <ProfileContent></ProfileContent>
-      </TabPanel>
-      <TabPanel value={value} index={0}>
-        <ImageStorage>
 
-        </ImageStorage>
+      <TabPanel value={value} index={0}>
+        <ImageStorage/>
       </TabPanel>
+      
       <TabPanel value={value} index={1}>
-        <VideoStorage></VideoStorage>
+        <VideoStorage/>
+      </TabPanel>
+      
+      <TabPanel value={value} index={2}>
+        <ProfileContent/>
       </TabPanel>
     </div>
   );
