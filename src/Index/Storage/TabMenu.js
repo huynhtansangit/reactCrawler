@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import ImageStorage from './ImageStorage';
 import ProfileContent from './ProfileContent';
+import VideoStorage from './VideoStorage';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -91,7 +92,7 @@ export default function ScrollableTabsButtonForce() {
         </ImageStorage>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Three
+        <VideoStorage></VideoStorage>
       </TabPanel>
     </div>
   );

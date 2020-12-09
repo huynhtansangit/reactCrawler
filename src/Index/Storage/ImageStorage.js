@@ -15,7 +15,7 @@ import {
 const useStyles = makeStyles({
   root: {
     width: '100%',
-    height: 600,
+    height: 800,
     overflowY: 'scroll',
     marginTop: 20,
   },

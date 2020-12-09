@@ -2,7 +2,14 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 import { Modal } from 'react-bootstrap';
-
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
+import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
+import PauseOutlinedIcon from '@material-ui/icons/PauseOutlined';
+import { downloadImageFromLink } from "../../services/downloadImageByUrl";
+import { createMuiTheme } from '@material-ui/core/styles';
 class VideoItem extends Component {
     constructor(props) {
         super(props);
@@ -11,6 +18,16 @@ class VideoItem extends Component {
             isOpenModal: false,
         }
     }
+    // theme = createMuiTheme({
+    //     palette: {
+    //       primary: {
+    //         main: purple[500],
+    //       },
+    //       secondary: {
+    //         main: '#f44336',
+    //       },
+    //     },
+    //   });
     playVideo = () => {
         this.setState({
             isPlay: !this.state.isPlay
@@ -19,15 +36,29 @@ class VideoItem extends Component {
     handleShow = () => {
         this.setState({ isOpenModal: !this.state.isOpenModal })
     }
+    renderPlayOrPause = () => {
+        if (this.state.isPlay)
+        {
+            return <PauseOutlinedIcon />
+        }
+        else return <PlayArrowOutlinedIcon />
+    }
     render() {
         return (
             <div className="img-card">
                 <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} playing={this.state.isPlay} />
                 <div className="card__text">
-                    <p className="card__title"><button onClick={this.playVideo} type="button" className="btn btn-outline-secondary"><i style={{ color: 'white', fontSize: '16px' }} className={"fas" + (this.state.isPlay ? ' fa-pause' : ' fa-play')} />
+                    <p className="card__title"><button onClick={this.playVideo} type="button" className="btn btn-outline-secondary">
+                    {this.renderPlayOrPause()}
                     </button>
                     </p>
-                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary"><i className={"fas fa-eye"} />
+                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary">
+                    <VisibilityOutlinedIcon />
+                    </button>
+                    </p>
+                   
+                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary">
+                    <FavoriteTwoToneIcon />
                     </button>
                     </p>
                 </div>
