@@ -8,6 +8,9 @@ import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
+import addToCollection from '../../services/user.services'
+
+
 class ImageItem extends Component {
     constructor(props) {
         super(props);
@@ -40,7 +43,14 @@ class ImageItem extends Component {
                         </Link>
                     </p>
                     <p className="card__title">
-                            <button type="button" className="btn btn-outline-secondary"><FavoriteTwoToneIcon/></button>
+                            <button type="button" className="btn btn-outline-secondary"
+                            onClick={()=>{addToCollection(this.props.itemSrc,"","picture",()=>{
+                                // If not login -> redirect to login.
+                                this.props.history.push("/login");
+                            })
+                            }}>
+                                <FavoriteTwoToneIcon/>
+                            </button>
                     </p>
                 </div>
 

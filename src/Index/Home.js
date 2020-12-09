@@ -157,7 +157,8 @@ class Index extends Component {
                     nameNetwork= {this.state.nameNetwork}
                     inputUrl= {this.state.inputUrl}
                     getMoreMedia={this.getMoreMedia.bind(this)}
-                    disableLoadMoreBtn={this.state.disableLoadMoreBtn}>
+                    disableLoadMoreBtn={this.state.disableLoadMoreBtn}
+                    history={this.props.history}>
                 </Gallery>
                 {/* <Storage></Storage> */}
                 <AboutUs></AboutUs>

@@ -57,7 +57,7 @@ class Gallery extends Component {
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
                     res = this.props.dataGallery.imagesData.map((img, idx) =>
-                        <ImageItem itemSrc={img.url} key={idx} />)
+                        <ImageItem itemSrc={img.url} key={idx} history={this.props.history}/>)
                 }
                 else {
                     // else: error occurred => Show pic 500
@@ -113,7 +113,7 @@ class Gallery extends Component {
                         if(this.props.dataGallery.videosData)
                         return (
                             (this.props.dataGallery.videosData.map((video, idx) =>
-                                <VideoItem url={video.url} key={idx}></VideoItem>
+                                <VideoItem url={video.url} key={idx} history={this.props.history}/>
                             )))
                     }
                 }
