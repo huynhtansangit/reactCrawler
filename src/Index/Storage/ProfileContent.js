@@ -29,7 +29,7 @@ class ProfileContent extends Component {
             loading: true,
             testing: false
         };
-        this.setState = this.setState.bind(this);
+        this.updateTesting = this.updateTesting.bind(this);
     }
 
     async componentDidMount() {
@@ -93,10 +93,9 @@ class ProfileContent extends Component {
         console.log("Updated");
     }
 
-    shouldComponentUpdate() { }
-
     updateTesting(){
-        this.setState({testing: !this.state.testing})
+        console.log(this.state);
+        this.setState({testing: "adsfasfasfdasdfasdfs"});
     }
 
     updateInputProfile = async (e) => {
@@ -135,23 +134,23 @@ class ProfileContent extends Component {
                         <p>this.state.firstname</p>
                         <div className="mt-2 w-75 ">
                             <label htmlFor="first_name">First name</label>
-                            <input className="w-100 form-control" type="text" name="firstname" id="first_name" onChange={this.updateInputProfile} value={this.props.firstname} />
+                            <input className="w-100 form-control" type="text" name="firstname" id="first_name" onChange={this.updateInputProfile} value={this.state.firstname} />
                         </div>
                         <div className="mt-2 w-75 ">
                             <label htmlFor="last_name">Last name</label>
-                            <input className="w-100 form-control" type="text" name="lastname" id="last_name" onChange={this.updateInputProfile} value={this.props.lastname} />
+                            <input className="w-100 form-control" type="text" name="lastname" id="last_name" onChange={this.updateInputProfile} value={this.state.lastname} />
                         </div>
                         <div className="mt-2 w-75 ">
                             <label htmlFor="birthday">Birthday</label>
-                            <input className="w-100 form-control" type="date" name="birthday" id="birthday" onChange={this.updateInputProfile} value={() => { convertTimeStampToDate(this.props.birthday) }} />
+                            <input className="w-100 form-control" type="date" name="birthday" id="birthday" onChange={this.updateInputProfile} value={() => { convertTimeStampToDate(this.state.birthday) }} />
                         </div>
                         <div className="mt-2 w-75 ">
                             <label htmlFor="phone">Phone</label>
-                            <input className="w-100 form-control" type="text" name="phone" id="phone" disabled value={this.props.phone} />
+                            <input className="w-100 form-control" type="text" name="phone" id="phone" disabled value={this.state.phone} />
                         </div>
                         <div className="mt-2 w-75 ">
                             <label htmlFor="email">Email</label>
-                            <input className="w-100 form-control" type="text" name="email" id="email" onChange={this.updateInputProfile} value={this.props.email} />
+                            <input className="w-100 form-control" type="text" name="email" id="email" onChange={this.updateInputProfile} value={this.state.email} />
                         </div>
                         <button id="btn-apply-profile" className="btn-apply rounded" onClick={this.updateInputProfile}>Apply</button>
                     </div>)
@@ -162,8 +161,8 @@ class ProfileContent extends Component {
             <div className="col-xl-11 col-md-12 storage-tab overflow-auto" id="profile-storage-container">
                 <div className="row">
                     <div id="left-side" className="col-lg-6 col-md-12">
-                        {/* {renderInfoUser()} */}
-                        <p>{this.state.testing}</p>
+                        {renderInfoUser()}
+                        {/* <p>{this.state.testing}</p> */}
                     </div>
                     <div id="right-side" className="col-lg-6 col-md-12">
                         <div className="form-group">
