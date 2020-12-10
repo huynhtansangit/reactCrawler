@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ScrollableTabsButtonForce() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(2);
+  const [value, setValue] = React.useState(0);
   const [statusGetCollection, setStatusGetCollection] = React.useState({loading: true, error: "false"})
   const [imagesData, setImagesData] = React.useState([]);
   const [videosData, setVideosData] = React.useState([]);

@@ -27,11 +27,14 @@ class ProfileContent extends Component {
             phone: "",
             email: "",
             loading: true,
-            testing: "Not yet"
+            testing: false
         };
+        this.setState = this.setState.bind(this);
     }
 
     async componentDidMount() {
+        console.log(this.state.testing);
+
         console.log("Didmount");
         config['url'] = MY_ACCOUNT_INFO_URL;
         config['method'] = 'GET';
@@ -91,6 +94,10 @@ class ProfileContent extends Component {
     }
 
     shouldComponentUpdate() { }
+
+    updateTesting(){
+        this.setState({testing: !this.state.testing})
+    }
 
     updateInputProfile = async (e) => {
         const target = e.target;
@@ -155,12 +162,13 @@ class ProfileContent extends Component {
             <div className="col-xl-11 col-md-12 storage-tab overflow-auto" id="profile-storage-container">
                 <div className="row">
                     <div id="left-side" className="col-lg-6 col-md-12">
-                        {renderInfoUser()}
+                        {/* {renderInfoUser()} */}
+                        <p>{this.state.testing}</p>
                     </div>
                     <div id="right-side" className="col-lg-6 col-md-12">
                         <div className="form-group">
                             <div className="mt-2 w-75 ">
-                                <label htmlFor="current_password">Current password</label>
+                                <label htmlFor="current_password">{this.state.testing}</label>
                                 <input className="w-100 form-control" type="text" name="current_password" id="current_password" />
                             </div>
                             <div className="mt-2 w-75 ">
@@ -171,7 +179,7 @@ class ProfileContent extends Component {
                                 <label htmlFor="new_password2">Confirm new password</label>
                                 <input className="w-100 form-control" type="password" name="new_password2" id="new_password2" />
                             </div>
-                            <button id="btn-change-password w-100" className="btn-apply rounded">Change Password</button>
+                            <button id="btn-change-password w-100" className="btn-apply rounded" onClick={this.updateTesting}>Change Password</button>
                         </div>
                     </div>
                 </div>
