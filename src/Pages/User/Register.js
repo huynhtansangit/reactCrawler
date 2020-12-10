@@ -7,7 +7,6 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -17,11 +16,8 @@ import qs from 'query-string';
 import { Modal } from 'react-bootstrap';
 import './Verify.css';
 import axios from 'axios';
+import { REGISTER_URL, VERIFY_REGISTER_URL } from '../../utils/config.url'
 
-
-
-const REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register";
-const VERIFY_REGISTER_ENDPOINT = "https://dacnhk1.herokuapp.com/register/verify";
 
 
 function Copyright() {
@@ -192,7 +188,7 @@ export default function SignUp() {
             password: password1
         };
         const config = {
-            url: REGISTER_ENDPOINT,
+            url: REGISTER_URL,
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -235,7 +231,7 @@ export default function SignUp() {
             otp: otp
         };
         const config = {
-            url: VERIFY_REGISTER_ENDPOINT,
+            url: VERIFY_REGISTER_URL,
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
