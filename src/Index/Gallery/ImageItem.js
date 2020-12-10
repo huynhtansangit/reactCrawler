@@ -38,7 +38,7 @@ class ImageItem extends Component {
                     </button>
                     </p>
                     <p className="card__title">
-                        <Link to={{ pathname: '/Testing', state: { imgSrc: this.props.itemSrc } }}>
+                        <Link to={{ pathname: '/editor', state: { imgSrc: this.props.itemSrc } }}>
                             <button type="button" className="btn btn-outline-secondary"><EditOutlinedIcon/></button>
                         </Link>
                     </p>
@@ -70,7 +70,7 @@ class ImageItem extends Component {
                         </p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Link to={{ pathname: '/Testing', state: { imgSrc: this.props.itemSrc } }}>
+                        <Link to={{ pathname: '/editor', state: { imgSrc: this.props.itemSrc } }}>
                             <Button variant="secondary">
                                 Edit
                             </Button>

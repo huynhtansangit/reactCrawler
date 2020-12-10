@@ -3,13 +3,11 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 import { Modal } from 'react-bootstrap';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import PauseOutlinedIcon from '@material-ui/icons/PauseOutlined';
-import { downloadImageFromLink } from "../../services/downloadImageByUrl";
-import { createMuiTheme } from '@material-ui/core/styles';
+import addToCollection from '../../services/user.services'
+
 class VideoItem extends Component {
     constructor(props) {
         super(props);
@@ -18,16 +16,7 @@ class VideoItem extends Component {
             isOpenModal: false,
         }
     }
-    // theme = createMuiTheme({
-    //     palette: {
-    //       primary: {
-    //         main: purple[500],
-    //       },
-    //       secondary: {
-    //         main: '#f44336',
-    //       },
-    //     },
-    //   });
+    
     playVideo = () => {
         this.setState({
             isPlay: !this.state.isPlay
@@ -52,14 +41,15 @@ class VideoItem extends Component {
                     {this.renderPlayOrPause()}
                     </button>
                     </p>
-                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary">
-                    <VisibilityOutlinedIcon />
-                    </button>
+                    <p className="card__title">
+                        <button onClick={this.handleShow} type="button" className="btn btn-outline-secondary">
+                            <VisibilityOutlinedIcon />
+                        </button>
                     </p>
-                   
-                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary">
-                    <FavoriteTwoToneIcon />
-                    </button>
+                    <p className="card__title">
+                        <button onClick={()=>{addToCollection(this.props.url, "", "video")}} type="button" className="btn btn-outline-secondary">
+                            <FavoriteTwoToneIcon />
+                        </button>
                     </p>
                 </div>
                 <Modal

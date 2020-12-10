@@ -4,15 +4,14 @@ import OwnerMedia from './OwnerMedia';
 // import Swiper core and required components
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 
-
 // Import Swiper styles
 import 'swiper/swiper.scss';
 import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
 import VideoItem from './VideoItem';
+import {DOWNLOAD_URL} from '../../utils/config.url'
 
-const DOWNLOAD_ENDPOINT = "https://dacnhk1.herokuapp.com/download/";
 
 class Gallery extends Component {
     constructor(props) {
@@ -107,7 +106,7 @@ class Gallery extends Component {
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
                     if(this.props.nameNetwork === 'tiktok'){
-                        return(<VideoItem url={`${DOWNLOAD_ENDPOINT}${this.props.nameNetwork}?url=${this.props.inputUrl}`}></VideoItem>)
+                        return(<VideoItem url={`${DOWNLOAD_URL}${this.props.nameNetwork}?url=${this.props.inputUrl}`}></VideoItem>)
                     }
                     else{
                         if(this.props.dataGallery.videosData)

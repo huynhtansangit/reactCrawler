@@ -17,7 +17,7 @@ import axios from 'axios'
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import cookies from '../../utils/cookie'
-import { TOKEN_URL, MY_ACCOUNT_URL } from "../../utils/config.url";
+import { TOKEN_URL, MY_ACCOUNT_INFO_URL } from "../../utils/config.url";
 
 
 function Copyright() {
@@ -174,7 +174,7 @@ export default function SignInSide(props) {
         })
         .then((accessToken)=>{
           const config = {
-            url: MY_ACCOUNT_URL,
+            url: MY_ACCOUNT_INFO_URL,
             method: 'GET',
             headers: {
               'Accept': 'application/json',

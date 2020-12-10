@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import './CustomizedMenu.css';
 import Icon from '@material-ui/core/Icon';
 import auth from "../../auth/auth";
+import {Link} from 'react-router-dom'
 
 const StyledMenu = withStyles({
   paper: {
@@ -76,7 +77,7 @@ export default function CustomizedMenus(props) {
           <ListItemIcon>
             <Icon className="fas fa-user" />
           </ListItemIcon>
-          <ListItemText primary={`Hello,  ${props.fullname}!`} />
+          <Link to="/me"><ListItemText primary={`Hello,  ${props.fullname}!`} /></Link>
         </StyledMenuItem>
         <StyledMenuItem onClick={handleLogout}>
           <ListItemIcon>
