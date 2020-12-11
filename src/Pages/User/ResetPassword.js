@@ -70,6 +70,7 @@ class ResetPassword extends Component {
 
             // Stage of resetting password: "request" otp and "verify" otp
             stage: "request",
+            countDownTime: 0,
 
             // Errors
             error: "",
@@ -85,6 +86,14 @@ class ResetPassword extends Component {
     }
     isEmptyOrSpaces = (str)=>{
         return str === null || str.match(/^ *$/) !== null;
+    }
+
+    countDown = (i)=>{
+        let tempThis = this;
+        var int = setInterval(function () {
+            tempThis.setState({countDownTime: i});
+            i-- || clearInterval(int);  //if i is 0, then stop the interval
+        }, 1000);
     }
 
     validateInputResetPassword = async (name)=>{
@@ -175,6 +184,8 @@ class ResetPassword extends Component {
                     if (data['status'] === 'pending') {
                         console.log("Waiting for verify OTP.");
                         console.log(`Server msg: ${data['message']}`);
+                        
+                        this.countDown(60);
                         
                         this.setState({ isOpenModal: true });
                         this.setState({ stage: 'verify' });
@@ -387,9 +398,14 @@ class ResetPassword extends Component {
                                             </div>
                                             <div>
                                                 Didn't receive the code?<br />
+                                                { 
+                                                this.state.countDownTime===0 ? 
                                                 <p style={{ marginBottom: 0 }} className="btn"
-                                                onClick={this.handleRequestOtp}
-                                                >Send code again</p><br />
+                                                    onClick={this.handleRequestOtp}
+                                                    >Send code again</p> :
+                                                    <p>You will be able to resend code after {this.state.countDownTime}s</p>
+                                                }
+                                                <br />
                                             </div>
                                         </div>
                                     </div>

@@ -168,7 +168,7 @@ export default function SignInSide(props) {
               localStorage.setItem('phone', "");
               localStorage.setItem('password', "");
             }
-            props.history.goBack();
+            props.history.push("/");
             return data['accessToken'];
           }
         })

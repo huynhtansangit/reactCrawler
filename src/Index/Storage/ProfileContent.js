@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import { MY_ACCOUNT_INFO_URL, UPDATE_MY_ACCOUNT_INFO_URL } from '../../utils/config.url'
 import cookies from '../../utils/cookie'
+import qs from 'querystring'
 
 const accessToken = cookies.get('accessToken');
 let config = {
     url: '',
     method: '',
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': `bearer ${accessToken}`
     },
 };
 
-const convertTimeStampToDate = (timestamp) => {
-    return new Date(timestamp);
-}
 
 class ProfileContent extends Component {
     constructor(props) {
@@ -27,49 +25,22 @@ class ProfileContent extends Component {
             phone: "",
             email: "",
             loading: true,
-            testing: false
+            disableUpdateInfoBtn: false,
+            message: "",
+            error: ""
         };
-        this.updateTesting = this.updateTesting.bind(this);
+        this.convertTimeStampToDate = this.convertTimeStampToDate.bind(this);
     }
 
     async componentDidMount() {
-        console.log(this.state.testing);
-
-        console.log("Didmount");
         config['url'] = MY_ACCOUNT_INFO_URL;
         config['method'] = 'GET';
-
-        // axios.request(config)
-        //     .then(res => res.data)
-        //     .then(data => {
-        //         if (data) {
-        //             setInfoUser({
-        //                 loading: false,
-        //                 error: "",
-        //                 data: data
-        //             })
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.log("Error occurred when trying to get your collection.");
-        //         if (error.response) {
-        //             setInfoUser({
-        //                 loading: false,
-        //                 error: error.response.data,
-        //                 data: null
-        //             })
-        //             // alert(error.response.data);
-        //         }
-        //         else {
-        //             alert("Something went wrong. Please check your internet connection.");
-        //         }
-        //     })
 
         try {
             const data = (await axios.request(config))['data'];
 
             if (data) {
-                setTimeout(() => this.setState({ testing: "asdfasdfas" }), 5000);
+                // setTimeout(() => this.setState({ testing: "asdfasdfas" }), 5000);
                 this.setState({ loading: false });
 
                 for (const key in data) {
@@ -80,8 +51,7 @@ class ProfileContent extends Component {
             if (error.response) {
                 console.error('Error:', error.response.data);
 
-                // setError(error.response.data['message']);
-                // Sẽ disable nút resend code ở đây, sử dụng lại cái setDisableRegisterBtn cũng được, dùng setTimeOut các kiểu.
+                this.setState({error: error.response.data['message']}); 
             }
             else {
                 console.log("Something went wrong. Please check your internet connection.");
@@ -90,12 +60,11 @@ class ProfileContent extends Component {
     }
 
     componentDidUpdate() {
-        console.log("Updated");
     }
 
-    updateTesting(){
-        console.log(this.state);
-        this.setState({testing: "adsfasfasfdasdfasdfs"});
+    convertTimeStampToDate = () => {
+        console.log(new Date(this.state.birthday).toISOString().substr(0,10));
+        return new Date(this.state.birthday).toISOString().substr(0,10);
     }
 
     updateInputProfile = async (e) => {
@@ -116,10 +85,42 @@ class ProfileContent extends Component {
     }
 
     handleUpdateProfile = () => {
+        let updateProfileData = {
+            firstname: this.state.firstname,
+            lastname: this.state.lastname,
+            birthday: this.state.birthday,
+            email: this.state.email
+        };
+        
         config['url'] = UPDATE_MY_ACCOUNT_INFO_URL;
         config['method'] = 'PUT';
+        config['data'] = qs.stringify(updateProfileData)
 
-        axios.request(config);
+        // Temp disable update btn
+        this.setState({disableUpdateInfoBtn: true});
+
+        axios.request(config)
+            .then(res=>{
+                let data = res.data;
+                if(data){
+                    if(data['message'] === 'success'){
+                        this.setState({message: "Successfully update profile."});
+                    }
+                }
+            })
+            .catch(error=>{
+                if (error.response) {
+                    console.error('Error:', error.response.data);
+                    // setState for showing errors here.
+                    this.setState({error: error.response.data['message']}); 
+                }
+                else {
+                    this.setState({error: "Something went wrong. Please check your internet connection."});
+                }
+            })
+            .finally(()=>{
+                this.setState({disableUpdateInfoBtn: false});
+            });
     }
 
     render() {
@@ -131,7 +132,6 @@ class ProfileContent extends Component {
             else {
                 return (
                     <div className="form-group">
-                        <p>this.state.firstname</p>
                         <div className="mt-2 w-75 ">
                             <label htmlFor="first_name">First name</label>
                             <input className="w-100 form-control" type="text" name="firstname" id="first_name" onChange={this.updateInputProfile} value={this.state.firstname} />
@@ -142,7 +142,7 @@ class ProfileContent extends Component {
                         </div>
                         <div className="mt-2 w-75 ">
                             <label htmlFor="birthday">Birthday</label>
-                            <input className="w-100 form-control" type="date" name="birthday" id="birthday" onChange={this.updateInputProfile} value={() => { convertTimeStampToDate(this.state.birthday) }} />
+                            <input className="w-100 form-control" type="date" name="birthday" id="birthday" onChange={this.updateInputProfile} value={ this.convertTimeStampToDate() } />
                         </div>
                         <div className="mt-2 w-75 ">
                             <label htmlFor="phone">Phone</label>
@@ -152,7 +152,7 @@ class ProfileContent extends Component {
                             <label htmlFor="email">Email</label>
                             <input className="w-100 form-control" type="text" name="email" id="email" onChange={this.updateInputProfile} value={this.state.email} />
                         </div>
-                        <button id="btn-apply-profile" className="btn-apply rounded" onClick={this.updateInputProfile}>Apply</button>
+                        <button id="btn-apply-profile" className="btn-apply rounded" onClick={this.handleUpdateProfile} disabled={this.state.disableUpdateInfoBtn ? true: false}>Apply</button>
                     </div>)
             }
         }
@@ -162,12 +162,11 @@ class ProfileContent extends Component {
                 <div className="row">
                     <div id="left-side" className="col-lg-6 col-md-12">
                         {renderInfoUser()}
-                        {/* <p>{this.state.testing}</p> */}
                     </div>
                     <div id="right-side" className="col-lg-6 col-md-12">
                         <div className="form-group">
                             <div className="mt-2 w-75 ">
-                                <label htmlFor="current_password">{this.state.testing}</label>
+                                <label htmlFor="current_password">Current password</label>
                                 <input className="w-100 form-control" type="text" name="current_password" id="current_password" />
                             </div>
                             <div className="mt-2 w-75 ">
@@ -178,7 +177,7 @@ class ProfileContent extends Component {
                                 <label htmlFor="new_password2">Confirm new password</label>
                                 <input className="w-100 form-control" type="password" name="new_password2" id="new_password2" />
                             </div>
-                            <button id="btn-change-password w-100" className="btn-apply rounded" onClick={this.updateTesting}>Change Password</button>
+                            <button id="btn-change-password w-100" className="btn-apply rounded">Change Password</button>
                         </div>
                     </div>
                 </div>

@@ -75,7 +75,6 @@ export default function SignUp() {
     const [firstName, setFirstName] = React.useState("");
     const [birthday, setBirthday] = React.useState("");
     const [password1, setPassword1] = React.useState("");
-    const [password2, setPassword2] = React.useState("");
     const [disableRegisterBtn, setDisableRegisterBtn] = React.useState(false);
     const [disableVerifyBtn, setDisableVerifyBtn] = React.useState(false);
     const [otp, setOtp] = React.useState("");
@@ -90,6 +89,7 @@ export default function SignUp() {
     // -------
     const [isOpenModal, setOpenModal] = React.useState(false);
     const [isShowAlert, setShowAlert] = React.useState(false);
+    const [countDownTime, setCountDownTime] = React.useState(0);
 
     const updateInputRegister = async (e) => {
         switch (e.target.id) {
@@ -151,7 +151,6 @@ export default function SignUp() {
                 break;
             case 'password2':
                 let rePwd = e.target.value;
-                setPassword2(rePwd);
                 
                 if (rePwd === password1 && !isEmptyOrSpaces(rePwd)) {
                     setErrorRetypePwd('');
@@ -204,6 +203,8 @@ export default function SignUp() {
             .then(response => response.data)
             .then(data => {
                 if (data['status'] === 'success') {
+                    countDown(60);
+                    
                     if (!resendOtp) {
                         handleShowAndCloseModal();
                     }
@@ -223,6 +224,13 @@ export default function SignUp() {
                 setDisableRegisterBtn(false);
                 setShowAlert(true);
             });
+    }
+
+    const countDown = (i)=>{
+        var int = setInterval(function () {
+            setCountDownTime(i);
+            i-- || clearInterval(int);  //if i is 0, then stop the interval
+        }, 1000);
     }
 
     const handleConfirmOtp = async () => {
@@ -436,7 +444,12 @@ export default function SignUp() {
                             </div>
                             <div>
                                 Didn't receive the code?<br />
-                                <p style={{ marginBottom: 0 }} className="btn" onClick={() => { handleRegister(true) }} disabled={setDisableRegisterBtn}>Send code again</p><br />
+                                {
+                                    countDownTime === 0 ?
+                                    <p style={{ marginBottom: 0 }} className="btn" onClick={() => { handleRegister(true) }}>Send code again</p>
+                                    : <p>You will be able to resend code after {countDownTime}s</p>
+                                }
+                                <br/>
                             </div>
                         </div>
                     </div>
