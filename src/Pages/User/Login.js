@@ -18,14 +18,16 @@ import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import cookies from '../../utils/cookie'
 import { TOKEN_URL, MY_ACCOUNT_INFO_URL } from "../../utils/config.url";
+import auth from '../../auth/auth';
+import {Redirect} from 'react-router-dom'
 
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="/">
-        Your Website
+      <Link color="inherit" href="https://www.facebook.com/profile.php?id=100008181729852">
+        Tan Thai Huy
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -66,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
 function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
 }
+
+let firstRender = true;
+
 export default function SignInSide(props) {
   const classes = useStyles();
   const [phone, setPhone] = React.useState(localStorage.getItem('phone') ? localStorage.getItem('phone') : "");
@@ -81,6 +86,7 @@ export default function SignInSide(props) {
   const [messagePwd, setMessagePwd] = React.useState("Password must not be empty");
 
   const [isRememberChecked, setRemember] = React.useState(localStorage.getItem('phone') ? true : false);
+  const [isLoggedIn, setLoggedIn] = React.useState("");
 
   const validatePhone = ()=>{
     let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
@@ -113,13 +119,14 @@ export default function SignInSide(props) {
   };
 
   const updateInputPhone = (event) => {
-    setPhone(event.target.value);
-    validatePhone();
+    setPhone(event.target.value); 
+    // No need to validate after set value because validate phone and pass func are used in useEffect()
+    // validatePhone();
   }
 
   const updateInputPassword = (event) => {
     setPwd(event.target.value);
-    validatePassword();
+    // validatePassword();
   }
 
   const checkRemember = () => {
@@ -223,12 +230,31 @@ export default function SignInSide(props) {
     }
   }
 
+  // Function below equal to componentDidMount
   useEffect(()=>{
+    const verifyProcess = async () => {
+        const result = await auth.verifyAccessToken();
+        setLoggedIn(result);
+    };
+    verifyProcess();
+    }, []);
+
+  // Function below equal to componentDidUpdate
+  useEffect(()=>{
+    // input phone/pwd => update component => Validate <=> validate whenever input be updated.
     validatePhone();
     validatePassword();
-  })
+  });
 
   return (
+    isLoggedIn&&isLoggedIn!=="" ? 
+    <Redirect
+      to={{
+          pathname: "/",
+          state: {
+              from: props.location
+          }
+      }}/> :
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />

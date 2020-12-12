@@ -24,8 +24,8 @@ function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="/">
-                Your Website
+            <Link color="inherit" href="https://www.facebook.com/profile.php?id=100008181729852">
+                Tan Thai Huy
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}

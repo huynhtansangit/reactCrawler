@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
+.MuiAlert-standardError{
+  color: black !important;
+  background-color: rgb(253 213 211) !important;
+}

@@ -13,7 +13,7 @@ export const ProtectedRoute = ({component: Component,...rest}) => {
             setVerifyDone(true);
         };
         verifyProcess();
-        }, [verifyResult]);
+        }, []);
 
     return (
             !isVerifiedDone ? null :
