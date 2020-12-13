@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import {
-    Link,
-} from "react-router-dom";
+import {Link,} from "react-router-dom";
 import { downloadImageFromLink } from "../../services/downloadImageByUrl";
-import { Button, Modal } from 'react-bootstrap';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -21,19 +18,37 @@ class ImageItem extends Component {
         }
     }
 
-    handleShow = () => {
-        this.setState({ isOpenModal: !this.state.isOpenModal })
+    // arrow 2 level cho ngầu. :v điều này sẽ làm thay đổi khi gọi hàm this.handleShow ở dưới.
+    // Func below is no longer in need due to movement of modal to Gallery.js
+    // handleShow = ()=>() => {
+    //     this.setState({ isOpenModal: !this.state.isOpenModal })
+    // }
+
+    login = ({isFromItemImg})=>{
+        this.props.history.push('/login');
+    };
+
+    clickDownload = ()=>{
+        downloadImageFromLink(this.props.imgSrc, ()=>this.login({
+            isFromItemImg: true
+        }));
     }
+    // redirect
     render() {
         return (
             <div className="img-card" variant="primary">
                 <img src={this.props.itemSrc} alt="Img-error" />
                 <div className="card__text">
-                    <p className="card__title"><button onClick={this.handleShow} type="button" className="btn btn-outline-secondary">
+                    <p className="card__title"><button onClick={ ()=>{
+                        // this.handleShow()
+                        
+                        // Click here will trigger show modal in Gallery.
+                        this.props.handleModal(this.props.itemSrc)
+                    }} type="button" className="btn btn-outline-secondary">
                     <VisibilityOutlinedIcon/>
                     </button>
                     </p>
-                    <p className="card__title"><button onClick={() => { downloadImageFromLink(this.props.itemSrc) }} type="button" className="btn btn-outline-secondary">
+                    <p className="card__title"><button onClick={this.clickDownload} type="button" className="btn btn-outline-secondary">
                     <GetAppOutlinedIcon/>
                     </button>
                     </p>
@@ -54,13 +69,15 @@ class ImageItem extends Component {
                     </p>
                 </div>
 
-                <Modal
+                {/* Modal will be moved to Gallery unless react will have to create 40 modal 
+                corresponding to 40 ImageItem every time it render, and this render func called a lot.  */}
+                {/* <Modal
                     size="xl"
                     scrollable={false}
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
                     show={this.state.isOpenModal}
-                    onHide={this.handleShow}>
+                    onHide={this.handleShow()}>
                     <Modal.Header closeButton>
                         <Modal.Title>Image previewer</Modal.Title>
                     </Modal.Header>
@@ -75,11 +92,12 @@ class ImageItem extends Component {
                                 Edit
                             </Button>
                         </Link>
-                        <Button variant="secondary" onClick={() => { downloadImageFromLink(this.props.itemSrc) }}>
+                        <Button variant="secondary" 
+                        onClick={this.clickDownload}>
                             Download
                         </Button>
                     </Modal.Footer>
-                </Modal>
+                </Modal> */}
             </div>
         );
     }

@@ -11,6 +11,9 @@ import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
 import VideoItem from './VideoItem';
 import {DOWNLOAD_URL} from '../../utils/config.url'
+import { Button, Modal } from 'react-bootstrap';
+import {Link,} from "react-router-dom";
+import { downloadImageFromLink } from '../../services/downloadImageByUrl'
 
 
 class Gallery extends Component {
@@ -19,7 +22,9 @@ class Gallery extends Component {
         this.state = {
             isImg: true,
             isVideo: false,
-        }
+            isOpenModal: false,
+            imageItemSrc: "",
+        };
     }
 
     componentDidMount() {
@@ -32,18 +37,32 @@ class Gallery extends Component {
 
     componentWillReceiveProps = (props)=> {
         if(props.nameNetwork !== 'instagram'){
-            this.activeVideo();
+            this.activeVideoTab();
         }
     }
 
-    activePhoto = () => {
+    activePhotoTab = () => {
         this.setState({ isImg: true })
         this.setState({ isVideo: false })
     }
-    activeVideo = () => {
+
+    activeVideoTab = () => {
         this.setState({ isVideo: true })
         this.setState({ isImg: false })
     }
+
+    handleShowModal = (url) => {
+        this.setState({ isOpenModal: !this.state.isOpenModal, imageItemSrc: url });
+    }
+
+    login = ()=>{
+        this.props.history.push('/login');
+    };
+
+    clickDownload = ()=>{
+        downloadImageFromLink(this.props.imgSrc, ()=>this.login());
+    }
+
     render() {
         // Helper functions
         const renderImageGallery = () => {
@@ -56,7 +75,12 @@ class Gallery extends Component {
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
                     res = this.props.dataGallery.imagesData.map((img, idx) =>
-                        <ImageItem itemSrc={img.url} key={idx} history={this.props.history}/>)
+                        <ImageItem
+                        itemSrc={img.url} handleModal = {(url)=>{
+                            // control modal with url
+                            console.log(url);
+                            this.handleShowModal(url);
+                        }} key={idx} history={this.props.history}/>)
                 }
                 else {
                     // else: error occurred => Show pic 500
@@ -68,7 +92,7 @@ class Gallery extends Component {
         }
         // FIXME CẦN XỬ LÝ KHI MÀ DATA VỀ NULL THÌ KHÔNG SẬP LUÔN FE.
         const handleCountPost = () =>{
-            if(this.props.dataGallery.ownerMedia.countPost)
+            if(this.props.dataGallery.ownerMedia?.countPost)
                 return this.props.dataGallery.ownerMedia.countPost;
             else if(this.props.dataGallery.ownerMedia.count_video)
                 return this.props.dataGallery.ownerMedia.count_video;
@@ -83,7 +107,7 @@ class Gallery extends Component {
             else {
                 return (!this.props.dataGallery.error ?
                     (
-                        <OwnerMedia avatar={this.props.dataGallery.ownerMedia.avatar}
+                        <OwnerMedia avatar={this.props.dataGallery.ownerMedia?.avatar}
                             username={this.props.dataGallery.ownerMedia.username}
                             fullname={this.props.dataGallery.ownerMedia.fullname}
                             countPost={ handleCountPost() }
@@ -169,10 +193,10 @@ class Gallery extends Component {
                         <h2 className="text-left slogan-title text-uppercase" style={{ letterSpacing: '4px' }}>Let's enjoy yourself</h2>
                     </div>
                     <div className="row">
-                        <div id="btn-image-gallery" className={"btn photo-btn col-sm" + (this.state.isImg ? ' active' : ' ')} onClick={this.activePhoto}>
+                        <div id="btn-image-gallery" className={"btn photo-btn col-sm" + (this.state.isImg ? ' active' : ' ')} onClick={this.activePhotoTab}>
                             <span>IMAGE TAB</span>
                         </div>
-                        <div id="btn-video-gallery" className={"btn video-btn col-sm" + (this.state.isVideo ? ' active' : ' ')} onClick={this.activeVideo}>
+                        <div id="btn-video-gallery" className={"btn video-btn col-sm" + (this.state.isVideo ? ' active' : ' ')} onClick={this.activeVideoTab}>
                             <span>VIDEO TAB</span>
                         </div>
                     </div>
@@ -204,6 +228,33 @@ class Gallery extends Component {
                         </div>
                         {renderLoadMoreButton()}
                     </div>
+                    <Modal
+                        size="xl"
+                        scrollable={false}
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                        show={this.state.isOpenModal}
+                        onHide={()=>this.handleShowModal(this.state.imageItemSrc)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Image previewer</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>
+                                <img className='img-fluid' width={1100} height={1000} style={{objectFit: 'cover'}} src={this.state.imageItemSrc} alt="Img-error" />
+                            </p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Link to={{ pathname: '/editor', state: { imgSrc: this.state.imageItemSrc } }}>
+                                <Button variant="secondary">
+                                    Edit
+                                </Button>
+                            </Link>
+                            <Button variant="secondary" 
+                            onClick={this.clickDownload}>
+                                Download
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
             </section>
         );

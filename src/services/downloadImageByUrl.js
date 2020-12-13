@@ -1,11 +1,20 @@
 import download from 'downloadjs'
+import auth from '../auth/auth'
 
-export const downloadImageFromLink = (url, name = "image.jpg") => {
-    var x = new XMLHttpRequest();
-    x.open("GET", url, true);
-    x.responseType = 'blob';
-    x.onload = function (e) { download(x.response, name, "image/jpg"); }
-    x.send();
+export const downloadImageFromLink = async (url, callback) => {
+    const result = await auth.verifyAccessToken();
+    const name = "image.jpg"
+    if(result===true)
+    {
+        var x = new XMLHttpRequest();
+        x.open("GET", url, true);
+        x.responseType = 'blob';
+        x.onload = function (e) { download(x.response, name, "image/jpg"); }
+        x.send();
+    }
+    else{
+      callback&&callback();
+    }
 }
 
 // Codes below can not download video
