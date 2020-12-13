@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import ImageItem from './ImageItem';
 import OwnerMedia from './OwnerMedia';
 // import Swiper core and required components
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+// import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 
 // Import Swiper styles
-import 'swiper/swiper.scss';
-import 'swiper/components/navigation/navigation.scss';
-import 'swiper/components/pagination/pagination.scss';
-import 'swiper/components/scrollbar/scrollbar.scss';
+// import 'swiper/swiper.scss';
+// import 'swiper/components/navigation/navigation.scss';
+// import 'swiper/components/pagination/pagination.scss';
+// import 'swiper/components/scrollbar/scrollbar.scss';
 import VideoItem from './VideoItem';
 import {DOWNLOAD_URL} from '../../utils/config.url'
 import { Button, Modal } from 'react-bootstrap';
 import {Link,} from "react-router-dom";
-import { downloadImageFromLink } from '../../services/downloadImageByUrl'
+import { downloadImageByUrl, downloadMultiImagesByUrls } from '../../services/user.services'
 
 
 class Gallery extends Component {
@@ -60,7 +60,14 @@ class Gallery extends Component {
     };
 
     clickDownload = ()=>{
-        downloadImageFromLink(this.props.imgSrc, ()=>this.login());
+        downloadImageByUrl(this.props.imgSrc, ()=>this.props.history.push('/login'));
+    }
+
+    handleDownloadMultiImages = ()=>{
+        if(this.props.dataGallery?.imagesData?.length)
+            downloadMultiImagesByUrls(this.props.dataGallery.imagesData, ()=>this.props.history.push('/login'));
+        else
+            alert("Found no thing can be downloaded.")
     }
 
     render() {
@@ -91,6 +98,7 @@ class Gallery extends Component {
             return (res);
         }
         // FIXME CẦN XỬ LÝ KHI MÀ DATA VỀ NULL THÌ KHÔNG SẬP LUÔN FE.
+        // Đã thêm dấu ? handle nhưng chưa test.
         const handleCountPost = () =>{
             if(this.props.dataGallery.ownerMedia?.countPost)
                 return this.props.dataGallery.ownerMedia.countPost;
@@ -130,13 +138,13 @@ class Gallery extends Component {
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
                     if(this.props.nameNetwork === 'tiktok'){
-                        return(<VideoItem url={`${DOWNLOAD_URL}${this.props.nameNetwork}?url=${this.props.inputUrl}`}></VideoItem>)
+                        return(<VideoItem url={`${DOWNLOAD_URL}${this.props.nameNetwork}?url=${this.props.inputUrl}`} isAuth={this.props.isAuth}></VideoItem>)
                     }
                     else{
                         if(this.props.dataGallery.videosData)
                         return (
                             (this.props.dataGallery.videosData.map((video, idx) =>
-                                <VideoItem url={video.url} key={idx} history={this.props.history}/>
+                                <VideoItem url={video.url} key={idx} history={this.props.history} isAuth={this.props.isAuth}/>
                             )))
                     }
                 }
@@ -148,7 +156,7 @@ class Gallery extends Component {
             }
         }
         const renderLoadMoreButton = () => {
-            // Load more only available with instagram
+            // Load more only available with instagram and fb
             if(this.props.nameNetwork !== 'tiktok'){
                 if (Object.keys(this.props.dataGallery).length === 0 ||
                     !this.props.dataGallery.videosData || !this.props.dataGallery.imagesData) {
@@ -182,6 +190,27 @@ class Gallery extends Component {
                 return("")
             }
         }
+        const renderDownloadAllImageBtn = ()=>{
+            if(Object.keys(this.props.dataGallery).length === 0){
+                return(null)
+            }
+            else if(!this.props.dataGallery.error){
+                if(this.props.isAuth){
+                    return(<button
+                        style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                        type="button" className="btn btn-danger" onClick={this.handleDownloadMultiImages}>Download all images
+                    </button>)
+                }
+                else{
+                    return(
+                        <button
+                            style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                            type="button" className="btn btn-danger" onClick={()=>{this.props.history.push('/login')}}>sign in to download
+                        </button>
+                        )
+                }
+            }
+        }
 
 
         return (
@@ -208,9 +237,8 @@ class Gallery extends Component {
                         <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1"
                             style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
                             {renderOwnerMedia()}
-                            <button
-                                style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                type="button" className="btn btn-danger">sign in to download</button>
+                            
+                            {renderDownloadAllImageBtn()}
                         </div>
                         {renderLoadMoreButton()}
                     </div>
@@ -222,9 +250,6 @@ class Gallery extends Component {
                         <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1"
                             style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
                             {renderOwnerMedia()}
-                            <button
-                                style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                type="button" className="btn btn-danger">sign in to download</button>
                         </div>
                         {renderLoadMoreButton()}
                     </div>
@@ -261,5 +286,5 @@ class Gallery extends Component {
     }
 }
 // install Swiper components
-SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
+// SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 export default Gallery;

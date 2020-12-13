@@ -5,6 +5,7 @@ import Gallery from './Gallery/Gallery';
 import AboutUs from './Aboutus/Aboutus';
 import Footer from './Footer/Footer';
 import {DOWNLOAD_URL} from '../utils/config.url'
+import auth from '../auth/auth'
 
 
 class Index extends Component {
@@ -17,7 +18,9 @@ class Index extends Component {
             hasNextPage: true,
             clickedBtnSearch: false,
             dataGallery: {},
-            disableLoadMoreBtn: false
+            disableLoadMoreBtn: false,
+            fullname: "User",
+            isAuth: false,
         }
     }
 
@@ -127,6 +130,17 @@ class Index extends Component {
     }
 
     async componentDidMount(){
+        // Authenticating process.
+        const authProcess = await auth.verifyAccessToken();
+        if(authProcess){
+            this.setState({isAuth: true});
+
+            const firstName = localStorage.getItem('firstname');
+            const lastName = localStorage.getItem('lastname');
+            if(firstName && lastName)
+                this.setState({fullname: `${firstName} ${lastName}`}); 
+        }
+        
         await this.getMedia(this.state.inputUrl, this.state.nameNetwork);
     }
 
@@ -151,6 +165,8 @@ class Index extends Component {
                 <Banner 
                     onUpdateBannerInput={this.onUpdateBannerInput.bind(this)}
                     history={this.props.history}
+                    fullname={this.state.fullname}
+                    isAuth={this.state.isAuth}
                 ></Banner>
                 <Gallery 
                     dataGallery= {this.state.dataGallery}
@@ -158,7 +174,8 @@ class Index extends Component {
                     inputUrl= {this.state.inputUrl}
                     getMoreMedia={this.getMoreMedia.bind(this)}
                     disableLoadMoreBtn={this.state.disableLoadMoreBtn}
-                    history={this.props.history}>
+                    history={this.props.history}
+                    isAuth={this.state.isAuth}>
                 </Gallery>
                 {/* <Storage></Storage> */}
                 <AboutUs></AboutUs>

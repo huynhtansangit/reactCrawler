@@ -63,9 +63,12 @@ class VideoItem extends Component {
                         <Modal.Title>Image previewer</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>
-                            <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} controls={true} playing />
-                        </p>
+                        {/* Prevent user download video if not logged in. */}
+                        {
+                            this.props.isAuth ? 
+                            <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} controls={true} playing /> :
+                            <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
+                        }
                     </Modal.Body>
                     {/* <Modal.Footer>
                         <Button variant="secondary" onClick={() => { downloadVideoFromLink(this.props.itemSrc) }}>

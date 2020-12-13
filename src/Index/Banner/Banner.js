@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import CustomizedMenu from './CustomizedMenu'
-import auth from '../../auth/auth'
 
 class Banner extends Component {
     constructor(props) {
@@ -10,26 +9,10 @@ class Banner extends Component {
         this.state = {
             inputUrlElement: '',
             nameSocialNetwork: '',
-            isAuth: false,
-            fullname: "User"
         }
 
         this.updateInputUrlElement = this.updateInputUrlElement.bind(this);
         this.selectSocialNetwork = this.selectSocialNetwork.bind(this);
-    }
-
-    async componentDidMount(){
-        // Authenticating process.
-        const authProcess = await auth.verifyAccessToken();
-        if(authProcess){
-            this.setState({isAuth: true});
-
-            const firstName = localStorage.getItem('firstname');
-            const lastName = localStorage.getItem('lastname');
-            if(firstName && lastName)
-                this.setState({fullname: `${firstName} ${lastName}`}); 
-        }
-
     }
 
     selectSocialNetwork = (event)=>{
@@ -56,11 +39,11 @@ class Banner extends Component {
     render() {
         //Helper function
         const renderUserInfo = ()=>{
-            if(this.state.isAuth){
+            if(this.props.isAuth){
                 return (
                     <div className="dropdown-menu-container">
                         <CustomizedMenu 
-                            fullname={this.state.fullname}
+                            fullname={this.props.fullname}
                             history={this.props.history}
                         />
                     </div>

@@ -289,7 +289,7 @@ export default function SignUp() {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
+                <div className={classes.form} noValidate>
                     <Grid container spacing={4}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -408,7 +408,7 @@ export default function SignUp() {
                             </Link>
                         </Grid>
                     </Grid>
-                </form>
+                </div>
             </div>
             <Box mt={5}>
                 <Copyright />
