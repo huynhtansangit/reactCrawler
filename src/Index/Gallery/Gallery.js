@@ -10,10 +10,11 @@ import OwnerMedia from './OwnerMedia';
 // import 'swiper/components/pagination/pagination.scss';
 // import 'swiper/components/scrollbar/scrollbar.scss';
 import VideoItem from './VideoItem';
+import ReactPlayer from 'react-player'
 import {DOWNLOAD_URL} from '../../utils/config.url'
 import { Button, Modal } from 'react-bootstrap';
 import {Link,} from "react-router-dom";
-import { downloadImageByUrl, downloadMultiImagesByUrls } from '../../services/user.services'
+import addToCollection, { downloadImageByUrl, downloadMultiImagesByUrls } from '../../services/user.services'
 
 
 class Gallery extends Component {
@@ -23,6 +24,7 @@ class Gallery extends Component {
             isImg: true,
             isVideo: false,
             isOpenModal: false,
+            isOpenModalVideo: false,
             imageItemSrc: "",
         };
     }
@@ -52,15 +54,20 @@ class Gallery extends Component {
     }
 
     handleShowModal = (url) => {
-        this.setState({ isOpenModal: !this.state.isOpenModal, imageItemSrc: url });
+        this.setState({ 
+            isOpenModal: !this.state.isOpenModal, 
+            isOpenModalVideo: false,
+            imageItemSrc: url 
+        });
     }
 
-    login = ()=>{
-        this.props.history.push('/login');
-    };
-
     clickDownload = ()=>{
-        downloadImageByUrl(this.props.imgSrc, ()=>this.props.history.push('/login'));
+        const tempThis = this;
+        downloadImageByUrl(this.props.itemSrc, ()=>this.props.history.push('/login', {
+            from: tempThis.props.location,
+            action: "downloadSingleImage",
+            imgSrc: tempThis.state.imageItemSrc
+        }));
     }
 
     handleDownloadMultiImages = ()=>{
@@ -68,6 +75,28 @@ class Gallery extends Component {
             downloadMultiImagesByUrls(this.props.dataGallery.imagesData, ()=>this.props.history.push('/login'));
         else
             alert("Not found any image to download.")
+    }
+
+    clickAddToCollection = (itemUrl, type)=>{
+        const tempThis = this;
+        addToCollection(itemUrl, "", type,()=>{
+            // If not login -> redirect to login.
+            this.props.history.push("/login", {
+                from: tempThis.props.location,
+                action: "addToCollection",
+                imgSrc: itemUrl,
+                thumbnail: "",
+                type:type
+            });
+        })
+    }
+
+    handleShowModalVideo = (url) => {
+        this.setState({ 
+            isOpenModalVideo: !this.state.isOpenModalVideo, 
+            isOpenModal: false,
+            videoItemSrc: url 
+        });
     }
 
     render() {
@@ -85,7 +114,7 @@ class Gallery extends Component {
                         <ImageItem
                         itemSrc={img.url} handleModal = {(url)=>{
                             // control modal with url
-                            console.log(url);
+                            // console.log(url);
                             this.handleShowModal(url);
                         }} key={idx} history={this.props.history}/>)
                 }
@@ -140,13 +169,21 @@ class Gallery extends Component {
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
                     if(this.props.nameNetwork === 'tiktok'){
-                        return(<VideoItem url={`${DOWNLOAD_URL}${this.props.nameNetwork}?url=${this.props.inputUrl}`} isAuth={this.props.isAuth}></VideoItem>)
+                        return(<VideoItem url={`${DOWNLOAD_URL}/${this.props.nameNetwork}?url=${this.props.inputUrl}`} handleModal = {(url)=>{
+                            // control modal with url
+                            // console.log(url);
+                            this.handleShowModalVideo(url);
+                        }} isAuth={this.props.isAuth}></VideoItem>)
                     }
                     else{
                         if(this.props.dataGallery.videosData)
                         return (
                             (this.props.dataGallery.videosData.map((video, idx) =>
-                                <VideoItem url={video.url} key={idx} history={this.props.history} isAuth={this.props.isAuth}/>
+                                <VideoItem url={video.url} key={idx} history={this.props.history} handleModal = {(url)=>{
+                                    // control modal with url
+                                    // console.log(url);
+                                    this.handleShowModalVideo(url);
+                                }} isAuth={this.props.isAuth}/>
                             )))
                     }
                 }
@@ -279,6 +316,34 @@ class Gallery extends Component {
                             <Button variant="secondary" 
                             onClick={this.clickDownload}>
                                 Download
+                            </Button>
+                            <Button variant="secondary" 
+                            onClick={()=>this.clickAddToCollection(this.state.imageItemSrc, "picture")}>
+                                Add to my collection
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                    <Modal
+                        size="xl"
+                        scrollable={false}
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                        show={this.state.isOpenModalVideo}
+                        onHide={()=>this.handleShowModalVideo(this.state.videoItemSrc)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Image previewer</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {/* Prevent user download video if not logged in. */}
+                            {
+                                this.props.isAuth ? 
+                                <ReactPlayer className="videoFrame" url={this.state.videoItemSrc} controls={true} playing /> :
+                                <ReactPlayer className="videoFrame" url={this.state.videoItemSrc} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
+                            }
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.videoItemSrc, "video")}>
+                                Add to my collection
                             </Button>
                         </Modal.Footer>
                     </Modal>

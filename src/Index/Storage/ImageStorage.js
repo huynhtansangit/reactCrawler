@@ -7,7 +7,7 @@ import './ImageHover.css'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import { downloadImageFromLink } from "../../services/downloadImageByUrl";
+import { downloadImageByUrl } from "../../services/user.services";
 import { Button, Modal } from 'react-bootstrap';
 import {Link,} from "react-router-dom";
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -52,7 +52,7 @@ export default function MasonryImageList(props) {
             />
             <div className="card__text">
               <p className="card__title"><button onClick={() => handleShow(item.url)} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon/></button></p>
-              <p className="card__title"><button onClick={() => { downloadImageFromLink(item.url) }} type="button" className="btn btn-outline-secondary"><GetAppOutlinedIcon /></button></p>
+              <p className="card__title"><button onClick={() => { downloadImageByUrl(item.url) }} type="button" className="btn btn-outline-secondary"><GetAppOutlinedIcon /></button></p>
               <p className="card__body">
                 <Link to={{ pathname: '/editor', state: { imgSrc: item.url } }}>
                   <button type="button" className="btn btn-outline-secondary"><EditOutlinedIcon /></button>
@@ -80,7 +80,7 @@ export default function MasonryImageList(props) {
             <Link to={{ pathname: '/editor', state: { imgSrc: imgSrc } }}>
               <Button variant="secondary">Edit</Button>
             </Link>
-            <Button variant="secondary" onClick={() => { downloadImageFromLink(imgSrc) }}>Download</Button>
+            <Button variant="secondary" onClick={() => { downloadImageByUrl(imgSrc) }}>Download</Button>
           </Modal.Footer>
         </Modal>
       </ImageList>

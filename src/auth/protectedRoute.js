@@ -13,6 +13,8 @@ export const ProtectedRoute = ({component: Component,...rest}) => {
             setVerifyDone(true);
         };
         verifyProcess();
+
+        // console.log("Testing get params: ", {...rest});
         }, []);
 
     return (
@@ -29,7 +31,7 @@ export const ProtectedRoute = ({component: Component,...rest}) => {
                             to={{
                                 pathname: "/login",
                                 state: {
-                                    from: props.location
+                                    to: props.location
                                 }
                             }}
                         />
