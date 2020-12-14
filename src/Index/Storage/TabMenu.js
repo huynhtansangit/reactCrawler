@@ -15,7 +15,7 @@ import VideoStorage from './VideoStorage';
 import {GET_MY_COLLECTION_URL, MY_ACCOUNT_INFO_URL} from '../../utils/config.url';
 import axios from 'axios';
 import cookies from '../../utils/cookie';
-
+import ProfileRemake from './Profile/ProfileRemake';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -25,10 +25,11 @@ function TabPanel(props) {
       role="tabpanel"
       hidden={value !== index}
       id={`scrollable-force-tabpanel-${index}`}
+      hidden={value !== index}
       aria-labelledby={`scrollable-force-tab-${index}`}
       {...other}
     >
-      {value === index && (
+      { (
         <Box p={3}>
           <Typography>{children}</Typography>
         </Box>
@@ -70,7 +71,7 @@ export default function ScrollableTabsButtonForce() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  
   useEffect(()=>{
     const accessToken = cookies.get("accessToken");
 
@@ -147,7 +148,8 @@ export default function ScrollableTabsButtonForce() {
       </TabPanel>
       
       <TabPanel value={value} index={2}>
-        <ProfileContent data={infoUser}/>
+        {/* <ProfileContent data={infoUser}/> */}
+        <ProfileRemake/>
       </TabPanel>
     </div>
   );
