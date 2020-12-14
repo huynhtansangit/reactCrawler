@@ -20,6 +20,7 @@ import cookies from '../../utils/cookie'
 import { TOKEN_URL, MY_ACCOUNT_INFO_URL } from "../../utils/config.url";
 import auth from '../../auth/auth';
 import {Redirect} from 'react-router-dom'
+import addToCollection, {downloadImageByUrl} from '../../services/user.services'
 
 
 function Copyright() {
@@ -173,7 +174,8 @@ export default function SignInSide(props) {
               localStorage.setItem('phone', "");
               localStorage.setItem('password', "");
             }
-            props.history.push("/");
+            // props.history.push("/");
+            setLoggedIn(true);
             return data['accessToken'];
           }
         })
@@ -234,8 +236,11 @@ export default function SignInSide(props) {
         const result = await auth.verifyAccessToken();
         setLoggedIn(result);
     };
-    verifyProcess();
-    }, []);
+    console.log("props.location:", props.location);
+
+    if(!isLoggedIn)
+      verifyProcess();
+    }, [isLoggedIn]);
 
   // Function below equal to componentDidUpdate
   useEffect(()=>{
@@ -244,15 +249,64 @@ export default function SignInSide(props) {
     validatePassword();
   });
 
+  const RedirectToDestinationOrActionIfAny = ()=>{
+    if(props.location.state?.to?.pathname){
+      if(props.location.state?.to?.state?.imgSrc){
+        return <Redirect
+          to={{
+            pathname: `${props.location.state.to.pathname}`,
+            state: {
+                from: props.location,
+                imgSrc: props.location.state.to.state.imgSrc
+            }
+          }}
+        />
+      }
+      else{
+        return (
+          <Redirect
+            to={{
+              pathname: `${props.location.state.to.pathname}`,
+                state: {
+                    from: props.location
+                }
+            }}/>
+        )
+      }
+    }
+    else if(props.location.state?.action){
+      if(props.location.state.action === "addToCollection")
+        addToCollection(props.location.state.imgSrc, props.location.state.thumbnail, props.location.state.type);
+      else if(props.location.state.action === "downloadSingleImage"){
+        downloadImageByUrl(props.location.state.imgSrc);
+      }
+      return (
+        <Redirect
+          to={{
+              pathname: "/",
+              state: {
+                  from: props.location
+              }
+          }}/>
+          )
+    }
+    else{
+      return (
+        <Redirect
+          to={{
+              pathname: "/",
+              state: {
+                  from: props.location
+              }
+          }}/>
+          )
+    }
+  }
+
   return (
     isLoggedIn&&isLoggedIn!=="" ? 
-    <Redirect
-      to={{
-          pathname: "/",
-          state: {
-              from: props.location
-          }
-      }}/> :
+      <RedirectToDestinationOrActionIfAny/>
+    :
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />

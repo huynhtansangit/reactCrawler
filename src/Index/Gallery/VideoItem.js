@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
-import { Modal } from 'react-bootstrap';
+// import { Modal } from 'react-bootstrap';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
@@ -22,9 +22,11 @@ class VideoItem extends Component {
             isPlay: !this.state.isPlay
         })
     }
+
     handleShow = () => {
         this.setState({ isOpenModal: !this.state.isOpenModal })
     }
+
     renderPlayOrPause = () => {
         if (this.state.isPlay)
         {
@@ -32,6 +34,21 @@ class VideoItem extends Component {
         }
         else return <PlayArrowOutlinedIcon />
     }
+
+    clickAddToCollection = ()=>{
+        const tempThis = this;
+        addToCollection(this.props.url, "", "video", ()=>{
+            // If not login -> redirect to login.
+            this.props.history.push("/login", {
+                from: tempThis.props.location,
+                action: "addToCollection",
+                imgSrc: tempThis.props.url,
+                thumbnail: "",
+                type:"video"
+            });
+        })
+    }
+
     render() {
         return (
             <div className="img-card">
@@ -42,17 +59,22 @@ class VideoItem extends Component {
                     </button>
                     </p>
                     <p className="card__title">
-                        <button onClick={this.handleShow} type="button" className="btn btn-outline-secondary">
+                        <button onClick={ ()=>{
+                        // this.handleShow()
+                        
+                        // Click here will trigger show modal in Gallery.
+                        this.props.handleModal(this.props.url)
+                    }} type="button" className="btn btn-outline-secondary">
                             <VisibilityOutlinedIcon />
                         </button>
                     </p>
                     <p className="card__title">
-                        <button onClick={()=>{addToCollection(this.props.url, "", "video")}} type="button" className="btn btn-outline-secondary">
+                        <button onClick={this.clickAddToCollection} type="button" className="btn btn-outline-secondary">
                             <FavoriteTwoToneIcon />
                         </button>
                     </p>
                 </div>
-                <Modal
+                {/* <Modal
                     size="xl"
                     scrollable={false}
                     aria-labelledby="contained-modal-title-vcenter"
@@ -62,20 +84,20 @@ class VideoItem extends Component {
                     <Modal.Header closeButton>
                         <Modal.Title>Image previewer</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body> */}
                         {/* Prevent user download video if not logged in. */}
-                        {
+                        {/* {
                             this.props.isAuth ? 
                             <ReactPlayer className="videoFrame" url={this.props.url} controls={true} playing /> :
                             <ReactPlayer className="videoFrame" url={this.props.url} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
                         }
-                    </Modal.Body>
+                    </Modal.Body> */}
                     {/* <Modal.Footer>
                         <Button variant="secondary" onClick={() => { downloadVideoFromLink(this.props.itemSrc) }}>
                             Download this video
                         </Button>
                     </Modal.Footer> */}
-                </Modal>
+                {/* </Modal> */}
             </div>
         );
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link,} from "react-router-dom";
-import { downloadImageFromLink } from "../../services/downloadImageByUrl";
+import { downloadImageByUrl } from "../../services/user.services";
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -24,16 +24,29 @@ class ImageItem extends Component {
     //     this.setState({ isOpenModal: !this.state.isOpenModal })
     // }
 
-    login = ({isFromItemImg})=>{
-        this.props.history.push('/login');
-    };
-
     clickDownload = ()=>{
-        downloadImageFromLink(this.props.imgSrc, ()=>this.login({
-            isFromItemImg: true
+        const tempThis = this; 
+        downloadImageByUrl(this.props.imgSrc, ()=>this.props.history.push('/login', {
+            from: tempThis.props.location,
+            action: "downloadSingleImage",
+            imgSrc: tempThis.props.itemSrc
         }));
     }
-    // redirect
+
+    clickAddToCollection = ()=>{
+        const tempThis = this;
+        addToCollection(this.props.itemSrc,"","picture",()=>{
+            // If not login -> redirect to login.
+            this.props.history.push("/login", {
+                from: tempThis.props.location,
+                action: "addToCollection",
+                imgSrc: tempThis.props.itemSrc,
+                thumbnail: "",
+                type:"picture"
+            });
+        })
+    }
+    
     render() {
         return (
             <div className="img-card" variant="primary">
@@ -59,11 +72,7 @@ class ImageItem extends Component {
                     </p>
                     <p className="card__title">
                             <button type="button" className="btn btn-outline-secondary"
-                            onClick={()=>{addToCollection(this.props.itemSrc,"","picture",()=>{
-                                // If not login -> redirect to login.
-                                this.props.history.push("/login");
-                            })
-                            }}>
+                            onClick={this.clickAddToCollection}>
                                 <FavoriteTwoToneIcon/>
                             </button>
                     </p>

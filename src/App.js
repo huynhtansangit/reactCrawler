@@ -21,8 +21,8 @@ function App() {
     <div className="App">
     <Switch>
       <ProtectedRoute path="/editor" exact component={ThuNghiem}></ProtectedRoute>
-      <Route path="/Login" exact component={Login}></Route>
-      <Route path="/Register" exact component={Register}></Route>
+      <Route path="/login" exact component={Login}></Route>
+      <Route path="/register" exact component={Register}></Route>
       <Route path="/reset" exact component={ResetPassword}></Route>
       <ProtectedRoute path="/me" exact component ={Storage}></ProtectedRoute>
       <Route path="/" component ={Index}/>
