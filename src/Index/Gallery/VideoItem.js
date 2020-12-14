@@ -35,7 +35,7 @@ class VideoItem extends Component {
     render() {
         return (
             <div className="img-card">
-                <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} playing={this.state.isPlay} />
+                <ReactPlayer className="videoFrame" url={this.props.url} playing={this.state.isPlay} />
                 <div className="card__text">
                     <p className="card__title"><button onClick={this.playVideo} type="button" className="btn btn-outline-secondary">
                     {this.renderPlayOrPause()}
@@ -66,8 +66,8 @@ class VideoItem extends Component {
                         {/* Prevent user download video if not logged in. */}
                         {
                             this.props.isAuth ? 
-                            <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} controls={true} playing /> :
-                            <ReactPlayer className="videoFrame" url={this.props.url} key={this.props.key} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
+                            <ReactPlayer className="videoFrame" url={this.props.url} controls={true} playing /> :
+                            <ReactPlayer className="videoFrame" url={this.props.url} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
                         }
                     </Modal.Body>
                     {/* <Modal.Footer>

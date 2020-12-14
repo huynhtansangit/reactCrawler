@@ -79,7 +79,7 @@ export default function SignUp() {
     const [disableVerifyBtn, setDisableVerifyBtn] = React.useState(false);
     const [otp, setOtp] = React.useState("");
     const [error, setError] = React.useState("");
-    const [message, setMessage] = React.useState("");
+    // const [message, setMessage] = React.useState("");
     //  Error configuration
     const [errorFirstName, setErrorFirstName] = React.useState("");
     const [errorLastName, setErrorLastName] = React.useState("");
@@ -208,7 +208,7 @@ export default function SignUp() {
                     if (!resendOtp) {
                         handleShowAndCloseModal();
                     }
-                    setMessage(data['message']);
+                    // setMessage(data['message']);
                 }
             })
             .catch((error) => {

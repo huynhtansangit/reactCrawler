@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
-import FileSaver from 'file-saver'
+// import FileSaver from 'file-saver'
 import '../../App.css';
 import logo from './logo_transparent.png';
 var whiteTheme = {
@@ -81,10 +81,10 @@ var whiteTheme = {
     'colorpicker.title.color': '#000'
 };
 class ThuNghiem extends Component {
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
 
-    }
+    // }
     editorRef = React.createRef();
 
     handleClickButton = () => {

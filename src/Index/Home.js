@@ -34,10 +34,11 @@ class Index extends Component {
         };
         
         try {
-            let response;
+            let fetchUrl = "";
             if(nameNetwork === 'tiktok'){
                 option['method']='GET';
-                response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`, option);
+                fetchUrl = `${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`
+                // response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`, option);
             }
             else{
                 if(cursor){
@@ -51,9 +52,15 @@ class Index extends Component {
                         "url": inputUrl,
                     })
                 }
-                response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}`, option);
+                fetchUrl = `${DOWNLOAD_URL}/${nameNetwork}`;
+                // response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}`, option);
             }
+            const response = await fetch(fetchUrl, option);
             const data = await response.json();
+
+            if(!data['data']?.length && !data['owner'])
+                throw new Error("User or post not found!")
+
             let imagesData = [];
             let videosData = [];
             const ownerMedia = data['owner'];

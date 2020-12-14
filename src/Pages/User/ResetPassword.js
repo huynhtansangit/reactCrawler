@@ -7,8 +7,8 @@ import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import axios from 'axios'
 import qs from 'querystring'
-
 import { RESET_PASSWORD_URL, VERIFY_RESET_PASSWORD_URL } from '../../utils/config.url'
+import auth from '../../auth/auth'
 
 
 
@@ -231,7 +231,7 @@ class ResetPassword extends Component {
                     if (data['status'] === 'success') {
                         console.log(`Server msg: ${data['message']}`);
 
-                        this.props.history.push('/login');
+                        auth.logout(()=> this.props.history.push('/login'));
                     }
                 }
             })
@@ -308,8 +308,8 @@ class ResetPassword extends Component {
                                                     </Grid>
                                                 </div>
                                                 {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}<span className="sg-image" data-imagelibrary="%7B%22width%22%3A%22260%22%2C%22height%22%3A54%2C%22alt_text%22%3A%22Reset%20your%20Password%22%2C%22alignment%22%3A%22%22%2C%22border%22%3A0%2C%22src%22%3A%22https%3A//marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png%22%2C%22link%22%3A%22%23%22%2C%22classes%22%3A%7B%22sg-image%22%3A1%7D%7D">
-                                                    <a onClick={this.handleRequestOtp} disabled={this.disableRequestOtpBtn}>
-                                                        <img alt="Reset your Password" height={54} src="https://marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png" style={{ borderWidth: '0px', marginTop: '30px', marginBottom: '50px', width: '355px', height: '54px' }} width={260} /></a></span>
+                                                    <div onClick={this.handleRequestOtp} disabled={this.disableRequestOtpBtn}>
+                                                        <img alt="Reset your Password" height={54} src="https://marketing-image-production.s3.amazonaws.com/uploads/c1e9ad698cfb27be42ce2421c7d56cb405ef63eaa78c1db77cd79e02742dd1f35a277fc3e0dcad676976e72f02942b7c1709d933a77eacb048c92be49b0ec6f3.png" style={{ borderWidth: '0px', marginTop: '30px', marginBottom: '50px', width: '355px', height: '54px' }} width={260} /></div></span>
                                                 {/*[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]*/}
                                             </center>
                                             <Collapse in={this.state.error ? true : false}>
@@ -427,9 +427,9 @@ class ResetPassword extends Component {
                     </tr>
                     {/* Social Media */}
                     <tr>
-                        <td align="center" style={{ paddingBottom: 0, paddingRight: 0, paddingLeft: 0, paddingTop: '0px' }} valign="middle"><span className="sg-image" ><a href="https://www.facebook.com/profile.php?id=100008181729852" target="_blank"><img alt="Facebook" height={18} src="https://marketing-image-production.s3.amazonaws.com/uploads/0a1d076f825eb13bd17a878618a1f749835853a3a3cce49111ac7f18255f10173ecf06d2b5bd711d6207fbade2a3779328e63e26a3bfea5fe07bf7355823567d.png" style={{ borderWidth: '0px', marginRight: '21px', marginLeft: '21px', width: '8px', height: '18px' }} width={8} /></a></span>
-                            {/*[if gte mso 9]>&nbsp;&nbsp;&nbsp;<![endif]*/}<span className="sg-image"><a href="https://www.facebook.com/profile.php?id=100008181729852" target="_blank"><img alt="Twitter" height={18} src="https://marketing-image-production.s3.amazonaws.com/uploads/6234335b200b187dda8644356bbf58d946eefadae92852cca49fea227cf169f44902dbf1698326466ef192bf122aa943d61bc5b092d06e6a940add1368d7fb71.png" style={{ borderWidth: '0px', marginRight: '16px', marginLeft: '16px', width: '23px', height: '18px' }} width={23} /></a></span>
-                            {/*[if gte mso 9]>&nbsp;&nbsp;&nbsp;&nbsp;<![endif]*/}<span className="sg-image"><a href="https://www.facebook.com/profile.php?id=100008181729852" target="_blank"><img alt="Instagram" height={18} src="https://marketing-image-production.s3.amazonaws.com/uploads/650ae3aa9987d91a188878413209c1d8d9b15d7d78854f0c65af44cab64e6c847fd576f673ebef2b04e5a321dc4fed51160661f72724f1b8df8d20baff80c46a.png" style={{ borderWidth: '0px', marginRight: '16px', marginLeft: '16px', width: '18px', height: '18px' }} width={18} /></a></span>
+                        <td align="center" style={{ paddingBottom: 0, paddingRight: 0, paddingLeft: 0, paddingTop: '0px' }} valign="middle"><span className="sg-image" ><a href="https://www.facebook.com/profile.php?id=100008181729852" target="_blank" rel="noopener noreferrer"><img alt="Facebook" height={18} src="https://marketing-image-production.s3.amazonaws.com/uploads/0a1d076f825eb13bd17a878618a1f749835853a3a3cce49111ac7f18255f10173ecf06d2b5bd711d6207fbade2a3779328e63e26a3bfea5fe07bf7355823567d.png" style={{ borderWidth: '0px', marginRight: '21px', marginLeft: '21px', width: '8px', height: '18px' }} width={8} /></a></span>
+                            {/*[if gte mso 9]>&nbsp;&nbsp;&nbsp;<![endif]*/}<span className="sg-image"><a href="https://www.facebook.com/profile.php?id=100008181729852" target="_blank" rel="noopener noreferrer"><img alt="Twitter" height={18} src="https://marketing-image-production.s3.amazonaws.com/uploads/6234335b200b187dda8644356bbf58d946eefadae92852cca49fea227cf169f44902dbf1698326466ef192bf122aa943d61bc5b092d06e6a940add1368d7fb71.png" style={{ borderWidth: '0px', marginRight: '16px', marginLeft: '16px', width: '23px', height: '18px' }} width={23} /></a></span>
+                            {/*[if gte mso 9]>&nbsp;&nbsp;&nbsp;&nbsp;<![endif]*/}<span className="sg-image"><a href="https://www.facebook.com/profile.php?id=100008181729852" target="_blank" rel="noopener noreferrer"><img alt="Instagram" height={18} src="https://marketing-image-production.s3.amazonaws.com/uploads/650ae3aa9987d91a188878413209c1d8d9b15d7d78854f0c65af44cab64e6c847fd576f673ebef2b04e5a321dc4fed51160661f72724f1b8df8d20baff80c46a.png" style={{ borderWidth: '0px', marginRight: '16px', marginLeft: '16px', width: '18px', height: '18px' }} width={18} /></a></span>
                         </td>
                     </tr>
                     {/* whitespace */}
@@ -444,9 +444,9 @@ class ResetPassword extends Component {
                         <td style={{ paddingTop: 0, paddingBottom: 0, paddingRight: '30px', paddingLeft: '30px', textAlign: 'center', marginRight: 'auto', marginLeft: 'auto' }}>
                             <center>
                                 <p style={{ fontFamily: '"Muli",Arial,sans-serif', margin: 0, textAlign: 'center', marginRight: 'auto', marginLeft: 'auto', fontSize: '15px', color: '#a1a8ad', lineHeight: '23px' }}>Problems or questions? Call us at
-                                <nobr><a className="tel" href="tel:0328888113" style={{ color: '#a1a8ad', textDecoration: 'none' }} target="_blank"><span style={{ whiteSpace: 'nowrap' }}> 0328.888.113</span></a></nobr>
+                                <nobr><a className="tel" href="tel:0328888113" style={{ color: '#a1a8ad', textDecoration: 'none' }} target="_blank" rel="noopener noreferrer"><span style={{ whiteSpace: 'nowrap' }}> 0328.888.113</span></a></nobr>
                                 </p>
-                                <p style={{ fontFamily: '"Muli",Arial,sans-serif', margin: 0, textAlign: 'center', marginRight: 'auto', marginLeft: 'auto', fontSize: '15px', color: '#a1a8ad', lineHeight: '23px' }}>or email <a href="mailto:1752xxxx@gm.uit.edu.vn" style={{ color: '#a1a8ad', textDecoration: 'underline' }} target="_blank">1752xxxx@gm.uit.edu.vn</a></p>
+                                <p style={{ fontFamily: '"Muli",Arial,sans-serif', margin: 0, textAlign: 'center', marginRight: 'auto', marginLeft: 'auto', fontSize: '15px', color: '#a1a8ad', lineHeight: '23px' }}>or email <a href="mailto:1752xxxx@gm.uit.edu.vn" style={{ color: '#a1a8ad', textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer">1752xxxx@gm.uit.edu.vn</a></p>
                                 <p style={{ fontFamily: '"Muli",Arial,sans-serif', margin: 0, textAlign: 'center', marginRight: 'auto', marginLeft: 'auto', paddingTop: '10px', paddingBottom: '0px', fontSize: '15px', color: '#a1a8ad', lineHeight: '23px' }}>© Tan Thai Huy <span style={{ whiteSpace: 'nowrap' }}></span>, UIT <span style={{ whiteSpace: 'nowrap' }}>Linh Trung ward​,</span> <span style={{ whiteSpace: 'nowrap' }}>Thu Duc City</span></p>
                             </center>
                         </td>

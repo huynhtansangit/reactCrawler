@@ -67,7 +67,7 @@ class Gallery extends Component {
         if(this.props.dataGallery?.imagesData?.length)
             downloadMultiImagesByUrls(this.props.dataGallery.imagesData, ()=>this.props.history.push('/login'));
         else
-            alert("Found no thing can be downloaded.")
+            alert("Not found any image to download.")
     }
 
     render() {
@@ -92,7 +92,7 @@ class Gallery extends Component {
                 else {
                     // else: error occurred => Show pic 500
                     res = (<img className="justify-item-center"
-                        src="https://bizflyportal.mediacdn.vn/bizflyportal/461/347/2020/06/02/22/54/nhi15910916872906.jpg" alt="500 error" />);
+                        src="https://www.wpexplorer.com/wp-content/uploads/wordpress-500-internal-server-error-fixes.jpg" alt="500 error" />);
                 }
             }
             return (res);
@@ -102,8 +102,10 @@ class Gallery extends Component {
         const handleCountPost = () =>{
             if(this.props.dataGallery.ownerMedia?.countPost)
                 return this.props.dataGallery.ownerMedia.countPost;
-            else if(this.props.dataGallery.ownerMedia.count_video)
+            else if(this.props.dataGallery.ownerMedia?.count_video)
                 return this.props.dataGallery.ownerMedia.count_video;
+            else if(this.props.dataGallery.error)
+                return 0;
             else    
                 return 1;
         }
@@ -116,13 +118,13 @@ class Gallery extends Component {
                 return (!this.props.dataGallery.error ?
                     (
                         <OwnerMedia avatar={this.props.dataGallery.ownerMedia?.avatar}
-                            username={this.props.dataGallery.ownerMedia.username}
-                            fullname={this.props.dataGallery.ownerMedia.fullname}
+                            username={this.props.dataGallery.ownerMedia?.username}
+                            fullname={this.props.dataGallery.ownerMedia?.fullname}
                             countPost={ handleCountPost() }
-                            countFollowedBy={this.props.dataGallery.ownerMedia.countFollowedBy} 
+                            countFollowedBy={this.props.dataGallery.ownerMedia?.countFollowedBy} 
                             nameNetwork={this.props.nameNetwork}/>) : (
                         <OwnerMedia
-                            avatar="https://bizflyportal.mediacdn.vn/bizflyportal/461/347/2020/06/02/22/54/nhi15910916872906.jpg"
+                            avatar="https://www.wpexplorer.com/wp-content/uploads/wordpress-500-internal-server-error-fixes.jpg"
                             username="Error" fullname="Error" countPost="Error" countFollowedBy="Error" 
                             nameNetwork={this.props.nameNetwork}/>
                     ))
@@ -151,7 +153,7 @@ class Gallery extends Component {
                 else {
                     // else: error occurred => Show pic 500
                     return ((<img className="justify-item-center"
-                        src="https://bizflyportal.mediacdn.vn/bizflyportal/461/347/2020/06/02/22/54/nhi15910916872906.jpg" alt="server error" />))
+                        src="https://www.wpexplorer.com/wp-content/uploads/wordpress-500-internal-server-error-fixes.jpg" alt="server error" />))
                 }
             }
         }

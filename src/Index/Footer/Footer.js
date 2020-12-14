@@ -10,15 +10,15 @@ class Footer extends Component {
                             <img id="footer-logo" src="/Assets/Images/Footer/logo_transparent.png" alt="Logo" />
                             <p className="parent-menu" style={{ marginTop: 0 }}>Follow us</p>
                             <div className="row" style={{ objectFit: 'cover' }}>
-                                <div className="col contact-icon"><a href="#"><img src="/Assets/Images/Footer/Path 4.png" alt="fb" /></a> </div>
-                                <div className="col contact-icon"><a href="#"><img src="/Assets/Images/Footer/Group 1.png" alt="instagram" /></a></div>
-                                <div className="col contact-icon"><a href="#"><img src="/Assets/Images/Footer/Layer 2.png" alt="twitter" /></a></div>
+                                <div className="col contact-icon"><a href="https://www.facebook.com/profile.php?id=100008181729852"><img src="/Assets/Images/Footer/Path 4.png" alt="fb" /></a> </div>
+                                <div className="col contact-icon"><a href="https://www.facebook.com/profile.php?id=100008181729852"><img src="/Assets/Images/Footer/Group 1.png" alt="instagram" /></a></div>
+                                <div className="col contact-icon"><a href="https://www.facebook.com/profile.php?id=100008181729852"><img src="/Assets/Images/Footer/Layer 2.png" alt="twitter" /></a></div>
                             </div>
                         </div>
                         <div className="col-2">
                             <p className="parent-menu">Quick links</p>
-                            <a className="child-menu" href="#">Image License</a> <br />
-                            <a className="child-menu" href="#">Style Guide</a>
+                            <a className="child-menu" href="/image-license">Image License</a> <br />
+                            <a className="child-menu" href="/guides">Style Guide</a>
                         </div>
                         <div className="col-5">
                             <p className="parent-menu">Information</p>
@@ -37,9 +37,9 @@ class Footer extends Component {
                         </div>
                         <div className="col-2">
                             <p className="parent-menu">Policies</p>
-                            <a className="child-menu" href="#">Privacy Policies</a> <br />
-                            <a className="child-menu" href="#">Refund Policies</a> <br />
-                            <a className="child-menu" href="#">Term Of Services</a> <br />
+                            <a className="child-menu" href="/privacies">Privacy Policies</a> <br />
+                            <a className="child-menu" href="/refund">Refund Policies</a> <br />
+                            <a className="child-menu" href="/terms">Term Of Services</a> <br />
                         </div>
                     </div>
                     <div style={{ backgroundColor: '#F1CDCD', height: '0.1rem', margin: '2rem 6.2rem 2rem 6.2rem' }} />

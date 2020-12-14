@@ -69,8 +69,6 @@ function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
 }
 
-let firstRender = true;
-
 export default function SignInSide(props) {
   const classes = useStyles();
   const [phone, setPhone] = React.useState(localStorage.getItem('phone') ? localStorage.getItem('phone') : "");
