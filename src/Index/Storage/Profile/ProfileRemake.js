@@ -81,7 +81,7 @@ class ProfileRemake extends Component {
                                     title="Email"
                                     type="text"
                                 />
-                                {/* <button id="btn-apply-profile" className="btn-apply rounded" onClick={this.updateInputProfile}>Apply</button> */}
+                                <button id="btn-apply-profile" className="btn-apply rounded" onClick={this.updateInputProfile}>Apply</button>
                             </div>
                         </Paper>
 

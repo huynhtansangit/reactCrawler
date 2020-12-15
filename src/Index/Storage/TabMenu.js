@@ -148,8 +148,8 @@ export default function ScrollableTabsButtonForce() {
       </TabPanel>
       
       <TabPanel value={value} index={2}>
-        {/* <ProfileContent data={infoUser}/> */}
-        <ProfileRemake/>
+        <ProfileContent data={infoUser}/>
+        {/* <ProfileRemake/> */}
       </TabPanel>
     </div>
   );
