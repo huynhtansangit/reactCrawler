@@ -9,7 +9,7 @@ import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { downloadImageByUrl } from "../../services/user.services";
 import { Button, Modal } from 'react-bootstrap';
-import {Link,} from "react-router-dom";
+import { Link, } from "react-router-dom";
 import Skeleton from '@material-ui/lab/Skeleton';
 
 
@@ -34,24 +34,21 @@ export default function MasonryImageList(props) {
   }
 
   useEffect(() => {
-      // setTemp(props.data[0]);
+    // setTemp(props.data[0]);
   });
 
   return (
     <div className={classes.root}>
       {/* {temp} */}
-      <ImageList variant="masonry" cols={6} gap={10}>
+      <ImageList variant="masonry" cols={6} gap={2} rowHeight={264}> 
         {props.data.map((item) => (
           <ImageListItem key={item.url}>
             <img
-              srcSet={`${item.url}`}
+              srcSet={item.url}
               alt={item.title}
-              // Hai dòng dưới thêm vào url sẽ lỗi, tìm cách format thủ công cho nó.
-              // ?w=280&fit=crop&auto=format 1x,
-                // ${item.url}?w=280&fit=crop&auto=format&dpr=2 2x
             />
             <div className="card__text">
-              <p className="card__title"><button onClick={() => handleShow(item.url)} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon/></button></p>
+              <p className="card__title"><button onClick={() => handleShow(item.url)} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon /></button></p>
               <p className="card__title"><button onClick={() => { downloadImageByUrl(item.url) }} type="button" className="btn btn-outline-secondary"><GetAppOutlinedIcon /></button></p>
               <p className="card__body">
                 <Link to={{ pathname: '/editor', state: { imgSrc: item.url } }}>

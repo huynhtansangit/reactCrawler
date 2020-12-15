@@ -3,12 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import VideoItem from '../Gallery/VideoItem'
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
-
+import './video.css';
 const useStyles = makeStyles({
     root: {
         width: '100%',
-        height: 800,
-        overflowY: 'scroll',
+        height: '100%',
         marginTop: 20,
     },
 });
@@ -17,7 +16,7 @@ function Example(props) {
 
     return (
         <div className={classes.root}>
-            <ImageList variant="masonry" cols={6} gap={10}>
+            <ImageList cols={4} className={classes.root} gap={2}>
                 {
                     props.data.map((item, i) =>
                         <ImageListItem key={i}>

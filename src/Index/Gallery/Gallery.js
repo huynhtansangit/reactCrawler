@@ -15,7 +15,7 @@ import {DOWNLOAD_URL} from '../../utils/config.url'
 import { Button, Modal } from 'react-bootstrap';
 import {Link,} from "react-router-dom";
 import addToCollection, { downloadImageByUrl, downloadMultiImagesByUrls } from '../../services/user.services'
-
+import './Gallery.css';
 
 class Gallery extends Component {
     constructor(props) {
