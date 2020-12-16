@@ -10,7 +10,7 @@ import VideoLibraryOutlinedIcon from '@material-ui/icons/VideoLibraryOutlined';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import ImageStorage from './ImageStorage';
-import ProfileContent from './ProfileContent';
+import ProfileContent from './Profile/ProfileContent';
 import VideoStorage from './VideoStorage';
 import {GET_MY_COLLECTION_URL} from '../../utils/config.url';
 import axios from 'axios';
