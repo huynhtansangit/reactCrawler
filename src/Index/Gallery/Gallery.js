@@ -205,7 +205,7 @@ class Gallery extends Component {
                     if (this.props.disableLoadMoreBtn) {
                         // 
                         return (
-                            <div className="mt-3" style={{width: '95%'}}>
+                            <div className="mt-3" style={{width: '90%'}}>
                                 {/* <div className="col-lg-8 col-md-8 col-sm-12"> */}
                                     <button
                                         style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
@@ -215,7 +215,7 @@ class Gallery extends Component {
                     }
                     else {
                         return (
-                            <div className="mt-3" style={{width: '95%'}}>
+                            <div className="mt-3" style={{width: '90%'}}>
                                 {/* <div className="col-lg-8 col-md-8 col-sm-12"> */}
                                     <button
                                         style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}

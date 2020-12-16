@@ -194,7 +194,7 @@
     color: white !important;
     font-size: 16px !important;
 }
-#image-tab-gallery > .col-lg-9.col-md-9.col-sm-12 {
+.tab-gallery > .col-lg-9.col-md-9.col-sm-12 {
     padding: 0;
 }
   /* ---- btn effect ----- */
