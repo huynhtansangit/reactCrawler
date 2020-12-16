@@ -14,7 +14,7 @@ import ReactPlayer from 'react-player'
 import {DOWNLOAD_URL} from '../../utils/config.url'
 import { Button, Modal } from 'react-bootstrap';
 import {Link,} from "react-router-dom";
-import addToCollection, { downloadImageByUrl, downloadMultiImagesByUrls } from '../../services/user.services'
+import addToCollection, { downloadImageByUrl, downloadMultiImagesByUrlsVers2 } from '../../services/user.services'
 import './Gallery.css';
 
 class Gallery extends Component {
@@ -26,6 +26,7 @@ class Gallery extends Component {
             isOpenModal: false,
             isOpenModalVideo: false,
             imageItemSrc: "",
+            downloadAllImagesStatus: "ready",
         };
     }
 
@@ -72,7 +73,7 @@ class Gallery extends Component {
 
     handleDownloadMultiImages = ()=>{
         if(this.props.dataGallery?.imagesData?.length)
-            downloadMultiImagesByUrls(this.props.dataGallery.imagesData, ()=>this.props.history.push('/login'));
+            downloadMultiImagesByUrlsVers2(this.props.dataGallery.imagesData, ()=>this.props.history.push('/login'));
         else
             alert("Not found any image to download.")
     }
