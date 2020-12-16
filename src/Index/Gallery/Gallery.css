@@ -54,7 +54,7 @@
     position: relative;
     height: auto;
     width: 90%;
-    margin: auto;
+    /* margin: auto; */
     padding: 20px;
     display: grid;
     grid-template-columns:auto  auto auto auto auto;
@@ -188,13 +188,23 @@
     font-size: 2rem;
     color: white;
     margin-bottom: 0;
-  }
-  .fa-download,.fa-edit, .fa-eye{
-      color: white !important;
-      font-size: 16px !important;
-  }
+}
+.fa-download,.fa-edit, .fa-eye{
+    color: white !important;
+    font-size: 16px !important;
+}
+#image-tab-gallery > .col-lg-9.col-md-9.col-sm-12 {
+    padding: 0;
+}
   /* ---- btn effect ----- */
-  
+
 /* End effect */
 /*  Responsive  */
+@media only screen and (max-width: 576px) {
+    .col-sm-12 {
+        -ms-flex: 0 0 100%;
+        flex: 0 0 0;
+        max-width: 0%;
+    }
+}
 /* For mobile phones: */

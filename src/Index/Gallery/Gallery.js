@@ -127,7 +127,6 @@ class Gallery extends Component {
             }
             return (res);
         }
-        // FIXME CẦN XỬ LÝ KHI MÀ DATA VỀ NULL THÌ KHÔNG SẬP LUÔN FE.
         // Đã thêm dấu ? handle nhưng chưa test.
         const handleCountPost = () =>{
             if(this.props.dataGallery.ownerMedia?.countPost)
@@ -195,7 +194,7 @@ class Gallery extends Component {
                 }
             }
         }
-        const renderLoadMoreButton = () => {
+            const renderLoadMoreButton = () => {
             // Load more only available with instagram and fb
             if(this.props.nameNetwork !== 'tiktok'){
                 if (Object.keys(this.props.dataGallery).length === 0 ||
@@ -206,22 +205,22 @@ class Gallery extends Component {
                     if (this.props.disableLoadMoreBtn) {
                         // 
                         return (
-                            <div className="row w-100 mt-3">
-                                <div className="col-lg-8 col-md-8 col-sm-12">
+                            <div className="mt-3" style={{width: '90%'}}>
+                                {/* <div className="col-lg-8 col-md-8 col-sm-12"> */}
                                     <button
                                         style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
                                         type="button" className="btn btn-danger justify-content-center" disabled>Load more media </button>
-                                </div>
+                                {/* </div> */}
                             </div>)
                     }
                     else {
                         return (
-                            <div className="row w-100 mt-3">
-                                <div className="col-lg-8 col-md-8 col-sm-12">
+                            <div className="mt-3" style={{width: '90%'}}>
+                                {/* <div className="col-lg-8 col-md-8 col-sm-12"> */}
                                     <button
                                         style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
                                         type="button" className="btn btn-danger justify-content-center" onClick={this.props.getMoreMedia}>Load more media </button>
-                                </div>
+                                {/* </div> */}
                             </div>)
                     }
                 }
@@ -271,16 +270,18 @@ class Gallery extends Component {
                     </div>
 
                     <div id="image-tab-gallery" className="row gallery-tab" style={{display: this.state.isImg ? "" : "none"}}>
-                        <div className="col-lg-8 col-md-8 col-sm-12 image-video-container justify-content-center">
-                            {renderImageGallery()}
+                        <div className="col-lg-9 col-md-9 col-sm-12">
+                            <div className=" image-video-container justify-content-center">
+                                {renderImageGallery()}
+                            </div>
+                            {renderLoadMoreButton()}
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1"
-                            style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
+                            style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif', marginLeft:0 }}>
                             {renderOwnerMedia()}
                             
                             {renderDownloadAllImageBtn()}
                         </div>
-                        {renderLoadMoreButton()}
                     </div>
                     
                     <div id="video-tab-gallery" className="row gallery-tab " style={{display: this.state.isVideo ? "" : "none"}}>

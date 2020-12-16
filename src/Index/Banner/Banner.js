@@ -108,7 +108,7 @@ class Banner extends Component {
                     The social media era is well and truly underway <br />
                 Photo &amp; Video sharing app Instagram, Facebook, Tiktok <br />
                 have become a huge hit with younger audiences. <br />
-                But if you find it hart to save them let's get started with us!
+                But if you find it hard to save them let's get started with us!
                 </div>
                 <div className="dropdown dropdown-banner">
                     <button className="btn dropdown-toggle btn-select-social-network" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
