@@ -331,7 +331,7 @@ class Gallery extends Component {
                         show={this.state.isOpenModalVideo}
                         onHide={()=>this.handleShowModalVideo(this.state.videoItemSrc)}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Image previewer</Modal.Title>
+                            <Modal.Title>Video previewer</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             {/* Prevent user download video if not logged in. */}

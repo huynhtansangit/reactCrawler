@@ -104,9 +104,10 @@ class Header extends Component {
                                 <div className="clearfix w-100">
                                     <div className="float-left">
                                         <ul className="navbar-nav">
+                                            {/* eslint-disable */}
                                             <li className="parent-home nav-item dropdown">
                                                 <a role="button" className="nav-link active" data-toggle="dropdown" data-target="#home_dropdown">Home
-                            <span className="caret" />
+                                                    <span className="caret" />
                                                 </a>
                                             </li>
                                             <li className="parent-page nav-item dropdown">
@@ -115,6 +116,7 @@ class Header extends Component {
                                             <li className="parent-shop nav-item dropdown">
                                                 <a className="nav-link " data-toggle="dropdown" data-target="shop-dropdown">Contact<span className="caret" /></a>
                                             </li>
+                                            {/* eslint-disable */}
                                         </ul>
                                     </div>
                                     <div title="Today is open" className="float-right pb-2" style={{ marginTop: '8px' }}>
@@ -123,9 +125,11 @@ class Header extends Component {
                                                 Choose...
                                             </button>
                                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                {/* eslint-disable */}
                                                 <a id="instagram" className="dropdown-item" onClick={this.selectSocialNetwork}>Instagram tool</a>
                                                 <a id="tiktok" className="dropdown-item" onClick={this.selectSocialNetwork}>Tiktok tool</a>
                                                 <a id="facebook" className="dropdown-item" onClick={this.selectSocialNetwork}>Facebook tool</a>
+                                                {/* eslint-disable-line */}
                                             </div>
                                         </div>
                                     </div>

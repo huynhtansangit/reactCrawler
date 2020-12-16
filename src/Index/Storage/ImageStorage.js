@@ -10,7 +10,7 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { downloadImageByUrl } from "../../services/user.services";
 import { Button, Modal } from 'react-bootstrap';
 import { Link, } from "react-router-dom";
-import Skeleton from '@material-ui/lab/Skeleton';
+// import Skeleton from '@material-ui/lab/Skeleton';
 
 
 const useStyles = makeStyles({
@@ -29,17 +29,18 @@ export default function MasonryImageList(props) {
   // const [temp, setTemp] = React.useState("");
 
   function handleShow(source) {
+    // Set image url whenever modal is showed, not when it closed.
+    if(!isShowModal)
+      setImgSrc(source);
     setShowModal(!isShowModal);
-    setImgSrc(source);
   }
 
   useEffect(() => {
-    // setTemp(props.data[0]);
+
   });
 
   return (
     <div className={classes.root}>
-      {/* {temp} */}
       <ImageList variant="masonry" cols={6} gap={2} rowHeight={264}> 
         {props.data.map((item) => (
           <ImageListItem key={item.url}>

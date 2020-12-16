@@ -115,9 +115,9 @@ class Banner extends Component {
                         Choose...
                     </button>
                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a id="instagram" className="dropdown-item"  onClick={this.selectSocialNetwork}>Instagram tool</a>
-                        <a id="tiktok" className="dropdown-item"  onClick={this.selectSocialNetwork}>Tiktok tool</a>
-                        <a id="facebook" className="dropdown-item"  onClick={this.selectSocialNetwork}>Facebook tool</a>
+                        <a id="instagram" className="dropdown-item"  onClick={this.selectSocialNetwork}>Instagram tool</a>  {/* eslint-disable-line */}
+                        <a id="tiktok" className="dropdown-item"  onClick={this.selectSocialNetwork}>Tiktok tool</a> {/* eslint-disable-line */}
+                        <a id="facebook" className="dropdown-item"  onClick={this.selectSocialNetwork}>Facebook tool</a> {/* eslint-disable-line */}
                     </div>
                 </div>
                 <div id="form-banner">

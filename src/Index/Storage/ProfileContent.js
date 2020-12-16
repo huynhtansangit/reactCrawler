@@ -88,7 +88,6 @@ class ProfileContent extends Component {
     }
     
     componentDidUpdate() {
-        console.log("Updated");
     }
 
     updateInputProfile = async (e) => {

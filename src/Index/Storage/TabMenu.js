@@ -12,10 +12,10 @@ import Box from '@material-ui/core/Box';
 import ImageStorage from './ImageStorage';
 import ProfileContent from './ProfileContent';
 import VideoStorage from './VideoStorage';
-import {GET_MY_COLLECTION_URL, MY_ACCOUNT_INFO_URL} from '../../utils/config.url';
+import {GET_MY_COLLECTION_URL} from '../../utils/config.url';
 import axios from 'axios';
 import cookies from '../../utils/cookie';
-import ProfileRemake from './Profile/ProfileRemake';
+// import ProfileRemake from './Profile/ProfileRemake';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -25,7 +25,6 @@ function TabPanel(props) {
       role="tabpanel"
       hidden={value !== index}
       id={`scrollable-force-tabpanel-${index}`}
-      hidden={value !== index}
       aria-labelledby={`scrollable-force-tab-${index}`}
       {...other}
     >
@@ -66,7 +65,7 @@ export default function ScrollableTabsButtonForce() {
   const [statusGetCollection, setStatusGetCollection] = React.useState({loading: true, error: "false"})
   const [imagesData, setImagesData] = React.useState([]);
   const [videosData, setVideosData] = React.useState([]);
-  const [infoUser, setInfoUser] = React.useState({loading: true, error: ""})
+  // const [infoUser, setInfoUser] = React.useState({loading: true, error: ""})
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -148,7 +147,7 @@ export default function ScrollableTabsButtonForce() {
       </TabPanel>
       
       <TabPanel value={value} index={2}>
-        <ProfileContent data={infoUser}/>
+        <ProfileContent/>
         {/* <ProfileRemake/> */}
       </TabPanel>
     </div>
