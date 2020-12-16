@@ -3,6 +3,10 @@ import { ADD_TO_COLLECTION_URL } from '../utils/config.url'
 import cookies from '../utils/cookie'
 import axios from 'axios'
 import download from 'downloadjs'
+import JSZIP from 'jszip'
+import JSZipUtils from 'jszip-utils'
+import { saveAs } from 'file-saver';
+
 
 const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -34,6 +38,38 @@ export const downloadMultiImagesByUrls = async (listImage, callback) => {
             x.responseType = 'blob';
             x.onload = function (e) { download(x.response, name, "image/jpg"); }
             x.send();
+        };
+    }
+    else {
+        callback && callback();
+    }
+}
+
+export const downloadMultiImagesByUrlsVers2 = async (listImage, callback) => {
+    const zip = new JSZIP();
+
+    const result = await auth.verifyAccessToken();
+    if (result === true) {
+        const folder = zip.folder("Downloaded-Image-From-InstaDown")
+        let count = 0;
+
+        for( const [idx, el] of listImage.entries()) {
+            // loading a file and add it in a zip file
+            // eslint-disable-next-line
+            JSZipUtils.getBinaryContent(el.url, (err, data) =>{
+                let filename = `image-${idx}.jpg`;
+                if (err) {
+                    throw err; // or handle the error
+                }
+                folder.file(filename, data, { binary: true });
+                count++; // eslint-no-loop-func
+                // NOTE Need to figure out if count can be less then length or not?
+                if (count === listImage.length) {    
+                zip.generateAsync({ type: 'blob' }).then(function (content) {
+                        saveAs(content, "FromInstaDownWithLove.zip");
+                    });
+                }
+            });
         };
     }
     else {
