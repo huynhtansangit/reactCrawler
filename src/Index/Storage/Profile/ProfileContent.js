@@ -166,7 +166,7 @@ class ProfileContent extends Component {
 
     render() {
         // Helper function
-        const { classes } = this.props;
+        // const { classes } = this.props;
         const renderInfoUser = () => {
             if (this.state.loading) {
                 return (<p>Loading</p>)

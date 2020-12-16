@@ -124,6 +124,7 @@
 .info-container {
     border-left: 1px solid black;
     border-right: 1px solid black;
+    margin-left:0;
 }
 /* Effect in gallery */
 
@@ -200,11 +201,13 @@
 
 /* End effect */
 /*  Responsive  */
-@media only screen and (max-width: 576px) {
-    .col-sm-12 {
-        -ms-flex: 0 0 100%;
-        flex: 0 0 0;
-        max-width: 0%;
+@media only screen and (max-width: 768px) {
+    .image-video-container{
+        width: 100%;
+    }
+
+    .info-container{
+        margin-top: 1.5rem;
     }
 }
 /* For mobile phones: */
