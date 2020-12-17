@@ -8,6 +8,8 @@ import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import PauseOutlinedIcon from '@material-ui/icons/PauseOutlined';
 import addToCollection from '../../services/user.services'
 
+
+// FIXME New format data returned is not adapted with this model by now
 class VideoItem extends Component {
     constructor(props) {
         super(props);

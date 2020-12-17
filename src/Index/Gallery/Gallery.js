@@ -26,6 +26,7 @@ class Gallery extends Component {
             isOpenModal: false,
             isOpenModalVideo: false,
             imageItemSrc: "",
+            mediaDTO: {},
             downloadAllImagesStatus: "ready",
         };
     }
@@ -54,11 +55,12 @@ class Gallery extends Component {
         this.setState({ isImg: false })
     }
 
-    handleShowModal = (url) => {
+    handleShowModal = (url, dto) => {
         this.setState({ 
             isOpenModal: !this.state.isOpenModal, 
             isOpenModalVideo: false,
-            imageItemSrc: url 
+            imageItemSrc: url ,
+            mediaDTO: dto
         });
     }
 
@@ -78,9 +80,9 @@ class Gallery extends Component {
             alert("Not found any image to download.")
     }
 
-    clickAddToCollection = (itemUrl, type)=>{
+    clickAddToCollection = (itemUrl, type, platform, id, source)=>{
         const tempThis = this;
-        addToCollection(itemUrl, "", type,()=>{
+        addToCollection(itemUrl, "", type, platform, id, source,()=>{
             // If not login -> redirect to login.
             this.props.history.push("/login", {
                 from: tempThis.props.location,
@@ -113,10 +115,10 @@ class Gallery extends Component {
                     // If not error => Show images
                     res = this.props.dataGallery.imagesData.map((img, idx) =>
                         <ImageItem
-                        itemSrc={img.url} handleModal = {(url)=>{
+                        itemSrc={img.url} handleModal = {(url, dto)=>{
                             // control modal with url
                             // console.log(url);
-                            this.handleShowModal(url);
+                            this.handleShowModal(url,dto);
                         }} key={idx} history={this.props.history}/>)
                 }
                 else {
@@ -179,6 +181,7 @@ class Gallery extends Component {
                         if(this.props.dataGallery.videosData)
                         return (
                             (this.props.dataGallery.videosData.map((video, idx) =>
+                            // FIXME Video not handled to add to collection with the new format API
                                 <VideoItem url={video.url} key={idx} history={this.props.history} handleModal = {(url)=>{
                                     // control modal with url
                                     // console.log(url);
@@ -323,7 +326,7 @@ class Gallery extends Component {
                                 Download
                             </Button>
                             <Button variant="secondary" 
-                            onClick={()=>this.clickAddToCollection(this.state.imageItemSrc, "picture")}>
+                            onClick={()=>this.clickAddToCollection(this.state.imageItemSrc, "picture", this.props.nameNetwork, this.state.mediaDTO.id, this.state.mediaDTO.source )}>
                                 Add to my collection
                             </Button>
                         </Modal.Footer>

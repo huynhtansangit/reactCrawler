@@ -7,7 +7,7 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import addToCollection from '../../services/user.services'
 
-
+// FIXME New format data returned is not adapted with this model by now
 class ImageItem extends Component {
     constructor(props) {
         super(props);
@@ -56,7 +56,7 @@ class ImageItem extends Component {
                         // this.handleShow()
                         
                         // Click here will trigger show modal in Gallery.
-                        this.props.handleModal(this.props.itemSrc)
+                        this.props.handleModal(this.props.itemSrc, {id: this.props.id, source: this.props.source})
                     }} type="button" className="btn btn-outline-secondary">
                     <VisibilityOutlinedIcon/>
                     </button>

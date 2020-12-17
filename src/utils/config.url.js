@@ -13,8 +13,8 @@ const DOWNLOAD_URL = BASE_URL + "/download";
 const MY_ACCOUNT_INFO_URL = BASE_URL + "/me";
 const UPDATE_MY_ACCOUNT_INFO_URL = MY_ACCOUNT_INFO_URL + "/update";
 const MY_AVATAR_URL = MY_ACCOUNT_INFO_URL + "/avatar";
-const GET_MY_COLLECTION_URL = MY_ACCOUNT_INFO_URL + "/collection";
-const ADD_TO_COLLECTION_URL = MY_ACCOUNT_INFO_URL + "/add";
+const GET_MY_COLLECTION_URL = MY_ACCOUNT_INFO_URL + "/my-collection";
+const ADD_TO_COLLECTION_URL = GET_MY_COLLECTION_URL + "/add";
 
 export { 
     BASE_URL,

@@ -77,13 +77,16 @@ export const downloadMultiImagesByUrlsVers2 = async (listImage, callback) => {
     }
 }
 
-const handleAddToCollection = async (url, thumbnail, type) => {
+const handleAddToCollection = async (url, thumbnail, type, platform, id, source) => {
     const accessToken = cookies.get("accessToken");
 
     const data = {
         "url": url,
         "thumbnail": thumbnail,
-        "type": type
+        "type": type,
+        "platform": platform,
+        "id": id,
+        "source": source
     };
 
     let config = {
@@ -106,7 +109,7 @@ const handleAddToCollection = async (url, thumbnail, type) => {
         .catch(error => {
             console.log("Error occurred when trying to add to collection.");
             if (error.response) {
-                alert(error.response.data);
+                alert(error.response.data.message);
             }
             else {
                 alert("Something went wrong. Please check your internet connection.");
@@ -114,11 +117,11 @@ const handleAddToCollection = async (url, thumbnail, type) => {
         })
 }
 
-export default async function addToCollection(url, thumbnail, type, callback) {
+export default async function addToCollection(url, thumbnail, type, platform, id, source, callback) {
     const verifyProcess = await auth.verifyAccessToken();
 
     if (verifyProcess) {
-        handleAddToCollection(url, thumbnail, type);
+        handleAddToCollection(url, thumbnail, type, platform, id, source);
     }
     else {
         callback();
