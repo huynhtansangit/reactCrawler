@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { MY_ACCOUNT_INFO_URL, UPDATE_MY_ACCOUNT_INFO_URL } from '../../../utils/config.url'
+import { MY_ACCOUNT_INFO_URL, UPDATE_MY_ACCOUNT_INFO_URL, MY_AVATAR_URL } from '../../../utils/config.url'
 import cookies from '../../../utils/cookie'
 import qs from 'querystring'
 import Avatar from '@material-ui/core/Avatar';
@@ -36,7 +36,8 @@ class ProfileContent extends Component {
             phone: "",
             email: "",
             loading: true,
-            birthdayIsoStandard: "2020-10-12" //yyyy-mm-dd
+            birthdayIsoStandard: "2020-10-12", //yyyy-mm-dd
+            avatar: "https://www.w3schools.com/howto/img_avatar.png"
         };
     }
 
@@ -71,16 +72,25 @@ class ProfileContent extends Component {
         //     })
 
         try {
-            const data = (await axios.request(config))['data'];
+            const dataProfile = (await axios.request(config))['data'];
 
-            if (data) {
+            if (dataProfile) {
                 this.setState({ loading: false });
 
-                for (const key in data) {
-                    this.setState({ [key]: data[key] })
+                for (const key in dataProfile) {
+                    this.setState({ [key]: dataProfile[key] })
                 }
 
                 this.setState({ birthdayIsoStandard: this.convertTimeStampToDate() });
+            }
+
+            // Get avatar
+            config['url'] = MY_AVATAR_URL;
+            const dataAvatar = (await axios.request(config))['data'];
+
+            if (dataAvatar) {
+                // const binary =  new Buffer(dataAvatar.data.toString(), 'binary')
+                // await this.setState({avatar: `data:image/jpeg;base64,${binary}`});
             }
         } catch (error) {
             if (error.response) {
@@ -178,7 +188,7 @@ class ProfileContent extends Component {
                             <input accept="image/*" className="d-none" id="icon-button-file" type="file" />
                             <label htmlFor="icon-button-file">
                                 <Tooltip title="Change avatar" arrow>
-                                    <Avatar src="https://www.w3schools.com/howto/img_avatar.png" />
+                                    <Avatar src={this.state.avatar}/>
                                 </Tooltip>
                             </label>
                         </div>
