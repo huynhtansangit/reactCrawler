@@ -131,9 +131,10 @@ class Index extends Component {
         // console.log("onUpdateBannerInput");
         this.setState({ 
             inputUrl: inputUrl,
-            nameNetwork: nameNetwork ,
             clickedBtnSearch: true
-        }) 
+        })
+        if(nameNetwork){
+            this.setState({nameNetwork: nameNetwork});}
     }
 
     async componentDidMount(){
