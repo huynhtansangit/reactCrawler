@@ -10,7 +10,7 @@ import {
   List,
   Typography,
   makeStyles
-} from '@material-ui/core';
+} from 'ver-4-11';
 import {
   BarChart as BarChartIcon,
   ShoppingBag as ShoppingBagIcon,
@@ -99,14 +99,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     <Box
       height="100%"
       display="flex"
-      flexDirection="column"
-    >
+      flexDirection="column">
       <Box
         alignItems="center"
         display="flex"
         flexDirection="column"
-        p={2}
-      >
+        p={2}>
         <Avatar
           className={classes.avatar}
           component={RouterLink}
@@ -116,15 +114,13 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         <Typography
           className={classes.name}
           color="textPrimary"
-          variant="h5"
-        >
-          {user.name}
+          variant="h5">
+          Hung Hoang Ngoc
         </Typography>
         <Typography
           color="textSecondary"
-          variant="body2"
-        >
-          Admin InstaDown
+          variant="body2">
+          Admin
         </Typography>
       </Box>
       <Divider />
@@ -152,8 +148,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           classes={{ paper: classes.mobileDrawer }}
           onClose={onMobileClose}
           open={openMobile}
-          variant="temporary"
-        >
+          variant="temporary">
           {content}
         </Drawer>
       </Hidden>
@@ -162,8 +157,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           anchor="left"
           classes={{ paper: classes.desktopDrawer }}
           open
-          variant="persistent"
-        >
+          variant="persistent">
           {content}
         </Drawer>
       </Hidden>

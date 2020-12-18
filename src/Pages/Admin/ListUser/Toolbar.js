@@ -8,8 +8,8 @@ import {
   TextField,
   InputAdornment,
   SvgIcon,
-  makeStyles
-} from '@material-ui/core';
+} from 'ver-4-11';
+import {makeStyles} from '@material-ui/core'
 import { Search as SearchIcon } from 'react-feather';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +35,7 @@ const Toolbar = ({ className, ...rest }) => {
             <Box maxWidth={500}>
               <TextField
                 fullWidth
+                id="searchUserBar"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

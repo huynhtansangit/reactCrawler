@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
     Avatar,
@@ -92,11 +91,9 @@ const Results = ({ className, data, ...rest }) => {
                                         }
                                         onChange={handleSelectAll}/>
                                 </TableCell>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Phone</TableCell>
-                                <TableCell>Email</TableCell>
-                                <TableCell>Birthday</TableCell>
-                                <TableCell>Total search</TableCell>
+                                <TableCell>User's ID</TableCell>
+                                <TableCell>Platform</TableCell>
+                                <TableCell>URL</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -125,16 +122,10 @@ const Results = ({ className, data, ...rest }) => {
                                         </Box>
                                     </TableCell>
                                     <TableCell>
-                                        {user.phone}
+                                        Instagram
                                     </TableCell>
                                     <TableCell>
-                                        {user.email}
-                                    </TableCell>
-                                    <TableCell>
-                                        {moment(user.createdAt).format('DD/MM/YYYY')}
-                                    </TableCell>
-                                    <TableCell>
-                                        {user.totalSearch ? user.totalSearch : 0}
+                                        https://www.instagram.com/selenagomez
                                     </TableCell>
                                 </TableRow>
                             ))}

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ListUser = () => {
     const classes = useStyles();
-    const [users, setUsers] = useState(data);
+    const [users, setUsers] = useState(data); // eslint-disable-line
 
     useEffect(()=>{
         // API here
@@ -34,7 +34,7 @@ const ListUser = () => {
             <Container maxWidth={false}>
                 <Toolbar/>
                 <Box mt={3}>
-                    <Results users={users} />
+                    <Results data={users} />
                 </Box>
             </Container>
         </Page>

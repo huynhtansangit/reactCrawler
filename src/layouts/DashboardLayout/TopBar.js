@@ -8,9 +8,9 @@ import {
   Box,
   Hidden,
   IconButton,
-  Toolbar,
-  makeStyles
-} from '@material-ui/core';
+  Toolbar
+} from 'ver-4-11';
+import {makeStyles} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
@@ -36,8 +36,7 @@ const TopBar = ({
     <AppBar
       className={clsx(classes.root, className)}
       elevation={0}
-      {...rest}
-    >
+      {...rest}>
       <Toolbar>
         <RouterLink to="/">
           {/* <Logo /> */}
@@ -48,8 +47,7 @@ const TopBar = ({
             <Badge
               badgeContent={notifications.length}
               color="primary"
-              variant="dot"
-            >
+              variant="dot">
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -60,8 +58,7 @@ const TopBar = ({
         <Hidden lgUp>
           <IconButton
             color="inherit"
-            onClick={onMobileNavOpen}
-          >
+            onClick={onMobileNavOpen}>
             <MenuIcon />
           </IconButton>
         </Hidden>
