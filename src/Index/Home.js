@@ -21,6 +21,7 @@ class Index extends Component {
             disableLoadMoreBtn: false,
             fullname: "User",
             isAuth: false,
+            isAddedTiktok: null
         }
     }
 
@@ -76,6 +77,8 @@ class Index extends Component {
                 });
             }
             else{
+                if(nameNetwork==='tiktok')
+                    this.setState({isAddedTiktok: data['isAdded']});
                 videosData = data['data'];
             }
             

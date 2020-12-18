@@ -56,11 +56,11 @@ class VideoItem extends Component {
             <div className="img-card">
                 <ReactPlayer className="videoFrame" url={this.props.url} playing={this.state.isPlay} />
                 <div className="card__text">
-                    <p className="card__title"><button onClick={this.playVideo} type="button" className="btn btn-outline-secondary">
+                    <div className="card__title"><button onClick={this.playVideo} type="button" className="btn btn-outline-secondary">
                     {this.renderPlayOrPause()}
                     </button>
-                    </p>
-                    <p className="card__title">
+                    </div>
+                    <div className="card__title">
                         <button onClick={ ()=>{
                         // this.handleShow()
                         
@@ -69,12 +69,12 @@ class VideoItem extends Component {
                     }} type="button" className="btn btn-outline-secondary">
                             <VisibilityOutlinedIcon />
                         </button>
-                    </p>
-                    <p className="card__title">
-                        <button onClick={this.clickAddToCollection} type="button" className="btn btn-outline-secondary">
+                    </div>
+                    <div className="card__title">
+                        <button onClick={this.clickAddToCollection} type="button" className={`btn btn-outline-secondary ${this.props.idAdded ? 'selectedBtn' : ""}`}>
                             <FavoriteTwoToneIcon />
                         </button>
-                    </p>
+                    </div>
                 </div>
                 {/* <Modal
                     size="xl"

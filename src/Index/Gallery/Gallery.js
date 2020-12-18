@@ -25,6 +25,7 @@ class Gallery extends Component {
             isVideo: false,
             isOpenModal: false,
             isOpenModalVideo: false,
+            isOpenModalCollection:false,
             imageItemSrc: "",
             mediaDTO: {},
             downloadAllImagesStatus: "ready",
@@ -94,11 +95,18 @@ class Gallery extends Component {
         })
     }
 
-    handleShowModalVideo = (url) => {
+    handleShowModalVideo = (url, dto) => {
         this.setState({ 
             isOpenModalVideo: !this.state.isOpenModalVideo, 
             isOpenModal: false,
-            videoItemSrc: url 
+            videoItemSrc: url ,
+            mediaDTO: dto
+        });
+    }
+
+    handleShowModalCollection = () => {
+        this.setState({ 
+            isOpenModalCollection: !this.state.isOpenModalCollection, 
         });
     }
 
@@ -119,7 +127,7 @@ class Gallery extends Component {
                             // control modal with url
                             // console.log(url);
                             this.handleShowModal(url,dto);
-                        }} key={idx} history={this.props.history}/>)
+                        }} key={idx} history={this.props.history} isAdded={img.isAdded}/>)
                 }
                 else {
                     // else: error occurred => Show pic 500
@@ -171,22 +179,22 @@ class Gallery extends Component {
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
                     if(this.props.nameNetwork === 'tiktok'){
-                        return(<VideoItem url={`${DOWNLOAD_URL}/${this.props.nameNetwork}?url=${this.props.inputUrl}`} handleModal = {(url)=>{
+                        return(<VideoItem url={`${DOWNLOAD_URL}/${this.props.nameNetwork}?url=${this.props.inputUrl}`} handleModal = {(url, dto)=>{
                             // control modal with url
                             // console.log(url);
-                            this.handleShowModalVideo(url);
-                        }} isAuth={this.props.isAuth}></VideoItem>)
+                            this.handleShowModalVideo(url, dto);
+                        }} isAuth={this.props.isAuth} isAdded={this.props.isAddedTiktok}></VideoItem>)
                     }
                     else{
                         if(this.props.dataGallery.videosData)
                         return (
                             (this.props.dataGallery.videosData.map((video, idx) =>
                             // FIXME Video not handled to add to collection with the new format API
-                                <VideoItem url={video.url} key={idx} history={this.props.history} handleModal = {(url)=>{
+                                <VideoItem url={video.url} key={idx} history={this.props.history} handleModal = {(url, dto)=>{
                                     // control modal with url
                                     // console.log(url);
                                     this.handleShowModalVideo(url);
-                                }} isAuth={this.props.isAuth}/>
+                                }} isAuth={this.props.isAuth} isAdded={video.isAdded}/>
                             )))
                     }
                 }
@@ -355,6 +363,25 @@ class Gallery extends Component {
                             </Button>
                         </Modal.Footer>
                     </Modal>
+                    {/* <Modal
+                        size="xl"
+                        scrollable={false}
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                        show={this.state.isOpenModalCollection}
+                        onHide={()=>this.handleShowModalCollection(this.state.videoItemSrc)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Select a collection</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.videoItemSrc, "video")}>
+                                Add to this collection
+                            </Button>
+                        </Modal.Footer>
+                    </Modal> */}
                 </div>
             </section>
         );
