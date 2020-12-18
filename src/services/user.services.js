@@ -1,5 +1,5 @@
 import auth from '../auth/auth'
-import { ADD_TO_COLLECTION_URL } from '../utils/config.url'
+import { COLLECTIONS_URL } from '../utils/config.url'
 import cookies from '../utils/cookie'
 import axios from 'axios'
 import download from 'downloadjs'
@@ -91,7 +91,7 @@ const handleAddToCollection = async (url, thumbnail, type, platform, id, source)
 
     let config = {
         method: 'post',
-        url: ADD_TO_COLLECTION_URL,
+        url: "temp",
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `bearer ${accessToken}`
@@ -117,11 +117,98 @@ const handleAddToCollection = async (url, thumbnail, type, platform, id, source)
         })
 }
 
-export default async function addToCollection(url, thumbnail, type, platform, id, source, callback) {
+export async function addToCollection(url, thumbnail, type, platform, id, source, callback) {
     const verifyProcess = await auth.verifyAccessToken();
 
     if (verifyProcess) {
         handleAddToCollection(url, thumbnail, type, platform, id, source);
+    }
+    else {
+        callback();
+    }
+};
+
+const handleCreateCollection = (name)=>{
+    const accessToken = cookies.get("accessToken");
+
+    const data = {
+        name: name
+    };
+
+    let config = {
+        method: 'POST',
+        url: COLLECTIONS_URL,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${accessToken}`
+        },
+        data: JSON.stringify(data)
+    };
+
+    axios.request(config)
+        .then(response => response.data)
+        .then(data => {
+            if (data && data['message'] === 'Success') {
+                alert("Created to collection");
+            }
+        })
+        .catch(error => {
+            console.log("Error occurred when trying to create collection.");
+            if (error.response) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong. Please check your internet connection.");
+            }
+        })
+};
+
+export async function createCollection(nameCollection, callback) {
+    const verifyProcess = await auth.verifyAccessToken();
+
+    if (verifyProcess) {
+        handleCreateCollection(nameCollection);
+    }
+    else {
+        callback();
+    }
+};
+
+const handleDeleteCollection = (id)=>{
+    const accessToken = cookies.get("accessToken");
+
+    const config = {
+        method: 'DELETE',
+        url: `${COLLECTIONS_URL}/${id}`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${accessToken}`
+        },
+    };
+
+    axios.request(config)
+        .then(response => response.data)
+        .then(data => {
+            if (data && data['message'] === 'Success') {
+                alert("Deleted collection");
+            }
+        })
+        .catch(error => {
+            console.log("Error occurred when trying to delete collection.");
+            if (error.response) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong. Please check your internet connection.");
+            }
+        })
+};
+
+export async function deleteCollection(idCollection, callback) {
+    const verifyProcess = await auth.verifyAccessToken();
+
+    if (verifyProcess) {
+        handleDeleteCollection(idCollection);
     }
     else {
         callback();

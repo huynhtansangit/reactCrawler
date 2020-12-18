@@ -5,9 +5,9 @@ import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
-import addToCollection from '../../services/user.services'
+import {addToCollection} from '../../services/user.services'
 
-// FIXME New format data returned is not adapted with this model by now
+
 class ImageItem extends Component {
     constructor(props) {
         super(props);
@@ -35,14 +35,17 @@ class ImageItem extends Component {
 
     clickAddToCollection = ()=>{
         const tempThis = this;
-        addToCollection(this.props.itemSrc,"","picture",()=>{
+        addToCollection(this.props.itemSrc, "", "picture", this.props.platform, this.props.id, this.props.source, ()=>{
             // If not login -> redirect to login.
             this.props.history.push("/login", {
                 from: tempThis.props.location,
                 action: "addToCollection",
                 imgSrc: tempThis.props.itemSrc,
                 thumbnail: "",
-                type:"picture"
+                type:"picture",
+                platform: this.props.platform, 
+                id: this.props.id, 
+                source: this.props.source
             });
         })
     }
@@ -53,10 +56,8 @@ class ImageItem extends Component {
                 <img src={this.props.itemSrc} alt="Img-error" />
                 <div className="card__text">
                     <p className="card__title"><button onClick={ ()=>{
-                        // this.handleShow()
-                        
                         // Click here will trigger show modal in Gallery.
-                        this.props.handleModal(this.props.itemSrc, {id: this.props.id, source: this.props.source})
+                        this.props.handleModal(this.props.itemSrc, {id: this.props.id, source: this.props.source, platform: this.props.platform})
                     }} type="button" className="btn btn-outline-secondary">
                     <VisibilityOutlinedIcon/>
                     </button>

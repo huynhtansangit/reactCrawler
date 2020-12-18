@@ -6,7 +6,7 @@ import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import PauseOutlinedIcon from '@material-ui/icons/PauseOutlined';
-import addToCollection from '../../services/user.services'
+import {addToCollection} from '../../services/user.services'
 
 
 // FIXME New format data returned is not adapted with this model by now
@@ -39,14 +39,17 @@ class VideoItem extends Component {
 
     clickAddToCollection = ()=>{
         const tempThis = this;
-        addToCollection(this.props.url, "", "video", ()=>{
+        addToCollection(this.props.url, "", "video", this.props.platform, this.props.id, this.props.source, ()=>{
             // If not login -> redirect to login.
             this.props.history.push("/login", {
                 from: tempThis.props.location,
                 action: "addToCollection",
                 imgSrc: tempThis.props.url,
                 thumbnail: "",
-                type:"video"
+                type:"video",
+                platform: this.props.platform, 
+                id: this.props.id, 
+                source: this.props.source
             });
         })
     }
@@ -62,10 +65,8 @@ class VideoItem extends Component {
                     </div>
                     <div className="card__title">
                         <button onClick={ ()=>{
-                        // this.handleShow()
-                        
                         // Click here will trigger show modal in Gallery.
-                        this.props.handleModal(this.props.url)
+                        this.props.handleModal(this.props.url, {id: this.props.id, source: this.props.source, platform: this.props.platform})
                     }} type="button" className="btn btn-outline-secondary">
                             <VisibilityOutlinedIcon />
                         </button>

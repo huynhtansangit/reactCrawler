@@ -14,7 +14,9 @@ import ReactPlayer from 'react-player'
 import {DOWNLOAD_URL} from '../../utils/config.url'
 import { Button, Modal } from 'react-bootstrap';
 import {Link,} from "react-router-dom";
-import addToCollection, { downloadImageByUrl, downloadMultiImagesByUrlsVers2 } from '../../services/user.services'
+import { 
+    addToCollection, downloadImageByUrl, downloadMultiImagesByUrlsVers2,
+    createCollection } from '../../services/user.services'
 import './Gallery.css';
 
 class Gallery extends Component {
@@ -25,10 +27,12 @@ class Gallery extends Component {
             isVideo: false,
             isOpenModal: false,
             isOpenModalVideo: false,
+            
+            // states for add to collection 
             isOpenModalCollection:false,
-            imageItemSrc: "",
+            itemUrl: "",
+            itemType: "",
             mediaDTO: {},
-            downloadAllImagesStatus: "ready",
         };
     }
 
@@ -60,17 +64,35 @@ class Gallery extends Component {
         this.setState({ 
             isOpenModal: !this.state.isOpenModal, 
             isOpenModalVideo: false,
-            imageItemSrc: url ,
+            itemUrl: url,
+            itemType: "picture",
             mediaDTO: dto
         });
     }
 
+    handleShowModalVideo = (url, dto) => {
+        this.setState({ 
+            isOpenModalVideo: !this.state.isOpenModalVideo, 
+            isOpenModal: false,
+            itemUrl: url ,
+            itemType: "video",
+            mediaDTO: dto
+        });
+    }
+
+    handleShowModalCollection = () => {
+        this.setState({ 
+            isOpenModalCollection: !this.state.isOpenModalCollection, 
+        });
+    }
+
+    // User's services handling function
     clickDownload = ()=>{
         const tempThis = this;
-        downloadImageByUrl(this.props.itemSrc, ()=>this.props.history.push('/login', {
+        downloadImageByUrl(tempThis.state.itemUrl, ()=>this.props.history.push('/login', {
             from: tempThis.props.location,
             action: "downloadSingleImage",
-            imgSrc: tempThis.state.imageItemSrc
+            imgSrc: tempThis.state.itemUrl
         }));
     }
 
@@ -79,6 +101,20 @@ class Gallery extends Component {
             downloadMultiImagesByUrlsVers2(this.props.dataGallery.imagesData, ()=>this.props.history.push('/login'));
         else
             alert("Not found any image to download.")
+    }
+
+    // Flow: Click => Check auth tại get list collections => chọn 1 hoặc tạo mới collection để thêm vô => thêm.
+    // NOTE: Làm flow bên gallery hoàn chỉnh rồi thực hiện call từ item qua đây cho khỏe.
+
+    // Click favorite btn to add image to a collection.
+    clickFavoriteBtn = ()=>{
+        this.setState({isOpenModalCollection:true});
+
+
+    }
+
+    clickCreateCollection = ()=>{
+        createCollection(this.state.nameNewCollection);
     }
 
     clickAddToCollection = (itemUrl, type, platform, id, source)=>{
@@ -90,25 +126,14 @@ class Gallery extends Component {
                 action: "addToCollection",
                 imgSrc: itemUrl,
                 thumbnail: "",
-                type:type
+                type:type,
+                platform: platform, 
+                id: id, 
+                source: source
             });
         })
     }
-
-    handleShowModalVideo = (url, dto) => {
-        this.setState({ 
-            isOpenModalVideo: !this.state.isOpenModalVideo, 
-            isOpenModal: false,
-            videoItemSrc: url ,
-            mediaDTO: dto
-        });
-    }
-
-    handleShowModalCollection = () => {
-        this.setState({ 
-            isOpenModalCollection: !this.state.isOpenModalCollection, 
-        });
-    }
+    // End user's service.
 
     render() {
         // Helper functions
@@ -127,7 +152,8 @@ class Gallery extends Component {
                             // control modal with url
                             // console.log(url);
                             this.handleShowModal(url,dto);
-                        }} key={idx} history={this.props.history} isAdded={img.isAdded}/>)
+                        }} key={idx} history={this.props.history} isAdded={img.isAdded} 
+                        id={img.id} source={img.source} platform={this.props.nameNetwork}/>)
                 }
                 else {
                     // else: error occurred => Show pic 500
@@ -183,7 +209,9 @@ class Gallery extends Component {
                             // control modal with url
                             // console.log(url);
                             this.handleShowModalVideo(url, dto);
-                        }} isAuth={this.props.isAuth} isAdded={this.props.isAddedTiktok}></VideoItem>)
+                        }} isAuth={this.props.isAuth} isAdded={this.props.additionalInfoTiktok.isAdded}
+                        id={this.props.additionalInfoTiktok.id} source={this.props.additionalInfoTiktok.source} 
+                        platform="tiktok"></VideoItem>)
                     }
                     else{
                         if(this.props.dataGallery.videosData)
@@ -191,10 +219,9 @@ class Gallery extends Component {
                             (this.props.dataGallery.videosData.map((video, idx) =>
                             // FIXME Video not handled to add to collection with the new format API
                                 <VideoItem url={video.url} key={idx} history={this.props.history} handleModal = {(url, dto)=>{
-                                    // control modal with url
-                                    // console.log(url);
-                                    this.handleShowModalVideo(url);
-                                }} isAuth={this.props.isAuth} isAdded={video.isAdded}/>
+                                    this.handleShowModalVideo(url, dto);
+                                }} isAuth={this.props.isAuth} isAdded={video.isAdded}
+                                id={video.id} source={video.source} platform={this.props.nameNetwork}/>
                             )))
                     }
                 }
@@ -314,17 +341,17 @@ class Gallery extends Component {
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
                         show={this.state.isOpenModal}
-                        onHide={()=>this.handleShowModal(this.state.imageItemSrc)}>
+                        onHide={()=>this.handleShowModal()}>
                         <Modal.Header closeButton>
                             <Modal.Title>Image previewer</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <p>
-                                <img className='img-fluid' width={1100} height={1000} style={{objectFit: 'cover'}} src={this.state.imageItemSrc} alt="Img-error" />
+                                <img className='img-fluid' width={1100} height={1000} style={{objectFit: 'cover'}} src={this.state.itemUrl} alt="Img-error" />
                             </p>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Link to={{ pathname: '/editor', state: { imgSrc: this.state.imageItemSrc } }}>
+                            <Link to={{ pathname: '/editor', state: { imgSrc: this.state.itemUrl } }}>
                                 <Button variant="secondary">
                                     Edit
                                 </Button>
@@ -333,8 +360,10 @@ class Gallery extends Component {
                             onClick={this.clickDownload}>
                                 Download
                             </Button>
-                            <Button variant="secondary" 
-                            onClick={()=>this.clickAddToCollection(this.state.imageItemSrc, "picture", this.props.nameNetwork, this.state.mediaDTO.id, this.state.mediaDTO.source )}>
+                            <Button variant="secondary" onClick={
+                                ()=>this.clickAddToCollection(this.state.itemUrl, "picture", this.props.nameNetwork, 
+                                                            this.state.mediaDTO.id, this.state.mediaDTO.source )
+                                }>
                                 Add to my collection
                             </Button>
                         </Modal.Footer>
@@ -345,7 +374,7 @@ class Gallery extends Component {
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
                         show={this.state.isOpenModalVideo}
-                        onHide={()=>this.handleShowModalVideo(this.state.videoItemSrc)}>
+                        onHide={()=>this.handleShowModalVideo()}>
                         <Modal.Header closeButton>
                             <Modal.Title>Video previewer</Modal.Title>
                         </Modal.Header>
@@ -353,23 +382,26 @@ class Gallery extends Component {
                             {/* Prevent user download video if not logged in. */}
                             {
                                 this.props.isAuth ? 
-                                <ReactPlayer className="videoFrame" url={this.state.videoItemSrc} controls={true} playing /> :
-                                <ReactPlayer className="videoFrame" url={this.state.videoItemSrc} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
+                                <ReactPlayer className="videoFrame" url={this.state.itemUrl} controls={true} playing /> :
+                                <ReactPlayer className="videoFrame" url={this.state.itemUrl} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
                             }
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.videoItemSrc, "video")}>
+                            <Button variant="secondary" onClick={
+                                ()=>this.clickAddToCollection(this.state.itemUrl, "video", this.props.nameNetwork, 
+                                                            this.state.mediaDTO.id, this.state.mediaDTO.source)
+                                }>
                                 Add to my collection
                             </Button>
                         </Modal.Footer>
                     </Modal>
-                    {/* <Modal
+                    <Modal
                         size="xl"
                         scrollable={false}
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
                         show={this.state.isOpenModalCollection}
-                        onHide={()=>this.handleShowModalCollection(this.state.videoItemSrc)}>
+                        onHide={()=>this.handleShowModalCollection()}>
                         <Modal.Header closeButton>
                             <Modal.Title>Select a collection</Modal.Title>
                         </Modal.Header>
@@ -377,11 +409,17 @@ class Gallery extends Component {
                             
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.videoItemSrc, "video")}>
+                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.itemUrl, "video")}>
                                 Add to this collection
                             </Button>
+                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.itemUrl, "video")}>
+                                Create a new collection
+                            </Button>
+                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.itemUrl, "video")}>
+                                Remove this collection
+                            </Button>
                         </Modal.Footer>
-                    </Modal> */}
+                    </Modal>
                 </div>
             </section>
         );

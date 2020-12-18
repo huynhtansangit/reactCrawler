@@ -21,7 +21,7 @@ class Index extends Component {
             disableLoadMoreBtn: false,
             fullname: "User",
             isAuth: false,
-            isAddedTiktok: null
+            additionalInfoTiktok: {isAdded: null, id: null, source: null}
         }
     }
 
@@ -77,8 +77,14 @@ class Index extends Component {
                 });
             }
             else{
-                if(nameNetwork==='tiktok')
+                if(nameNetwork==='tiktok'){
+                    this.setState({additionalInfoTiktok: {
+                        isAdded: data['isAdded'],
+                        id: data['id'], 
+                        source: data['source']
+                    }});
                     this.setState({isAddedTiktok: data['isAdded']});
+                }
                 videosData = data['data'];
             }
             
@@ -180,6 +186,7 @@ class Index extends Component {
                 ></Banner>
                 <Gallery 
                     dataGallery= {this.state.dataGallery}
+                    additionalInfoTiktok= {this.state.additionalInfoTiktok}
                     nameNetwork= {this.state.nameNetwork}
                     inputUrl= {this.state.inputUrl}
                     getMoreMedia={this.getMoreMedia.bind(this)}
