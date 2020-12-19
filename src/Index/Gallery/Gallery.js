@@ -209,7 +209,7 @@ class Gallery extends Component {
                                 {/* <div className="col-lg-8 col-md-8 col-sm-12"> */}
                                     <button
                                         style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                        type="button" className="btn btn-danger justify-content-center" disabled>Load more media </button>
+                                        type="button" className="btn btn-danger justify-content-center download-all-btn" disabled>Load more media </button>
                                 {/* </div> */}
                             </div>)
                     }
@@ -238,14 +238,14 @@ class Gallery extends Component {
                 if(this.props.isAuth){
                     return(<button
                         style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                        type="button" className="btn btn-danger" onClick={this.handleDownloadMultiImages}>Download all {this.props.dataGallery?.imagesData.length} images
+                        type="button" className="btn btn-danger download-all-btn" onClick={this.handleDownloadMultiImages}>Download all {this.props.dataGallery?.imagesData.length} images
                     </button>)
                 }
                 else{
                     return(
                         <button
                             style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                            type="button" className="btn btn-danger" onClick={()=>{this.props.history.push('/login')}}>sign in to download
+                            type="button" className="btn btn-danger download-all-btn" onClick={()=>{this.props.history.push('/login')}}>sign in to download
                         </button>
                         )
                 }

@@ -213,7 +213,7 @@ section{
      }
      #form-banner {
         left: 161px !important;
-        top: 539px !important;
+        top: 520px !important;
 
      }
 
@@ -243,10 +243,114 @@ section{
        #circle-6{
         left: 581px !important;
        }
+       .avt-image{
+           width: 100px !important;
+           height: 100px !important;
+       }
+       .download-all-btn{
+           width: 150px !important;
+           height: 50px !important;
+           font-size: 12px !important;
+       }
+       .fa-instagram{
+           font-size: 20px !important;
+       }
+       .image-video-container{
+        grid-template-columns:  auto auto auto !important;
+       }
+       .dropdown-banner button, .dropdown-header-customize button{
+        width: 320px !important;
+        height: 35px !important;
+        border-radius: 0px !important;
+        }
+       .dropdown-header-customize button:after{
+           left: 50% !important;
+           top: 10% !important;
+       }
+       #input-url-banner{
+        width: 320px !important;
+        height: 35px !important;
+        font-size: 14px !important;
+       }
+       .icon-input-url{
+           width: 24px !important;
+           top: 5px !important;
+       }
+       .icon-input-header{
+        width: 24px !important;
+       }
+       .icon-search{
+           width: 24px !important;
+           height: 24px !important;
+
+       }
+       .submit-btn{
+            width: 120px !important;
+            height: 40px !important;
+       }
+       #exampleInputEmail1{
+           width: 290px !important;
+           height: 35px !important;
+           left: -76px !important;
+       }
+       .fa-sign-in-alt{
+           font-size: 16px !important;
+       }
+       .btn-input-header{
+        height: 35px !important;
+        right: 118px !important;
+       }
+
 }
  /* Medium devices (landscape tablets, 768px and up) */
  @media only screen and (max-width: 768px) {
+    .big-slogan, .small-slogan {
+        display: none;
+    }
+    .logo-app{
+        margin-left: 30px !important;
+    }
+    .sign-i-btn{
+        left: 56% !important;
+    }
+    .sign-u-btn{
+        left: 70% !important;
+    }
+    .wonderful-gift-title{
+        font-size: 38px !important;
 
+    }
+    .slogan-title{
+        font-size: 26px !important;
+    }
+    .gallery-container {
+        margin-left: 30px !important;
+        margin-right: 30px !important;
+    }
+
+    .pink-circle-decor {
+      display: none;
+    }
+    #girl-1 {
+        top: 600.38px !important;
+        left: 486px !important;
+    }
+
+    #girl-3{
+        left: 89px !important;
+       }
+       #girl-2{
+        left: 549px !important;
+       }
+       #girl-4{
+        left: 549px !important;
+       }
+       #girl-5{
+        left: 199px !important;
+       }
+       .navbar-brand img{
+        left: 180px !important;
+       }
 }
  /* Extra small devices (phones, 600px and down) */
  @media only screen and (max-width: 600px) {
