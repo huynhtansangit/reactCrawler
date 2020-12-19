@@ -119,7 +119,7 @@ export async function getCollections (callback) {
     }
 };
 
-const handleAddToCollection = async (url, thumbnail, type, platform, id, source) => {
+const handleAddToCollection = async (url, thumbnail, type, platform, id, source, collectionId) => {
     const accessToken = cookies.get("accessToken");
 
     const data = {
@@ -132,8 +132,8 @@ const handleAddToCollection = async (url, thumbnail, type, platform, id, source)
     };
 
     let config = {
-        method: 'post',
-        url: "temp",
+        method: 'POST',
+        url: `${COLLECTIONS_URL}/${collectionId}`,
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `bearer ${accessToken}`
@@ -141,7 +141,7 @@ const handleAddToCollection = async (url, thumbnail, type, platform, id, source)
         data: JSON.stringify(data)
     };
 
-    axios.request(config)
+    await axios.request(config)
         .then(response => response.data)
         .then(data => {
             if (data && data['message'] === 'Success') {
@@ -159,13 +159,15 @@ const handleAddToCollection = async (url, thumbnail, type, platform, id, source)
         })
 }
 
-export async function addToCollection(url, thumbnail, type, platform, id, source, callback) {
+export async function addToCollection(url, thumbnail, type, platform, id, source, collectionId, callback) {
+    // No need to verify here.
     const verifyProcess = await auth.verifyAccessToken();
 
     if (verifyProcess) {
-        handleAddToCollection(url, thumbnail, type, platform, id, source);
+        await handleAddToCollection(url, thumbnail, type, platform, id, source, collectionId);
     }
     else {
+        // Callback will never be used.
         callback();
     }
 };
@@ -206,12 +208,14 @@ const handleCreateCollection = (name) => {
 };
 
 export async function createCollection(nameCollection, callback) {
+    // No need to verify here.
     const verifyProcess = await auth.verifyAccessToken();
 
     if (verifyProcess) {
         handleCreateCollection(nameCollection);
     }
     else {
+        // Callback will never be used.
         callback();
     }
 };
@@ -247,12 +251,14 @@ const handleDeleteCollection = async (id) => {
 };
 
 export async function deleteCollection(idCollection, callback) {
+    // No need to verify here.
     const verifyProcess = await auth.verifyAccessToken();
 
     if (verifyProcess) {
         await handleDeleteCollection(idCollection);
     }
     else {
+        // Callback will never be used.
         callback();
     }
 };

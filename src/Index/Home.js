@@ -6,6 +6,7 @@ import AboutUs from './Aboutus/Aboutus';
 import Footer from './Footer/Footer';
 import {DOWNLOAD_URL} from '../utils/config.url'
 import auth from '../auth/auth'
+import cookies from '../utils/cookie'
 
 
 class Index extends Component {
@@ -26,12 +27,16 @@ class Index extends Component {
     }
 
     async getMedia(inputUrl, nameNetwork, cursor){
+        let headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+
+        if(this.state.isAuth)
+            headers['Authorization']=`bearer ${cookies.get('accessToken')}`;
         let option = {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
+            headers: headers
         };
         
         try {
@@ -149,7 +154,7 @@ class Index extends Component {
         // Authenticating process.
         const authProcess = await auth.verifyAccessToken();
         if(authProcess){
-            this.setState({isAuth: true});
+            await this.setState({isAuth: true});
 
             const firstName = localStorage.getItem('firstname');
             const lastName = localStorage.getItem('lastname');

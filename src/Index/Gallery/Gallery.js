@@ -163,21 +163,25 @@ class Gallery extends Component {
         createCollection(this.state.nameNewCollection);
     }
 
-    clickAddToCollection = (itemUrl, type, platform, id, source) => {
-        const tempThis = this;
-        addToCollection(itemUrl, "", type, platform, id, source, () => {
-            // If not login -> redirect to login.
-            this.props.history.push("/login", {
-                from: tempThis.props.location,
-                action: "addToCollection",
-                imgSrc: itemUrl,
-                thumbnail: "",
-                type: type,
-                platform: platform,
-                id: id,
-                source: source
-            });
-        })
+    clickAddToCollection = () => {
+        (async () => {
+            await this.setState({ disableThreeBtnCollectionModal: true })
+            if (this.state.selectedCollectionIds.length) {
+                // if (window.confirm("Are you sure want to delete selected collection(s)?")) {
+                    for (const idCollection of this.state.selectedCollectionIds)
+                        await addToCollection(this.state.itemUrl, "", this.state.itemType, 
+                            this.props.nameNetwork, this.state.mediaDTO.id, this.state.mediaDTO.source, 
+                            idCollection);
+
+                    // whatever opening, after add to collection, all modals will be close immediately.
+                    await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
+                // }
+            }
+            else
+                alert("No collection selected.")
+            this.setState({disableThreeBtnCollectionModal: false });
+        })()
+        
     }
 
     clickDeleteCollection = () => {
@@ -496,8 +500,9 @@ class Gallery extends Component {
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={
-                                () => this.clickAddToCollection(this.state.itemUrl, "video", this.props.nameNetwork,
-                                    this.state.mediaDTO.id, this.state.mediaDTO.source)
+                                // () => this.clickAddToCollection(this.state.itemUrl, "video", this.props.nameNetwork,
+                                //     this.state.mediaDTO.id, this.state.mediaDTO.source)
+                                ()=>this.clickFavoriteBtn()
                             }>
                                 Add to my collection
                         </Button>
@@ -517,7 +522,7 @@ class Gallery extends Component {
                             {renderCollections()}
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={() => console.log('Add to this collection')} disabled={this.state.disableThreeBtnCollectionModal}>
+                            <Button variant="secondary" onClick={() => this.clickAddToCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Add to this collection
                         </Button>
                             <Button variant="secondary" onClick={() => console.log('Create new a collection')} disabled={this.state.disableThreeBtnCollectionModal}>

@@ -72,7 +72,7 @@ class ImageItem extends Component {
                         </Link>
                     </p>
                     <p className="card__title">
-                            <button type="button" className={`btn btn-outline-secondary ${this.props.idAdded ? 'selectedBtn' : ""}`}
+                            <button type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}
                             onClick={this.clickAddToCollection}>
                                 <FavoriteTwoToneIcon/>
                             </button>
