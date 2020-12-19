@@ -11,13 +11,20 @@ import OwnerMedia from './OwnerMedia';
 // import 'swiper/components/scrollbar/scrollbar.scss';
 import VideoItem from './VideoItem';
 import ReactPlayer from 'react-player'
-import {DOWNLOAD_URL} from '../../utils/config.url'
+import { DOWNLOAD_URL } from '../../utils/config.url'
 import { Button, Modal } from 'react-bootstrap';
-import {Link,} from "react-router-dom";
-import { 
+import { Link, } from "react-router-dom";
+import {
     addToCollection, downloadImageByUrl, downloadMultiImagesByUrlsVers2,
-    createCollection } from '../../services/user.services'
+    createCollection, getCollections, deleteCollection
+} from '../../services/user.services'
 import './Gallery.css';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Skeleton from '@material-ui/lab/Skeleton';
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 
 class Gallery extends Component {
     constructor(props) {
@@ -27,25 +34,46 @@ class Gallery extends Component {
             isVideo: false,
             isOpenModal: false,
             isOpenModalVideo: false,
-            
+
             // states for add to collection 
-            isOpenModalCollection:false,
+            isOpenModalSelectCollection: false,
+            isOpenModalCreateCollection: false,
             itemUrl: "",
             itemType: "",
             mediaDTO: {},
+            willUpdateModalCollections: false,
+            dataCollections: null,
+            isLoadingCollections: false,
+            selectedCollectionIds: [],
+            disableThreeBtnCollectionModal: false,
         };
     }
 
     componentDidMount() {
-        
-    }
-
-    componentDidUpdate() {
 
     }
 
-    componentWillReceiveProps = (props)=> {
-        if(props.nameNetwork !== 'instagram'){
+    async componentDidUpdate() {
+        if (this.state.willUpdateModalCollections) {
+            await this.setState({ willUpdateModalCollections: false, isLoadingCollections: true, selectedCollectionIds: [] });
+            const dataCollections = await getCollections(() => {
+                // If not login -> redirect to login.
+                this.props.history.push("/login", {
+                    action: "addToCollection",
+                    imgSrc: "itemUrl",
+                    thumbnail: "",
+                    type: "type",
+                    platform: "platform",
+                    id: "id",
+                    source: "source"
+                });
+            });
+            await this.setState({ dataCollections: dataCollections, isLoadingCollections: false });
+        }
+    }
+
+    componentWillReceiveProps = (props) => {
+        if (props.nameNetwork !== 'instagram') {
             this.activeVideoTab();
         }
     }
@@ -61,44 +89,60 @@ class Gallery extends Component {
     }
 
     handleShowModal = (url, dto) => {
-        this.setState({ 
-            isOpenModal: !this.state.isOpenModal, 
-            isOpenModalVideo: false,
-            itemUrl: url,
-            itemType: "picture",
-            mediaDTO: dto
-        });
+        // If this modal is not shown => give it data, open it.
+        if (!this.state.isOpenModal)
+            this.setState({
+                isOpenModalVideo: false,
+                itemUrl: url,
+                itemType: "picture",
+                mediaDTO: dto
+            });
+        this.setState({ isOpenModal: !this.state.isOpenModal });
     }
 
     handleShowModalVideo = (url, dto) => {
-        this.setState({ 
-            isOpenModalVideo: !this.state.isOpenModalVideo, 
-            isOpenModal: false,
-            itemUrl: url ,
-            itemType: "video",
-            mediaDTO: dto
+        if (!this.state.isOpenModalVideo)
+            this.setState({
+                isOpenModal: false,
+                itemUrl: url,
+                itemType: "video",
+                mediaDTO: dto
+            });
+        this.setState({ isOpenModalVideo: !this.state.isOpenModalVideo });
+    }
+
+    handleShowModalSelectCollection = () => {
+        this.setState({
+            isOpenModalSelectCollection: !this.state.isOpenModalSelectCollection,
         });
     }
 
-    handleShowModalCollection = () => {
-        this.setState({ 
-            isOpenModalCollection: !this.state.isOpenModalCollection, 
-        });
+    handleSelectCollection = (event, id) => {
+        let selectedIndex = this.state.selectedCollectionIds.indexOf(id);
+        let newSelectedCollectionIds = this.state.selectedCollectionIds;
+
+        if (selectedIndex === -1)
+            newSelectedCollectionIds.push(id);
+        else
+            newSelectedCollectionIds.splice(selectedIndex, 1);
+
+        this.setState({ selectedCollectionIds: newSelectedCollectionIds });
     }
 
-    // User's services handling function
-    clickDownload = ()=>{
+
+    // ***** User's services handling function ******
+    clickDownload = () => {
         const tempThis = this;
-        downloadImageByUrl(tempThis.state.itemUrl, ()=>this.props.history.push('/login', {
+        downloadImageByUrl(tempThis.state.itemUrl, () => this.props.history.push('/login', {
             from: tempThis.props.location,
             action: "downloadSingleImage",
             imgSrc: tempThis.state.itemUrl
         }));
     }
 
-    handleDownloadMultiImages = ()=>{
-        if(this.props.dataGallery?.imagesData?.length)
-            downloadMultiImagesByUrlsVers2(this.props.dataGallery.imagesData, ()=>this.props.history.push('/login'));
+    handleDownloadMultiImages = () => {
+        if (this.props.dataGallery?.imagesData?.length)
+            downloadMultiImagesByUrlsVers2(this.props.dataGallery.imagesData, () => this.props.history.push('/login'));
         else
             alert("Not found any image to download.")
     }
@@ -107,33 +151,57 @@ class Gallery extends Component {
     // NOTE: Làm flow bên gallery hoàn chỉnh rồi thực hiện call từ item qua đây cho khỏe.
 
     // Click favorite btn to add image to a collection.
-    clickFavoriteBtn = ()=>{
-        this.setState({isOpenModalCollection:true});
-
-
+    clickFavoriteBtn = () => {
+        // Change state and react will do the rest in componentDidUpdate
+        this.setState({
+            isOpenModalSelectCollection: true,
+            willUpdateModalCollections: true
+        });
     }
 
-    clickCreateCollection = ()=>{
+    clickCreateCollection = () => {
         createCollection(this.state.nameNewCollection);
     }
 
-    clickAddToCollection = (itemUrl, type, platform, id, source)=>{
+    clickAddToCollection = (itemUrl, type, platform, id, source) => {
         const tempThis = this;
-        addToCollection(itemUrl, "", type, platform, id, source,()=>{
+        addToCollection(itemUrl, "", type, platform, id, source, () => {
             // If not login -> redirect to login.
             this.props.history.push("/login", {
                 from: tempThis.props.location,
                 action: "addToCollection",
                 imgSrc: itemUrl,
                 thumbnail: "",
-                type:type,
-                platform: platform, 
-                id: id, 
+                type: type,
+                platform: platform,
+                id: id,
                 source: source
             });
         })
     }
-    // End user's service.
+
+    clickDeleteCollection = () => {
+        (async () => {
+            await this.setState({ disableThreeBtnCollectionModal: true })
+            if (this.state.selectedCollectionIds.length) {
+                if (window.confirm("Are you sure want to delete selected collection(s)?")) {
+                    for (const idCollection of this.state.selectedCollectionIds)
+                        await deleteCollection(idCollection);
+
+                    await this.setState({ willUpdateModalCollections: true});
+                }
+            }
+            else
+                alert("No collection selected.")
+            this.setState({disableThreeBtnCollectionModal: false });
+        })()
+    }
+
+    clickReloadCollections = () => {
+        // In case of occurring errors, click this button to reload.
+        this.setState({ willUpdateModalCollections: true });
+    }
+    // ***** End user's service. ******
 
     render() {
         // Helper functions
@@ -148,12 +216,12 @@ class Gallery extends Component {
                     // If not error => Show images
                     res = this.props.dataGallery.imagesData.map((img, idx) =>
                         <ImageItem
-                        itemSrc={img.url} handleModal = {(url, dto)=>{
-                            // control modal with url
-                            // console.log(url);
-                            this.handleShowModal(url,dto);
-                        }} key={idx} history={this.props.history} isAdded={img.isAdded} 
-                        id={img.id} source={img.source} platform={this.props.nameNetwork}/>)
+                            itemSrc={img.url} handleModal={(url, dto) => {
+                                // control modal with url
+                                // console.log(url);
+                                this.handleShowModal(url, dto);
+                            }} key={idx} history={this.props.history} isAdded={img.isAdded}
+                            id={img.id} source={img.source} platform={this.props.nameNetwork} />)
                 }
                 else {
                     // else: error occurred => Show pic 500
@@ -164,14 +232,14 @@ class Gallery extends Component {
             return (res);
         }
         // Đã thêm dấu ? handle nhưng chưa test.
-        const handleCountPost = () =>{
-            if(this.props.dataGallery.ownerMedia?.countPost)
+        const handleCountPost = () => {
+            if (this.props.dataGallery.ownerMedia?.countPost)
                 return this.props.dataGallery.ownerMedia.countPost;
-            else if(this.props.dataGallery.ownerMedia?.count_video)
+            else if (this.props.dataGallery.ownerMedia?.count_video)
                 return this.props.dataGallery.ownerMedia.count_video;
-            else if(this.props.dataGallery.error)
+            else if (this.props.dataGallery.error)
                 return 0;
-            else    
+            else
                 return 1;
         }
         const renderOwnerMedia = () => {
@@ -185,13 +253,13 @@ class Gallery extends Component {
                         <OwnerMedia avatar={this.props.dataGallery.ownerMedia?.avatar}
                             username={this.props.dataGallery.ownerMedia?.username}
                             fullname={this.props.dataGallery.ownerMedia?.fullname}
-                            countPost={ handleCountPost() }
-                            countFollowedBy={this.props.dataGallery.ownerMedia?.countFollowedBy} 
-                            nameNetwork={this.props.nameNetwork}/>) : (
+                            countPost={handleCountPost()}
+                            countFollowedBy={this.props.dataGallery.ownerMedia?.countFollowedBy}
+                            nameNetwork={this.props.nameNetwork} />) : (
                         <OwnerMedia
                             avatar="https://www.wpexplorer.com/wp-content/uploads/wordpress-500-internal-server-error-fixes.jpg"
-                            username="Error" fullname="Error" countPost="Error" countFollowedBy="Error" 
-                            nameNetwork={this.props.nameNetwork}/>
+                            username="Error" fullname="Error" countPost="Error" countFollowedBy="Error"
+                            nameNetwork={this.props.nameNetwork} />
                     ))
             }
         }
@@ -204,25 +272,24 @@ class Gallery extends Component {
                 // Else: loaded
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
-                    if(this.props.nameNetwork === 'tiktok'){
-                        return(<VideoItem url={`${DOWNLOAD_URL}/${this.props.nameNetwork}?url=${this.props.inputUrl}`} handleModal = {(url, dto)=>{
+                    if (this.props.nameNetwork === 'tiktok') {
+                        return (<VideoItem url={`${DOWNLOAD_URL}/${this.props.nameNetwork}?url=${this.props.inputUrl}`} handleModal={(url, dto) => {
                             // control modal with url
                             // console.log(url);
                             this.handleShowModalVideo(url, dto);
                         }} isAuth={this.props.isAuth} isAdded={this.props.additionalInfoTiktok.isAdded}
-                        id={this.props.additionalInfoTiktok.id} source={this.props.additionalInfoTiktok.source} 
-                        platform="tiktok"></VideoItem>)
+                            id={this.props.additionalInfoTiktok.id} source={this.props.additionalInfoTiktok.source}
+                            platform="tiktok"></VideoItem>)
                     }
-                    else{
-                        if(this.props.dataGallery.videosData)
-                        return (
-                            (this.props.dataGallery.videosData.map((video, idx) =>
-                            // FIXME Video not handled to add to collection with the new format API
-                                <VideoItem url={video.url} key={idx} history={this.props.history} handleModal = {(url, dto)=>{
-                                    this.handleShowModalVideo(url, dto);
-                                }} isAuth={this.props.isAuth} isAdded={video.isAdded}
-                                id={video.id} source={video.source} platform={this.props.nameNetwork}/>
-                            )))
+                    else {
+                        if (this.props.dataGallery.videosData)
+                            return (
+                                (this.props.dataGallery.videosData.map((video, idx) =>
+                                    <VideoItem url={video.url} key={idx} history={this.props.history} handleModal={(url, dto) => {
+                                        this.handleShowModalVideo(url, dto);
+                                    }} isAuth={this.props.isAuth} isAdded={video.isAdded}
+                                        id={video.id} source={video.source} platform={this.props.nameNetwork} />
+                                )))
                     }
                 }
                 else {
@@ -234,7 +301,7 @@ class Gallery extends Component {
         }
         const renderLoadMoreButton = () => {
             // Load more only available with instagram and fb
-            if(this.props.nameNetwork !== 'tiktok'){
+            if (this.props.nameNetwork !== 'tiktok') {
                 if (Object.keys(this.props.dataGallery).length === 0 ||
                     !this.props.dataGallery.videosData || !this.props.dataGallery.imagesData) {
                     return ('');
@@ -243,53 +310,91 @@ class Gallery extends Component {
                     if (this.props.disableLoadMoreBtn) {
                         // 
                         return (
-                            <div className="mt-3" style={{width: '90%'}}>
+                            <div className="mt-3" style={{ width: '90%' }}>
                                 {/* <div className="col-lg-8 col-md-8 col-sm-12"> */}
-                                    <button
-                                        style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                        type="button" className="btn btn-danger justify-content-center" disabled>Load more media </button>
+                                <button
+                                    style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                                    type="button" className="btn btn-danger justify-content-center" disabled>Load more media </button>
                                 {/* </div> */}
                             </div>)
                     }
                     else {
                         return (
-                            <div className="mt-3" style={{width: '90%'}}>
+                            <div className="mt-3" style={{ width: '90%' }}>
                                 {/* <div className="col-lg-8 col-md-8 col-sm-12"> */}
-                                    <button
-                                        style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                                        type="button" className="btn btn-danger justify-content-center" onClick={this.props.getMoreMedia}>Load more media </button>
+                                <button
+                                    style={{ textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
+                                    type="button" className="btn btn-danger justify-content-center" onClick={this.props.getMoreMedia}>Load more media </button>
                                 {/* </div> */}
                             </div>)
                     }
                 }
             }
-            else{
-                return("")
+            else {
+                return ("")
             }
         }
-
-        const renderDownloadAllImageBtn = ()=>{
-            if(Object.keys(this.props.dataGallery).length === 0){
-                return(null)
+        const renderDownloadAllImageBtn = () => {
+            if (Object.keys(this.props.dataGallery).length === 0) {
+                return (null)
             }
-            else if(!this.props.dataGallery.error){
-                if(this.props.isAuth){
-                    return(<button
+            else if (!this.props.dataGallery.error) {
+                if (this.props.isAuth) {
+                    return (<button
                         style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
                         type="button" className="btn btn-danger" onClick={this.handleDownloadMultiImages}>Download all {this.props.dataGallery?.imagesData.length} images
                     </button>)
                 }
-                else{
-                    return(
+                else {
+                    return (
                         <button
                             style={{ marginTop: '50px', textTransform: 'uppercase', fontFamily: 'Poppins', padding: '10px', backgroundColor: '#CD3D76' }}
-                            type="button" className="btn btn-danger" onClick={()=>{this.props.history.push('/login')}}>sign in to download
+                            type="button" className="btn btn-danger" onClick={() => { this.props.history.push('/login') }}>sign in to download
                         </button>
-                        )
+                    )
                 }
             }
         }
-
+        const renderCollections = () => {
+            if (!this.state.isLoadingCollections && this.state.dataCollections) {
+                if (this.state.dataCollections.error)
+                    return (<>
+                        <Button variant="secondary" onClick={() => this.setState({ willUpdateModalCollections: true })}>
+                                Try again
+                        </Button>
+                        <br/>
+                        <Alert severity="error">
+                            <AlertTitle>Error</AlertTitle>
+                            <p>{this.state.dataCollections.error}</p>
+                        </Alert>
+                        </>)
+                else
+                    return (<div style={{ overflowY: 'scroll' }}>
+                        {this.state.dataCollections.collections.map(
+                            (collection, idx) =>
+                                <FormGroup row key={idx}  >
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={this.state.selectedCollectionIds.indexOf(collection.id) !== -1}
+                                                onChange={(event) => this.handleSelectCollection(event, collection.id)}
+                                                value="true"
+                                                color="primary"
+                                            />}
+                                        label={collection.name}
+                                    />
+                                </FormGroup>
+                        )}
+                    </div>)
+            }
+            else {
+                return (<div>
+                    <Skeleton />
+                    <Skeleton />
+                    <Skeleton />
+                </div>)
+            }
+        }
 
         return (
             <section id="gallery-section">
@@ -308,7 +413,7 @@ class Gallery extends Component {
                         </div>
                     </div>
 
-                    <div id="image-tab-gallery" className="row gallery-tab" style={{display: this.state.isImg ? "" : "none"}}>
+                    <div id="image-tab-gallery" className="row gallery-tab" style={{ display: this.state.isImg ? "" : "none" }}>
                         <div className="col-lg-9 col-md-9 col-sm-12">
                             <div className=" image-video-container justify-content-center">
                                 {renderImageGallery()}
@@ -318,12 +423,12 @@ class Gallery extends Component {
                         <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1"
                             style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
                             {renderOwnerMedia()}
-                            
+
                             {renderDownloadAllImageBtn()}
                         </div>
                     </div>
-                    
-                    <div id="video-tab-gallery" className="row gallery-tab " style={{display: this.state.isVideo ? "" : "none"}}>
+
+                    <div id="video-tab-gallery" className="row gallery-tab " style={{ display: this.state.isVideo ? "" : "none" }}>
                         <div className="col-lg-9 col-md-9 col-sm-12">
                             <div className="image-video-container justify-content-center">
                                 {renderVideoGallery()}
@@ -341,31 +446,34 @@ class Gallery extends Component {
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
                         show={this.state.isOpenModal}
-                        onHide={()=>this.handleShowModal()}>
+                        onHide={() => this.handleShowModal()}>
                         <Modal.Header closeButton>
                             <Modal.Title>Image previewer</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <p>
-                                <img className='img-fluid' width={1100} height={1000} style={{objectFit: 'cover'}} src={this.state.itemUrl} alt="Img-error" />
+                                <img className='img-fluid' width={1100} height={1000} style={{ objectFit: 'cover' }} src={this.state.itemUrl} alt="Img-error" />
                             </p>
                         </Modal.Body>
                         <Modal.Footer>
                             <Link to={{ pathname: '/editor', state: { imgSrc: this.state.itemUrl } }}>
                                 <Button variant="secondary">
                                     Edit
-                                </Button>
+                            </Button>
                             </Link>
-                            <Button variant="secondary" 
-                            onClick={this.clickDownload}>
+                            <Button variant="secondary"
+                                onClick={this.clickDownload}>
                                 Download
-                            </Button>
+                        </Button>
                             <Button variant="secondary" onClick={
-                                ()=>this.clickAddToCollection(this.state.itemUrl, "picture", this.props.nameNetwork, 
-                                                            this.state.mediaDTO.id, this.state.mediaDTO.source )
-                                }>
+                                () => {
+                                    // this.clickAddToCollection(this.state.itemUrl, "picture", this.props.nameNetwork, 
+                                    //                         this.state.mediaDTO.id, this.state.mediaDTO.source )
+                                    this.clickFavoriteBtn()
+                                }
+                            }>
                                 Add to my collection
-                            </Button>
+                        </Button>
                         </Modal.Footer>
                     </Modal>
                     <Modal
@@ -374,25 +482,25 @@ class Gallery extends Component {
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
                         show={this.state.isOpenModalVideo}
-                        onHide={()=>this.handleShowModalVideo()}>
+                        onHide={() => this.handleShowModalVideo()}>
                         <Modal.Header closeButton>
                             <Modal.Title>Video previewer</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             {/* Prevent user download video if not logged in. */}
                             {
-                                this.props.isAuth ? 
-                                <ReactPlayer className="videoFrame" url={this.state.itemUrl} controls={true} playing /> :
-                                <ReactPlayer className="videoFrame" url={this.state.itemUrl} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
+                                this.props.isAuth ?
+                                    <ReactPlayer className="videoFrame" url={this.state.itemUrl} controls={true} playing /> :
+                                    <ReactPlayer className="videoFrame" url={this.state.itemUrl} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
                             }
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={
-                                ()=>this.clickAddToCollection(this.state.itemUrl, "video", this.props.nameNetwork, 
-                                                            this.state.mediaDTO.id, this.state.mediaDTO.source)
-                                }>
+                                () => this.clickAddToCollection(this.state.itemUrl, "video", this.props.nameNetwork,
+                                    this.state.mediaDTO.id, this.state.mediaDTO.source)
+                            }>
                                 Add to my collection
-                            </Button>
+                        </Button>
                         </Modal.Footer>
                     </Modal>
                     <Modal
@@ -400,24 +508,24 @@ class Gallery extends Component {
                         scrollable={false}
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
-                        show={this.state.isOpenModalCollection}
-                        onHide={()=>this.handleShowModalCollection()}>
+                        show={this.state.isOpenModalSelectCollection}
+                        onHide={() => this.handleShowModalSelectCollection()}>
                         <Modal.Header closeButton>
                             <Modal.Title>Select a collection</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            
+                            {renderCollections()}
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.itemUrl, "video")}>
+                            <Button variant="secondary" onClick={() => console.log('Add to this collection')} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Add to this collection
-                            </Button>
-                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.itemUrl, "video")}>
+                        </Button>
+                            <Button variant="secondary" onClick={() => console.log('Create new a collection')} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Create a new collection
-                            </Button>
-                            <Button variant="secondary" onClick={()=>this.clickAddToCollection(this.state.itemUrl, "video")}>
+                        </Button>
+                            <Button variant="secondary" onClick={() => this.clickDeleteCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Remove this collection
-                            </Button>
+                        </Button>
                         </Modal.Footer>
                     </Modal>
                 </div>

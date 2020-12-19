@@ -236,7 +236,7 @@ export default function SignInSide(props) {
         const result = await auth.verifyAccessToken();
         setLoggedIn(result);
     };
-    console.log(props.location);
+    // console.log(props.location);
     if(!isLoggedIn)
       verifyProcess();
     }, [isLoggedIn]);
