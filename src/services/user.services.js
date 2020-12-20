@@ -172,6 +172,49 @@ export async function addToCollection(url, thumbnail, type, platform, id, source
     }
 };
 
+const handleItemRemoveFromCollection = async (collectionId, itemId) => {
+    const accessToken = cookies.get("accessToken");
+
+    let config = {
+        method: 'DELETE',
+        url: `${COLLECTIONS_URL}/${collectionId}/items/${itemId}`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${accessToken}`
+        },
+    };
+
+    await axios.request(config)
+        .then(response => response.data)
+        .then(data => {
+            if (data && data['message'] === 'Success') {
+                // alert("Added to collection");
+            }
+        })
+        .catch(error => {
+            console.log("Error occurred when trying to add to collection.");
+            if (error.response) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong. Please check your internet connection.");
+            }
+        })
+}
+
+export async function removeItemFromCollection(collectionId, itemId, callback) {
+    // No need to verify here.
+    const verifyProcess = await auth.verifyAccessToken();
+
+    if (verifyProcess) {
+        await handleItemRemoveFromCollection(collectionId, itemId);
+    }
+    else {
+        // Callback will never be used.
+        callback();
+    }
+};
+
 const handleCreateCollection = (name) => {
     const accessToken = cookies.get("accessToken");
 
@@ -193,7 +236,7 @@ const handleCreateCollection = (name) => {
         .then(response => response.data)
         .then(data => {
             if (data && data['message'] === 'Success') {
-                alert("Created to collection");
+                // alert("Created to collection");
             }
         })
         .catch(error => {

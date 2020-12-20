@@ -15,7 +15,28 @@ class ImageItem extends Component {
             imgSrc: "",
             isRedirect: false,
             isOpenModal: false,
+            itemDTO: {
+                isAdding: !this.props.isAdded,
+                imgSrc: this.props.itemSrc,
+                thumbnail: "",
+                type:"picture",
+                platform: this.props.platform, 
+                id: this.props.id, 
+                source: this.props.source
+            },
         }
+    }
+
+    prepareData(){
+        this.setState({itemDTO: {
+            isAdding: !this.props.isAdded,
+            imgSrc: this.props.itemSrc,
+            thumbnail: "",
+            type:"picture",
+            platform: this.props.platform, 
+            id: this.props.id, 
+            source: this.props.source
+        }})
     }
 
     // arrow 2 level cho ngầu. :v điều này sẽ làm thay đổi khi gọi hàm this.handleShow ở dưới.
@@ -55,12 +76,15 @@ class ImageItem extends Component {
             <div className="img-card" variant="primary">
                 <img src={this.props.itemSrc} alt="Img-error" />
                 <div className="card__text">
-                    <p className="card__title"><button onClick={ ()=>{
-                        // Click here will trigger show modal in Gallery.
-                        this.props.handleModal(this.props.itemSrc, {id: this.props.id, source: this.props.source, platform: this.props.platform})
-                    }} type="button" className="btn btn-outline-secondary">
-                    <VisibilityOutlinedIcon/>
-                    </button>
+                    <p className="card__title">
+                        <button 
+                            onClick={ ()=>{
+                                // Click here will trigger show modal in Gallery.
+                                this.props.handleModal(this.props.itemSrc, {id: this.props.id, source: this.props.source, platform: this.props.platform, isAdding: !this.props.isAdded})
+                            }} 
+                            type="button" className="btn btn-outline-secondary">
+                            <VisibilityOutlinedIcon/>
+                        </button>
                     </p>
                     <p className="card__title"><button onClick={this.clickDownload} type="button" className="btn btn-outline-secondary">
                     <GetAppOutlinedIcon/>
@@ -73,7 +97,10 @@ class ImageItem extends Component {
                     </p>
                     <p className="card__title">
                             <button type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}
-                            onClick={this.clickAddToCollection}>
+                            onClick={()=>{
+                                this.prepareData();
+                                this.props.isClickAddToCollection(this.state.itemDTO);
+                            }}>
                                 <FavoriteTwoToneIcon/>
                             </button>
                     </p>

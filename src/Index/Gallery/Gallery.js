@@ -16,7 +16,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { Link, } from "react-router-dom";
 import {
     addToCollection, downloadImageByUrl, downloadMultiImagesByUrlsVers2,
-    createCollection, getCollections, deleteCollection
+    createCollection, getCollections, deleteCollection, removeItemFromCollection
 } from '../../services/user.services'
 import './Gallery.css';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -148,8 +148,24 @@ class Gallery extends Component {
     }
 
     // Flow: Click => Check auth tại get list collections => chọn 1 hoặc tạo mới collection để thêm vô => thêm.
-    // NOTE: Làm flow bên gallery hoàn chỉnh rồi thực hiện call từ item qua đây cho khỏe.
 
+    clickFavoriteBtnFromItem = (itemDTO)=>{
+        this.setState({
+            itemUrl: itemDTO.imgSrc,
+            itemType: itemDTO.type,
+            mediaDTO: {
+                isAdding: itemDTO.isAdding,
+                id: itemDTO.id,
+                source: itemDTO.source
+            }
+        });
+
+        this.setState({
+            isOpenModalSelectCollection: true,
+            willUpdateModalCollections: true
+        });
+    }
+    
     // Click favorite btn to add image to a collection.
     clickFavoriteBtn = () => {
         // Change state and react will do the rest in componentDidUpdate
@@ -157,10 +173,6 @@ class Gallery extends Component {
             isOpenModalSelectCollection: true,
             willUpdateModalCollections: true
         });
-    }
-
-    clickCreateCollection = () => {
-        createCollection(this.state.nameNewCollection);
     }
 
     clickAddToCollection = () => {
@@ -182,6 +194,22 @@ class Gallery extends Component {
             this.setState({disableThreeBtnCollectionModal: false });
         })()
         
+    }
+
+    clickCreateCollection = () => {
+        (async () => {
+            await this.setState({ disableThreeBtnCollectionModal: true })
+            // if (this.state.selectedCollectionIds.length) {
+            let name = prompt("Enter collection's name:", "New collection");    
+            if (name) {
+                await createCollection(name);
+                await this.setState({ willUpdateModalCollections: true});
+                
+            }
+            else if(name !== null)
+                alert("Please enter collection's name.")
+            this.setState({disableThreeBtnCollectionModal: false });
+        })()
     }
 
     clickDeleteCollection = () => {
@@ -220,12 +248,17 @@ class Gallery extends Component {
                     // If not error => Show images
                     res = this.props.dataGallery.imagesData.map((img, idx) =>
                         <ImageItem
-                            itemSrc={img.url} handleModal={(url, dto) => {
+                            itemSrc={img.url} 
+                            handleModal={(url, dto) => {
                                 // control modal with url
-                                // console.log(url);
                                 this.handleShowModal(url, dto);
-                            }} key={idx} history={this.props.history} isAdded={img.isAdded}
-                            id={img.id} source={img.source} platform={this.props.nameNetwork} />)
+                            }} 
+                            isClickAddToCollection={(itemDTO)=>{
+                                this.clickFavoriteBtnFromItem(itemDTO);
+                            }} 
+                            key={idx} history={this.props.history} isAdded={img.isAdded}
+                            id={img.id} source={img.source} platform={this.props.nameNetwork} 
+                        />)
                 }
                 else {
                     // else: error occurred => Show pic 500
@@ -277,21 +310,32 @@ class Gallery extends Component {
                 if (!this.props.dataGallery.error) {
                     // If not error => Show images
                     if (this.props.nameNetwork === 'tiktok') {
-                        return (<VideoItem url={`${DOWNLOAD_URL}/${this.props.nameNetwork}?url=${this.props.inputUrl}`} handleModal={(url, dto) => {
-                            // control modal with url
-                            // console.log(url);
-                            this.handleShowModalVideo(url, dto);
-                        }} isAuth={this.props.isAuth} isAdded={this.props.additionalInfoTiktok.isAdded}
+                        return (
+                        <VideoItem url={`${DOWNLOAD_URL}/${this.props.nameNetwork}?url=${this.props.inputUrl}`} 
+                            handleModal={(url, dto) => {
+                                // control modal with url
+                                this.handleShowModalVideo(url, dto);
+                            }} 
+                            isClickAddToCollection={(itemDTO)=>{
+                                this.clickFavoriteBtnFromItem(itemDTO);
+                            }} 
+                            isAuth={this.props.isAuth} isAdded={this.props.additionalInfoTiktok.isAdded}
                             id={this.props.additionalInfoTiktok.id} source={this.props.additionalInfoTiktok.source}
-                            platform="tiktok"></VideoItem>)
+                            platform="tiktok">
+                        </VideoItem>)
                     }
                     else {
                         if (this.props.dataGallery.videosData)
                             return (
                                 (this.props.dataGallery.videosData.map((video, idx) =>
-                                    <VideoItem url={video.url} key={idx} history={this.props.history} handleModal={(url, dto) => {
-                                        this.handleShowModalVideo(url, dto);
-                                    }} isAuth={this.props.isAuth} isAdded={video.isAdded}
+                                    <VideoItem url={video.url} key={idx} history={this.props.history} 
+                                        handleModal={(url, dto) => {
+                                            this.handleShowModalVideo(url, dto);
+                                        }} 
+                                        isClickAddToCollection={(itemDTO)=>{
+                                            this.clickFavoriteBtnFromItem(itemDTO);
+                                        }} 
+                                        isAuth={this.props.isAuth} isAdded={video.isAdded}
                                         id={video.id} source={video.source} platform={this.props.nameNetwork} />
                                 )))
                     }
@@ -525,7 +569,7 @@ class Gallery extends Component {
                             <Button variant="secondary" onClick={() => this.clickAddToCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Add to this collection
                         </Button>
-                            <Button variant="secondary" onClick={() => console.log('Create new a collection')} disabled={this.state.disableThreeBtnCollectionModal}>
+                            <Button variant="secondary" onClick={() => this.clickCreateCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Create a new collection
                         </Button>
                             <Button variant="secondary" onClick={() => this.clickDeleteCollection()} disabled={this.state.disableThreeBtnCollectionModal}>

@@ -16,7 +16,28 @@ class VideoItem extends Component {
         this.state = {
             isPlay: false,
             isOpenModal: false,
+            itemDTO: {
+                isAdding: !this.props.isAdded,
+                imgSrc: this.props.url,
+                thumbnail: "",
+                type:"video",
+                platform: this.props.platform, 
+                id: this.props.id, 
+                source: this.props.source
+            }
         }
+    }
+
+    prepareData(){
+        this.setState({itemDTO: {
+            isAdding: !this.props.isAdded,
+            imgSrc: this.props.url,
+            thumbnail: "",
+            type:"video",
+            platform: this.props.platform, 
+            id: this.props.id, 
+            source: this.props.source
+        }})
     }
     
     playVideo = () => {
@@ -65,14 +86,19 @@ class VideoItem extends Component {
                     </div>
                     <div className="card__title">
                         <button onClick={ ()=>{
-                        // Click here will trigger show modal in Gallery.
-                        this.props.handleModal(this.props.url, {id: this.props.id, source: this.props.source, platform: this.props.platform})
-                    }} type="button" className="btn btn-outline-secondary">
+                                // Click here will trigger show modal in Gallery.
+                                this.props.handleModal(this.props.url, {id: this.props.id, source: this.props.source, platform: this.props.platform, isAdding: !this.props.isAdded})
+                            }} 
+                            type="button" className="btn btn-outline-secondary">
                             <VisibilityOutlinedIcon />
                         </button>
                     </div>
                     <div className="card__title">
-                        <button onClick={this.clickAddToCollection} type="button" className={`btn btn-outline-secondary ${this.props.idAdded ? 'selectedBtn' : ""}`}>
+                        <button onClick={()=>{
+                                this.prepareData();
+                                this.props.isClickAddToCollection(this.state.itemDTO);
+                            }} 
+                            type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}>
                             <FavoriteTwoToneIcon />
                         </button>
                     </div>
