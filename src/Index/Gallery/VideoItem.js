@@ -87,7 +87,7 @@ class VideoItem extends Component {
                     <div className="card__title">
                         <button onClick={ ()=>{
                                 // Click here will trigger show modal in Gallery.
-                                this.props.handleModal(this.props.url, {id: this.props.id, source: this.props.source, platform: this.props.platform, isAdding: !this.props.isAdded})
+                                this.props.handleModal(this.props.url, {id: this.props.id, source: this.props.source, platform: this.props.platform, isAdding: !this.props.isAdded, collectionId: this.props.collectionId})
                             }} 
                             type="button" className="btn btn-outline-secondary">
                             <VisibilityOutlinedIcon />

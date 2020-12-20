@@ -22,7 +22,7 @@ class Index extends Component {
             disableLoadMoreBtn: false,
             fullname: "User",
             isAuth: false,
-            additionalInfoTiktok: {isAdded: null, id: null, source: null}
+            additionalInfoTiktok: {isAdded: null, id: null, source: null, collectionId: null}
         }
     }
 
@@ -44,7 +44,6 @@ class Index extends Component {
             if(nameNetwork === 'tiktok'){
                 option['method']='GET';
                 fetchUrl = `${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`
-                // response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`, option);
             }
             else{
                 if(cursor){
@@ -86,7 +85,8 @@ class Index extends Component {
                     this.setState({additionalInfoTiktok: {
                         isAdded: data['isAdded'],
                         id: data['id'], 
-                        source: data['source']
+                        source: data['source'],
+                        collectionId: data['collectionId'],
                     }});
                     this.setState({isAddedTiktok: data['isAdded']});
                 }

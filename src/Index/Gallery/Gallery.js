@@ -156,7 +156,8 @@ class Gallery extends Component {
             mediaDTO: {
                 isAdding: itemDTO.isAdding,
                 id: itemDTO.id,
-                source: itemDTO.source
+                source: itemDTO.source,
+                collectionId: itemDTO.collectionId,
             }
         });
 
@@ -174,6 +175,18 @@ class Gallery extends Component {
             willUpdateModalCollections: true
         });
     }
+    // Click favorite btn again to un-favorite
+    clickUnFavorite = (collectionId, itemId) => {
+        // TODO Remove khỏi collection đã được nhưng chưa cập nhật cái icon tim,
+        // NOTE Nếu add 1 item tới hơn 1 collection thì phải xóa số collection mà item đó được gắn vô, cd item thuộc về 2 collection thì phải xóa 2 lần.
+        console.log("Un-favorite");
+        (async () => {
+            await removeItemFromCollection(collectionId, itemId);
+            
+            // whatever opening, after add to collection, all modals will be close immediately.
+            await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
+        })()
+    } 
 
     clickAddToCollection = () => {
         (async () => {
@@ -199,7 +212,6 @@ class Gallery extends Component {
     clickCreateCollection = () => {
         (async () => {
             await this.setState({ disableThreeBtnCollectionModal: true })
-            // if (this.state.selectedCollectionIds.length) {
             let name = prompt("Enter collection's name:", "New collection");    
             if (name) {
                 await createCollection(name);
@@ -257,7 +269,8 @@ class Gallery extends Component {
                                 this.clickFavoriteBtnFromItem(itemDTO);
                             }} 
                             key={idx} history={this.props.history} isAdded={img.isAdded}
-                            id={img.id} source={img.source} platform={this.props.nameNetwork} 
+                            id={img.id} source={img.source} platform={this.props.nameNetwork}
+                            collectionId={img.collectionId} 
                         />)
                 }
                 else {
@@ -268,7 +281,7 @@ class Gallery extends Component {
             }
             return (res);
         }
-        // Đã thêm dấu ? handle nhưng chưa test.
+        // Đã thêm dấu ? handle trả về null nhưng chưa test.
         const handleCountPost = () => {
             if (this.props.dataGallery.ownerMedia?.countPost)
                 return this.props.dataGallery.ownerMedia.countPost;
@@ -321,7 +334,7 @@ class Gallery extends Component {
                             }} 
                             isAuth={this.props.isAuth} isAdded={this.props.additionalInfoTiktok.isAdded}
                             id={this.props.additionalInfoTiktok.id} source={this.props.additionalInfoTiktok.source}
-                            platform="tiktok">
+                            platform="tiktok" collection={this.props.additionalInfoTiktok.collectionId}>
                         </VideoItem>)
                     }
                     else {
@@ -336,7 +349,8 @@ class Gallery extends Component {
                                             this.clickFavoriteBtnFromItem(itemDTO);
                                         }} 
                                         isAuth={this.props.isAuth} isAdded={video.isAdded}
-                                        id={video.id} source={video.source} platform={this.props.nameNetwork} />
+                                        id={video.id} source={video.source} platform={this.props.nameNetwork} 
+                                        collectionId={video.collectionId}/>
                                 )))
                     }
                 }
@@ -443,6 +457,33 @@ class Gallery extends Component {
                 </div>)
             }
         }
+        const renderAddToCollection = ()=>{
+            // Khi add to collection rồi, thì tắt modal, sau đó mở modal lên lại thì nút vẫn là add to collection thay vì remove from collection
+            if(this.state.mediaDTO?.isAdding){
+                return (
+                    <Button variant="secondary" onClick={
+                        () => {
+                            // this.clickAddToCollection(this.state.itemUrl, "picture", this.props.nameNetwork, 
+                            //                         this.state.mediaDTO.id, this.state.mediaDTO.source )
+                            this.clickFavoriteBtn();
+                        }
+                    }>
+                        Add to my collection
+                    </Button>)
+            }
+            else if(!this.state.mediaDTO?.isAdding){
+                return (
+                    <Button variant="secondary" onClick={
+                        () => {
+                            // this.clickAddToCollection(this.state.itemUrl, "picture", this.props.nameNetwork, 
+                            //                         this.state.mediaDTO.id, this.state.mediaDTO.source )
+                            this.clickUnFavorite(this.state.mediaDTO.collectionId, this.state.mediaDTO.id);
+                        }
+                    }>
+                        Remove this from collection
+                    </Button>)
+            }
+        }
 
         return (
             <section id="gallery-section">
@@ -512,16 +553,8 @@ class Gallery extends Component {
                             <Button variant="secondary"
                                 onClick={this.clickDownload}>
                                 Download
-                        </Button>
-                            <Button variant="secondary" onClick={
-                                () => {
-                                    // this.clickAddToCollection(this.state.itemUrl, "picture", this.props.nameNetwork, 
-                                    //                         this.state.mediaDTO.id, this.state.mediaDTO.source )
-                                    this.clickFavoriteBtn()
-                                }
-                            }>
-                                Add to my collection
-                        </Button>
+                            </Button>
+                            {renderAddToCollection()}
                         </Modal.Footer>
                     </Modal>
                     <Modal
@@ -568,13 +601,13 @@ class Gallery extends Component {
                         <Modal.Footer>
                             <Button variant="secondary" onClick={() => this.clickAddToCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Add to this collection
-                        </Button>
+                            </Button>
                             <Button variant="secondary" onClick={() => this.clickCreateCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Create a new collection
-                        </Button>
+                            </Button>
                             <Button variant="secondary" onClick={() => this.clickDeleteCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Remove this collection
-                        </Button>
+                            </Button>
                         </Modal.Footer>
                     </Modal>
                 </div>

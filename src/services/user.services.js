@@ -188,7 +188,7 @@ const handleItemRemoveFromCollection = async (collectionId, itemId) => {
         .then(response => response.data)
         .then(data => {
             if (data && data['message'] === 'Success') {
-                // alert("Added to collection");
+                alert("Removed item from collection");
             }
         })
         .catch(error => {
