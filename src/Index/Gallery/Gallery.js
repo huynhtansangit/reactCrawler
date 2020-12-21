@@ -183,10 +183,12 @@ class Gallery extends Component {
         // NOTE Nếu add 1 item tới hơn 1 collection thì phải xóa số collection mà item đó được gắn vô, cd item thuộc về 2 collection thì phải xóa 2 lần.
         console.log("Un-favorite");
         (async () => {
+            if (window.confirm("Are you sure want to remove this item from collection?")) {
             await removeItemFromCollection(collectionId, itemId);
             
             // whatever opening, after add to collection, all modals will be close immediately.
             await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
+        }
         })()
     } 
 

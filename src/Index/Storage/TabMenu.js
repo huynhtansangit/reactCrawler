@@ -134,7 +134,6 @@ export default function ScrollableTabsButtonForce() {
           centered>
           <Tab label="Your Images" icon={<FavoriteIcon />} {...a11yProps(0)} />
           <Tab label="Your Videos" icon={<VideoLibraryOutlinedIcon />} {...a11yProps(1)} />
-          <Tab label="Your Information" icon={<PersonPinIcon />} {...a11yProps(2)} />
         </Tabs>
       </AppBar>
 
@@ -144,11 +143,6 @@ export default function ScrollableTabsButtonForce() {
       
       <TabPanel value={value} index={1}>
         <VideoStorage status={statusGetCollection} data={videosData}/>
-      </TabPanel>
-      
-      <TabPanel value={value} index={2}>
-        <ProfileContent/>
-        {/* <ProfileRemake/> */}
       </TabPanel>
     </div>
   );

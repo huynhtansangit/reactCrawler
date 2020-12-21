@@ -17,7 +17,7 @@ export default function SelectedListItem() {
     return (
         <div className={classes.root}>
             <List component="div" aria-label="main mailbox folders">
-                <Item MainPrimary="Testing 1" key="1"/>
+                <Item MainPrimary="Profile" key="1" type="profile"/>
                 <Item MainPrimary="Testing 2" key="2"/>
                 <Item MainPrimary="Testing 3" key="3"/>
                 <Item MainPrimary="Testing 4" key="4"/>

@@ -23,13 +23,13 @@ class Storage extends Component {
             <section id="storage-section">
                 <div className="storage-container">
                     <img id="you-can-find-downloaded-stuff-here" src="Assets/Images/Store/Mask-Group-2-Copy.png" alt="All downloaded here" />
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} sm={3}>
+                    <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12}>
                             <Paper className={classes.paper}><CollectionList/></Paper>
                         </Grid>
-                        <Grid item xs={12} sm={9}>
+                        {/* <Grid item xs={12} sm={9}>
                             <Paper className={classes.paper}><TabMenu /></Paper>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
 
                 </div>

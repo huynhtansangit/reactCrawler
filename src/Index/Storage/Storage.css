@@ -383,3 +383,9 @@ p, label, a {
         margin: 0;
     }
 }
+.MuiPaper-root {
+     height: 100% !important;
+}
+.makeStyles-root-3{
+    max-width: 100% !important;
+}
