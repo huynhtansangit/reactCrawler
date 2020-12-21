@@ -158,7 +158,7 @@ export default function SignInSide(props) {
       // Temporary disable btn after clicked.
       setDisableLoginBtn(true);
       
-      axios.request(configRequest)
+      await axios.request(configRequest)
         .then(response => response.data)
         .then(data => {
           if (data) {
@@ -175,11 +175,10 @@ export default function SignInSide(props) {
               localStorage.setItem('password', "");
             }
             // props.history.push("/");
-            setLoggedIn(true);
             return data['accessToken'];
           }
         })
-        .then((accessToken)=>{
+        .then(async (accessToken)=>{
           const config = {
             url: MY_ACCOUNT_INFO_URL,
             method: 'GET',
@@ -191,12 +190,12 @@ export default function SignInSide(props) {
             data: formData
           };
           
-          axios.request(config)
+          await axios.request(config)
             .then(res=> res.data)
-            .then(data =>{
+            .then(async data =>{
               if(data){
-                localStorage.setItem('firstname', data['firstname'])
-                localStorage.setItem('lastname', data['lastname'])
+                await localStorage.setItem('firstname', data['firstname'])
+                await localStorage.setItem('lastname', data['lastname'])
               }
             })
             .catch(error =>{
@@ -208,6 +207,8 @@ export default function SignInSide(props) {
                 console.log("Something went wrong. Please check your internet connection.");
               }
             })
+
+            setLoggedIn(true);
         })
         .catch((error) => {
           console.log(error);

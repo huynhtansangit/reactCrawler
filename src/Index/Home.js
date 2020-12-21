@@ -157,8 +157,8 @@ class Index extends Component {
         if(authProcess){
             await this.setState({isAuth: true});
 
-            const firstName = localStorage.getItem('firstname');
-            const lastName = localStorage.getItem('lastname');
+            const firstName = await localStorage.getItem('firstname');
+            const lastName = await localStorage.getItem('lastname');
             if(firstName && lastName)
                 this.setState({fullname: `${firstName} ${lastName}`}); 
         }

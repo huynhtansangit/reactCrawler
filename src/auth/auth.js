@@ -60,8 +60,8 @@ class Auth {
     }
 
     logout = (callback)=>{
-        localStorage.setItem('firstname', '');
-        localStorage.setItem('lastname', '');
+        localStorage.removeItem('firstname');
+        localStorage.removeItem('lastname');
 
         cookies.set('accessToken', '', { path: '/'});
         cookies.set('refreshToken', '', { path: '/'});
