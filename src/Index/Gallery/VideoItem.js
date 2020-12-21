@@ -23,8 +23,9 @@ class VideoItem extends Component {
                 type:"video",
                 platform: this.props.platform, 
                 id: this.props.id, 
-                source: this.props.source
-            }
+                source: this.props.source,
+                collectionId: this.props.collectionId
+        }
         }
     }
 
@@ -36,7 +37,8 @@ class VideoItem extends Component {
             type:"video",
             platform: this.props.platform, 
             id: this.props.id, 
-            source: this.props.source
+            source: this.props.source,
+            collectionId: this.props.collectionId
         }})
     }
     

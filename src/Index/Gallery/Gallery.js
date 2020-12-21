@@ -150,21 +150,23 @@ class Gallery extends Component {
     // Flow: Click => Check auth tại get list collections => chọn 1 hoặc tạo mới collection để thêm vô => thêm.
 
     clickFavoriteBtnFromItem = (itemDTO)=>{
-        this.setState({
-            itemUrl: itemDTO.imgSrc,
-            itemType: itemDTO.type,
-            mediaDTO: {
-                isAdding: itemDTO.isAdding,
-                id: itemDTO.id,
-                source: itemDTO.source,
-                collectionId: itemDTO.collectionId,
-            }
-        });
-
-        this.setState({
-            isOpenModalSelectCollection: true,
-            willUpdateModalCollections: true
-        });
+        (async ()=>{
+            await this.setState({
+                itemUrl: itemDTO.imgSrc,
+                itemType: itemDTO.type,
+                mediaDTO: {
+                    isAdding: itemDTO.isAdding,
+                    id: itemDTO.id,
+                    source: itemDTO.source,
+                    collectionId: itemDTO.collectionId,
+                }
+            });
+    
+            if(this.state.mediaDTO.isAdding)
+                this.clickFavoriteBtn();
+            else if(this.state.mediaDTO.isAdding === false) // Condition should compare with false, not check falsy.
+                this.clickUnFavorite(this.state.mediaDTO.collectionId, this.state.mediaDTO.id);
+        })();
     }
     
     // Click favorite btn to add image to a collection.
@@ -334,7 +336,7 @@ class Gallery extends Component {
                             }} 
                             isAuth={this.props.isAuth} isAdded={this.props.additionalInfoTiktok.isAdded}
                             id={this.props.additionalInfoTiktok.id} source={this.props.additionalInfoTiktok.source}
-                            platform="tiktok" collection={this.props.additionalInfoTiktok.collectionId}>
+                            platform="tiktok" collectionId={this.props.additionalInfoTiktok.collectionId}>
                         </VideoItem>)
                     }
                     else {
@@ -548,7 +550,7 @@ class Gallery extends Component {
                             <Link to={{ pathname: '/editor', state: { imgSrc: this.state.itemUrl } }}>
                                 <Button variant="secondary">
                                     Edit
-                            </Button>
+                                </Button>
                             </Link>
                             <Button variant="secondary"
                                 onClick={this.clickDownload}>
