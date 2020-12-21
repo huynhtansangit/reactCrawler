@@ -6,6 +6,7 @@ import AboutUs from './Aboutus/Aboutus';
 import Footer from './Footer/Footer';
 import {DOWNLOAD_URL} from '../utils/config.url'
 import auth from '../auth/auth'
+import cookies from '../utils/cookie'
 
 
 class Index extends Component {
@@ -21,16 +22,21 @@ class Index extends Component {
             disableLoadMoreBtn: false,
             fullname: "User",
             isAuth: false,
+            additionalInfoTiktok: {isAdded: null, id: null, source: null, collectionId: null}
         }
     }
 
     async getMedia(inputUrl, nameNetwork, cursor){
+        let headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+
+        if(this.state.isAuth)
+            headers['Authorization']=`bearer ${cookies.get('accessToken')}`;
         let option = {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
+            headers: headers
         };
         
         try {
@@ -38,7 +44,6 @@ class Index extends Component {
             if(nameNetwork === 'tiktok'){
                 option['method']='GET';
                 fetchUrl = `${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`
-                // response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`, option);
             }
             else{
                 if(cursor){
@@ -76,6 +81,15 @@ class Index extends Component {
                 });
             }
             else{
+                if(nameNetwork==='tiktok'){
+                    this.setState({additionalInfoTiktok: {
+                        isAdded: data['isAdded'],
+                        id: data['id'], 
+                        source: data['source'],
+                        collectionId: data['collectionId'],
+                    }});
+                    this.setState({isAddedTiktok: data['isAdded']});
+                }
                 videosData = data['data'];
             }
             
@@ -141,7 +155,7 @@ class Index extends Component {
         // Authenticating process.
         const authProcess = await auth.verifyAccessToken();
         if(authProcess){
-            this.setState({isAuth: true});
+            await this.setState({isAuth: true});
 
             const firstName = localStorage.getItem('firstname');
             const lastName = localStorage.getItem('lastname');
@@ -178,6 +192,7 @@ class Index extends Component {
                 ></Banner>
                 <Gallery 
                     dataGallery= {this.state.dataGallery}
+                    additionalInfoTiktok= {this.state.additionalInfoTiktok}
                     nameNetwork= {this.state.nameNetwork}
                     inputUrl= {this.state.inputUrl}
                     getMoreMedia={this.getMoreMedia.bind(this)}

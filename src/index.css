@@ -11,6 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
+.selectedBtn{
+  background-color: #6c757d !important;
+}
+
 .MuiAlert-standardError{
   color: black !important;
   background-color: rgb(253 213 211) !important;

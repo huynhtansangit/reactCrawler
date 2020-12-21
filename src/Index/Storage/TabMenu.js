@@ -12,7 +12,7 @@ import Box from '@material-ui/core/Box';
 import ImageStorage from './ImageStorage';
 import ProfileContent from './Profile/ProfileContent';
 import VideoStorage from './VideoStorage';
-import {GET_MY_COLLECTION_URL} from '../../utils/config.url';
+import {COLLECTIONS_URL} from '../../utils/config.url';
 import axios from 'axios';
 import cookies from '../../utils/cookie';
 // import ProfileRemake from './Profile/ProfileRemake';
@@ -75,7 +75,7 @@ export default function ScrollableTabsButtonForce() {
     const accessToken = cookies.get("accessToken");
 
     let config = {
-      url: GET_MY_COLLECTION_URL,
+      url: COLLECTIONS_URL,
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
