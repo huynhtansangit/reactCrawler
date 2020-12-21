@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import CustomizedMenu from './CustomizedMenu'
 
 class Banner extends Component {
     constructor(props) {
@@ -38,30 +36,6 @@ class Banner extends Component {
 
     render() {
         //Helper function
-        const renderUserInfo = ()=>{
-            if(this.props.isAuth){
-                return (
-                    <div className="dropdown-menu-container">
-                        <CustomizedMenu 
-                            fullname={this.props.fullname}
-                            history={this.props.history}
-                        />
-                    </div>
-                )
-            }
-            else{
-                return(
-                    <>
-                        <Link to="/login">
-                            <button type="button" className="sign-i-btn btn btn-outline-dark">Sign-in <i className="fas fa-key" /></button>
-                        </Link>
-                        <Link to="/register">
-                            <button type="button" className="sign-u-btn btn btn-outline-danger">Sign-up<i style={{ marginLeft: '10px' }} className="fas fa-chevron-right" /></button>
-                        </Link>
-                    </>
-                )
-            }
-        }
 
         return (
             <section id="banner-section">
@@ -95,7 +69,6 @@ class Banner extends Component {
                     </div>
                 </div>
 
-                { renderUserInfo() }
 
                 <div className="pink-circle-decor" id="circle-1">
                 </div>

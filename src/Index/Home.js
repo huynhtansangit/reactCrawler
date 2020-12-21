@@ -183,6 +183,9 @@ class Index extends Component {
                 <Header
                     onUpdateBannerInput={this.onUpdateBannerInput.bind(this)} 
                     sticky="fixed-top"
+                    isAuth={this.state.isAuth}
+                    fullname={this.state.fullname}
+                    history={this.props.history}
                 ></Header>
                 <Banner 
                     onUpdateBannerInput={this.onUpdateBannerInput.bind(this)}

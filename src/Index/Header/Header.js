@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import CustomizedMenu from './CustomizedMenu';
+import SignInUp from './SignInUp';
+
+import { Link } from 'react-router-dom';
 
 class Header extends Component {
     constructor(props) {
@@ -13,7 +17,7 @@ class Header extends Component {
         this.selectSocialNetwork = this.selectSocialNetwork.bind(this);
     }
 
-    selectSocialNetwork = (event)=>{
+    selectSocialNetwork = (event) => {
         // console.log(`update name social network: ${event.target.getAttribute('id')}`);
         this.setState({ nameSocialNetwork: event.target.getAttribute('id') })
     }
@@ -25,11 +29,11 @@ class Header extends Component {
 
     updateBannerInput = () => {
         // console.log("update btn header");
-        this.props.onUpdateBannerInput(this.state.inputUrlElement ,this.state.nameSocialNetwork)
+        this.props.onUpdateBannerInput(this.state.inputUrlElement, this.state.nameSocialNetwork)
     }
 
-    handleHitEnter = (e)=>{
-        if(e.key === 'Enter'){
+    handleHitEnter = (e) => {
+        if (e.key === 'Enter') {
             // console.log("entered");
             this.updateBannerInput();
         }
@@ -91,6 +95,26 @@ class Header extends Component {
         })();
     }
     render() {
+        const renderUserInfo = () => {
+            if (this.props.isAuth) {
+                return (
+                    <div className="dropdown-menu-container">
+                        <CustomizedMenu
+                            fullname={this.props.fullname}
+                            history={this.props.history}
+                        />
+                    </div>
+                )
+            }
+            else {
+                return (
+                    <>
+                        <SignInUp/>
+                    </>
+                )
+            }
+        }
+
         return (
             <header>
                 <nav id="navbar" className={`navbar navbar-expand-md navbar-light bg-light ${this.props.sticky}`}>
@@ -111,10 +135,7 @@ class Header extends Component {
                                                 </a>
                                             </li>
                                             <li className="parent-page nav-item dropdown">
-                                                <a className="nav-link " data-target="page-dropdown">About us<span className="caret" /></a>
-                                            </li>
-                                            <li className="parent-shop nav-item dropdown">
-                                                <a className="nav-link " data-toggle="dropdown" data-target="shop-dropdown">Contact<span className="caret" /></a>
+                                                {renderUserInfo()}
                                             </li>
                                             {/* eslint-disable */}
                                         </ul>
@@ -139,8 +160,8 @@ class Header extends Component {
                                 <div className=" pt-2">
                                     <div className="form-group input-header-container navbar-nav">
                                         <img className="icon-input-header" src="Assets/Images/Banner/urlIcon1x.png" alt="" />
-                                        <input style={{ paddingLeft: '55px' }} type="text" className="form-control input-header" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Url" 
-                                        onChange={this.updateInputUrlElement} onKeyDown={this.handleHitEnter}/>
+                                        <input style={{ paddingLeft: '55px' }} type="text" className="form-control input-header" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Url"
+                                            onChange={this.updateInputUrlElement} onKeyDown={this.handleHitEnter} />
                                         <button type="button" className="btn btn-dark btn-input-header" onClick={this.updateBannerInput.bind(this)}><i className="fas fa-sign-in-alt" /></button>
                                     </div>
                                 </div>
