@@ -184,6 +184,7 @@ class ProfileContent extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         // Helper function
         // const { classes } = this.props;
         const renderInfoUser = () => {

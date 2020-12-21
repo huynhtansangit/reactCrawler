@@ -7,7 +7,7 @@ import './ImageHover.css'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import { downloadImageByUrl } from "../../services/user.services";
+import { downloadImageByUrl } from "../../../services/user.services";
 import { Button, Modal } from 'react-bootstrap';
 import { Link, } from "react-router-dom";
 // import Skeleton from '@material-ui/lab/Skeleton';

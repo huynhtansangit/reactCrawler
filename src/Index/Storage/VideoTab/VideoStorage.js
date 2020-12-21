@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import VideoItem from '../Gallery/VideoItem'
+import VideoItem from '../../Gallery/VideoItem'
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 import './video.css';
