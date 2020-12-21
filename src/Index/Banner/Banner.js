@@ -53,10 +53,10 @@ class Banner extends Component {
                 return(
                     <>
                         <Link to="/login">
-                            <button type="button" className=" btn btn-outline-dark">Sign-in <i className="fas fa-key" /></button>
+                            <button type="button" className="sign-i-btn btn btn-outline-dark">Sign-in <i className="fas fa-key" /></button>
                         </Link>
                         <Link to="/register">
-                            <button type="button" className=" btn btn-outline-danger">Sign-up<i style={{ marginLeft: '10px' }} className="fas fa-chevron-right" /></button>
+                            <button type="button" className="sign-u-btn btn btn-outline-danger">Sign-up<i style={{ marginLeft: '10px' }} className="fas fa-chevron-right" /></button>
                         </Link>
                     </>
                 )

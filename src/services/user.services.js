@@ -50,7 +50,7 @@ export const downloadMultiImagesByUrlsVers2 = async (listImage, callback) => {
 
     const result = await auth.verifyAccessToken();
     if (result === true) {
-        const folder = zip.folder("Downloaded-Image-From-InstaDown")
+        const folder = zip.folder("From InstaDown With Love")
         let count = 0;
 
         for (const [idx, el] of listImage.entries()) {

@@ -14,23 +14,23 @@ class Header extends Component {
     }
 
     selectSocialNetwork = (event)=>{
-        console.log(`update name social network: ${event.target.getAttribute('id')}`);
+        // console.log(`update name social network: ${event.target.getAttribute('id')}`);
         this.setState({ nameSocialNetwork: event.target.getAttribute('id') })
     }
 
     updateInputUrlElement = (event) => {
-        console.log(`update url ${event.target.value}`);
+        // console.log(`update url ${event.target.value}`);
         this.setState({ inputUrlElement: event.target.value })
     }
 
     updateBannerInput = () => {
-        console.log("update btn header");
+        // console.log("update btn header");
         this.props.onUpdateBannerInput(this.state.inputUrlElement ,this.state.nameSocialNetwork)
     }
 
     handleHitEnter = (e)=>{
         if(e.key === 'Enter'){
-            console.log("entered");
+            // console.log("entered");
             this.updateBannerInput();
         }
     }
