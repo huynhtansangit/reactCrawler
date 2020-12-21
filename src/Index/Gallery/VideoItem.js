@@ -16,21 +16,12 @@ class VideoItem extends Component {
         this.state = {
             isPlay: false,
             isOpenModal: false,
-            itemDTO: {
-                isAdding: !this.props.isAdded,
-                imgSrc: this.props.url,
-                thumbnail: "",
-                type:"video",
-                platform: this.props.platform, 
-                id: this.props.id, 
-                source: this.props.source,
-                collectionId: this.props.collectionId
-        }
+            itemDTO: {},
         }
     }
 
-    prepareData(){
-        this.setState({itemDTO: {
+    async prepareData(){
+        await this.setState({itemDTO: {
             isAdding: !this.props.isAdded,
             imgSrc: this.props.url,
             thumbnail: "",
@@ -96,8 +87,8 @@ class VideoItem extends Component {
                         </button>
                     </div>
                     <div className="card__title">
-                        <button onClick={()=>{
-                                this.prepareData();
+                        <button onClick={async ()=>{
+                                await this.prepareData();
                                 this.props.isClickAddToCollection(this.state.itemDTO);
                             }} 
                             type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}>
@@ -105,30 +96,6 @@ class VideoItem extends Component {
                         </button>
                     </div>
                 </div>
-                {/* <Modal
-                    size="xl"
-                    scrollable={false}
-                    aria-labelledby="contained-modal-title-vcenter"
-                    centered
-                    show={this.state.isOpenModal}
-                    onHide={this.handleShow}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Image previewer</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body> */}
-                        {/* Prevent user download video if not logged in. */}
-                        {/* {
-                            this.props.isAuth ? 
-                            <ReactPlayer className="videoFrame" url={this.props.url} controls={true} playing /> :
-                            <ReactPlayer className="videoFrame" url={this.props.url} controls={true} config={{ file: { attributes: { controlsList: 'nodownload' } } }} onContextMenu={e => e.preventDefault()} playing />
-                        }
-                    </Modal.Body> */}
-                    {/* <Modal.Footer>
-                        <Button variant="secondary" onClick={() => { downloadVideoFromLink(this.props.itemSrc) }}>
-                            Download this video
-                        </Button>
-                    </Modal.Footer> */}
-                {/* </Modal> */}
             </div>
         );
     }

@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
 import ImageItem from './ImageItem';
 import OwnerMedia from './OwnerMedia';
-// import Swiper core and required components
-// import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-
-// Import Swiper styles
-// import 'swiper/swiper.scss';
-// import 'swiper/components/navigation/navigation.scss';
-// import 'swiper/components/pagination/pagination.scss';
-// import 'swiper/components/scrollbar/scrollbar.scss';
 import VideoItem from './VideoItem';
 import ReactPlayer from 'react-player'
 import { DOWNLOAD_URL } from '../../utils/config.url'
@@ -46,14 +38,45 @@ class Gallery extends Component {
             isLoadingCollections: false,
             selectedCollectionIds: [],
             disableThreeBtnCollectionModal: false,
+            isImageAddedHashedTable: {},
+            isVideoAddedHashedTable: {},
         };
     }
 
     componentDidMount() {
-
     }
 
-    async componentDidUpdate() {
+    async processIsAddedHashedTable(dataGallery){
+        let dataImageHashedTable = {};
+        for(const item of dataGallery.imagesData)
+            dataImageHashedTable[item.id] = item.isAdded;
+        
+        let dataVideoHashedTable = {};
+        for(const item of dataGallery.videosData)
+            dataVideoHashedTable[item.id] = item.isAdded;
+
+        await this.setState({
+            isImageAddedHashedTable: dataImageHashedTable,
+            isVideoAddedHashedTable: dataVideoHashedTable,
+        })
+    }
+
+    async updateIsAddedHashedTable(id, type){
+        if(type === "picture"){
+            let newIsImageAddedHashedTable = this.state.isImageAddedHashedTable;
+            newIsImageAddedHashedTable[id] = !newIsImageAddedHashedTable[id];
+
+            await this.setState({isImageAddedHashedTable: newIsImageAddedHashedTable});
+        }
+        else if(type === 'video'){
+            let newIsVideoAddedHashedTable = this.state.isVideoAddedHashedTable;
+            newIsVideoAddedHashedTable[id] = !newIsVideoAddedHashedTable[id];
+
+            await this.setState({isVideoAddedHashedTable: newIsVideoAddedHashedTable});
+        }
+    }
+
+    async componentDidUpdate(prevProps) {
         if (this.state.willUpdateModalCollections) {
             await this.setState({ willUpdateModalCollections: false, isLoadingCollections: true, selectedCollectionIds: [] });
             const dataCollections = await getCollections(() => {
@@ -69,6 +92,13 @@ class Gallery extends Component {
                 });
             });
             await this.setState({ dataCollections: dataCollections, isLoadingCollections: false });
+        }
+        else if(!this.props.dataGallery?.loading){
+            // This case will include componentDidMount.
+            if(this.props.dataGallery?.imagesData?.length !== prevProps.dataGallery?.imagesData?.length && 
+                this.props.dataGallery?.videosData?.length !== prevProps.dataGallery?.videosData?.length){
+                    this.processIsAddedHashedTable(this.props.dataGallery);
+                }
         }
     }
 
@@ -184,11 +214,13 @@ class Gallery extends Component {
         console.log("Un-favorite");
         (async () => {
             if (window.confirm("Are you sure want to remove this item from collection?")) {
-            await removeItemFromCollection(collectionId, itemId);
-            
-            // whatever opening, after add to collection, all modals will be close immediately.
-            await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
-        }
+                await removeItemFromCollection(collectionId, itemId);
+                
+                // this.updateIsAddedHashedTable(itemId, this.state.itemType); // Như này cũng được
+                await this.updateIsAddedHashedTable(this.state.mediaDTO.id, this.state.itemType);
+                // whatever opening, after add to collection, all modals will be close immediately.
+                await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
+            }
         })()
     } 
 
@@ -208,7 +240,9 @@ class Gallery extends Component {
             }
             else
                 alert("No collection selected.")
-            this.setState({disableThreeBtnCollectionModal: false });
+
+            await this.updateIsAddedHashedTable(this.state.mediaDTO.id, this.state.itemType);
+            await this.setState({disableThreeBtnCollectionModal: false });
         })()
         
     }
@@ -272,7 +306,7 @@ class Gallery extends Component {
                             isClickAddToCollection={(itemDTO)=>{
                                 this.clickFavoriteBtnFromItem(itemDTO);
                             }} 
-                            key={idx} history={this.props.history} isAdded={img.isAdded}
+                            key={idx} history={this.props.history} isAdded={this.state.isImageAddedHashedTable[img.id]}
                             id={img.id} source={img.source} platform={this.props.nameNetwork}
                             collectionId={img.collectionId} 
                         />)
@@ -352,7 +386,7 @@ class Gallery extends Component {
                                         isClickAddToCollection={(itemDTO)=>{
                                             this.clickFavoriteBtnFromItem(itemDTO);
                                         }} 
-                                        isAuth={this.props.isAuth} isAdded={video.isAdded}
+                                        isAuth={this.props.isAuth} isAdded={this.state.isVideoAddedHashedTable[video.id]}
                                         id={video.id} source={video.source} platform={this.props.nameNetwork} 
                                         collectionId={video.collectionId}/>
                                 )))
@@ -467,8 +501,6 @@ class Gallery extends Component {
                 return (
                     <Button variant="secondary" onClick={
                         () => {
-                            // this.clickAddToCollection(this.state.itemUrl, "picture", this.props.nameNetwork, 
-                            //                         this.state.mediaDTO.id, this.state.mediaDTO.source )
                             this.clickFavoriteBtn();
                         }
                     }>
@@ -479,8 +511,6 @@ class Gallery extends Component {
                 return (
                     <Button variant="secondary" onClick={
                         () => {
-                            // this.clickAddToCollection(this.state.itemUrl, "picture", this.props.nameNetwork, 
-                            //                         this.state.mediaDTO.id, this.state.mediaDTO.source )
                             this.clickUnFavorite(this.state.mediaDTO.collectionId, this.state.mediaDTO.id);
                         }
                     }>
@@ -580,13 +610,7 @@ class Gallery extends Component {
                             }
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={
-                                // () => this.clickAddToCollection(this.state.itemUrl, "video", this.props.nameNetwork,
-                                //     this.state.mediaDTO.id, this.state.mediaDTO.source)
-                                ()=>this.clickFavoriteBtn()
-                            }>
-                                Add to my collection
-                        </Button>
+                            {renderAddToCollection()}
                         </Modal.Footer>
                     </Modal>
                     <Modal
@@ -619,6 +643,5 @@ class Gallery extends Component {
         );
     }
 }
-// install Swiper components
-// SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
+
 export default Gallery;

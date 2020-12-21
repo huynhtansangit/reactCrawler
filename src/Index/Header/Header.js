@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import CustomizedMenu from './CustomizedMenu';
 import SignInUp from './SignInUp';
 
-import { Link } from 'react-router-dom';
 
 class Header extends Component {
     constructor(props) {

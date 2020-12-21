@@ -203,7 +203,6 @@ class Index extends Component {
                     history={this.props.history}
                     isAuth={this.state.isAuth}>
                 </Gallery>
-                {/* <Storage></Storage> */}
                 <AboutUs></AboutUs>
                 <Footer></Footer>
             </div>

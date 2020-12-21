@@ -15,21 +15,12 @@ class ImageItem extends Component {
             imgSrc: "",
             isRedirect: false,
             isOpenModal: false,
-            itemDTO: {
-                isAdding: !this.props.isAdded,
-                imgSrc: this.props.itemSrc,
-                thumbnail: "",
-                type:"picture",
-                platform: this.props.platform, 
-                id: this.props.id, 
-                source: this.props.source,
-                collectionId: this.props.collectionId,
-            },
+            itemDTO: {},
         }
     }
 
-    prepareData(){
-        this.setState({itemDTO: {
+    async prepareData(){
+        await this.setState({itemDTO: {
             isAdding: !this.props.isAdded,
             imgSrc: this.props.itemSrc,
             thumbnail: "",
@@ -99,44 +90,14 @@ class ImageItem extends Component {
                     </p>
                     <p className="card__title">
                             <button type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}
-                            onClick={()=>{
-                                this.prepareData();
+                            onClick={async ()=>{
+                                await this.prepareData();
                                 this.props.isClickAddToCollection(this.state.itemDTO);
                             }}>
                                 <FavoriteTwoToneIcon/>
                             </button>
                     </p>
                 </div>
-
-                {/* Modal will be moved to Gallery unless react will have to create 40 modal 
-                corresponding to 40 ImageItem every time it render, and this render func called a lot.  */}
-                {/* <Modal
-                    size="xl"
-                    scrollable={false}
-                    aria-labelledby="contained-modal-title-vcenter"
-                    centered
-                    show={this.state.isOpenModal}
-                    onHide={this.handleShow()}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Image previewer</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            <img className='img-fluid' width={1100} height={1000} style={{objectFit: 'cover'}} src={this.props.itemSrc} alt="Img-error" />
-                        </p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Link to={{ pathname: '/editor', state: { imgSrc: this.props.itemSrc } }}>
-                            <Button variant="secondary">
-                                Edit
-                            </Button>
-                        </Link>
-                        <Button variant="secondary" 
-                        onClick={this.clickDownload}>
-                            Download
-                        </Button>
-                    </Modal.Footer>
-                </Modal> */}
             </div>
         );
     }

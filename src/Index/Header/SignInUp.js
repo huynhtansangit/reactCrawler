@@ -7,7 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import './CustomizedMenu.css';
 import Icon from '@material-ui/core/Icon';
-import auth from "../../auth/auth";
+// import auth from "../../auth/auth";
 import {Link} from 'react-router-dom'
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 const StyledMenu = withStyles({
@@ -52,9 +52,9 @@ export default function CustomizedMenus(props) {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    auth.logout(()=>{props.history.push("/login")});
-  }
+  // const handleLogout = () => {
+  //   auth.logout(()=>{props.history.push("/login")});
+  // }
 
   return (
     <div>
