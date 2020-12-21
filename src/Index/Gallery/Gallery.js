@@ -46,15 +46,20 @@ class Gallery extends Component {
     componentDidMount() {
     }
 
-    async processIsAddedHashedTable(dataGallery){
+    async processIsAddedHashedTable(dataGallery, additionalInfoTiktok){
         let dataImageHashedTable = {};
-        for(const item of dataGallery.imagesData)
-            dataImageHashedTable[item.id] = item.isAdded;
-        
         let dataVideoHashedTable = {};
-        for(const item of dataGallery.videosData)
-            dataVideoHashedTable[item.id] = item.isAdded;
-
+        
+        if(this.props.nameNetwork !== 'tiktok'){
+            for(const item of dataGallery.imagesData)
+                dataImageHashedTable[item.id] = item.isAdded;
+            
+            for(const item of dataGallery.videosData)
+                dataVideoHashedTable[item.id] = item.isAdded;
+        }
+        else{
+            dataVideoHashedTable[additionalInfoTiktok.id] = additionalInfoTiktok.isAdded;
+        }
         await this.setState({
             isImageAddedHashedTable: dataImageHashedTable,
             isVideoAddedHashedTable: dataVideoHashedTable,
@@ -97,7 +102,7 @@ class Gallery extends Component {
             // This case will include componentDidMount.
             if(this.props.dataGallery?.imagesData?.length !== prevProps.dataGallery?.imagesData?.length && 
                 this.props.dataGallery?.videosData?.length !== prevProps.dataGallery?.videosData?.length){
-                    this.processIsAddedHashedTable(this.props.dataGallery);
+                    this.processIsAddedHashedTable(this.props.dataGallery, this.props.additionalInfoTiktok);
                 }
         }
     }
@@ -370,7 +375,7 @@ class Gallery extends Component {
                             isClickAddToCollection={(itemDTO)=>{
                                 this.clickFavoriteBtnFromItem(itemDTO);
                             }} 
-                            isAuth={this.props.isAuth} isAdded={this.props.additionalInfoTiktok.isAdded}
+                            isAuth={this.props.isAuth} isAdded={this.state.isVideoAddedHashedTable[this.props.additionalInfoTiktok.id]}
                             id={this.props.additionalInfoTiktok.id} source={this.props.additionalInfoTiktok.source}
                             platform="tiktok" collectionId={this.props.additionalInfoTiktok.collectionId}>
                         </VideoItem>)
