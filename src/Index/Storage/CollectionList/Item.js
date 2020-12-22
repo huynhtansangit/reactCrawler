@@ -12,6 +12,12 @@ import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 import TabMenu from '../TabMenu';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import ProfileContent from '../ProfileTab/ProfileContent';
+import axios from 'axios';
+import cookies from '../../../utils/cookie';
+import { COLLECTIONS_URL } from '../../../utils/config.url';
+import Skeleton from '@material-ui/lab/Skeleton';
+
+
 const useStyles = theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
@@ -24,13 +30,71 @@ class Item extends Component {
         this.state = {
             isOpen: false,
             selectedIndex: 0,
+            willLoadContent: false,
+            firstRender: true,
+            statusGetDataOfCollection: { loading: true, error: "false" },
+            dataOfCollection: [],
         }
     }
     onClickItem = (event, index) => {
-        this.setState({ isOpen: !this.state.isOpen });
-        this.setState({ selectedIndex: index });
+        this.setState({ isOpen: !this.state.isOpen, selectedIndex: index, willLoadContent: true });
     }
-    renderProfile = (type, classes) => {
+
+    async componentDidUpdate() {
+
+        if (this.state.willLoadContent && this.state.firstRender) {
+            const accessToken = cookies.get("accessToken");
+            console.log(`${COLLECTIONS_URL}/${this.props.id}`);
+            console.log(`${accessToken}`);
+            const config = {
+                url: `${COLLECTIONS_URL}/${this.props.id}`,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${accessToken}`
+                },
+            };
+
+            // get data for collection
+            await axios.request(config)
+                .then(res => res.data)
+                .then(data => {
+                    if (data) {
+                        this.setState({ statusGetDataOfCollection: { loading: false, error: "" } });
+                        this.setState({ dataOfCollection: data["items"] });
+                        console.log(this.state.dataOfCollection);
+                    }
+                })
+                .catch(error => {
+                    console.log("Error occurred when trying to get your collection.");
+                    if (error.response) {
+                        this.setState({ statusGetDataOfCollection: { loading: false, error: error.response.data['message'] } });
+                        alert(error.response.data);
+                    }
+                    else {
+                        alert("Something went wrong. Please check your internet connection.");
+                    }
+                })
+            await this.setState({ firstRender: false });
+        }
+    }
+    renderTabMenu = (classes) => {
+        if (this.state.statusGetDataOfCollection['loading'] === true) {
+            return (
+                <>
+                    <Skeleton animation="wave" width='100%' height={100} />
+                </>
+            )
+        }
+        else {
+            return (
+                <ListItem className={classes.nested}>
+                    <TabMenu dataOfCollection={this.state.dataOfCollection} />
+                </ListItem>
+            )
+        }
+    }
+     renderProfile = (type, classes) => {
         if (type === "profile") {
             return (
                 <div>
@@ -55,6 +119,7 @@ class Item extends Component {
                 </div>
             )
         }
+
         else
             return (
                 <div>
@@ -77,9 +142,7 @@ class Item extends Component {
                                 </ListItemIcon>
                                 <ListItemText primary="Delete" />
                             </ListItem>
-                            <ListItem button className={classes.nested}>
-                                <TabMenu />
-                            </ListItem>
+                            {this.renderTabMenu(classes)}
                         </List>
                     </Collapse>
                 </div>

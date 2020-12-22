@@ -5,16 +5,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
 import VideoLibraryOutlinedIcon from '@material-ui/icons/VideoLibraryOutlined';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import ImageStorage from './ImageTab/ImageStorage';
-import ProfileContent from './ProfileTab/ProfileContent';
 import VideoStorage from './VideoTab/VideoStorage';
-import {COLLECTIONS_URL} from '../../utils/config.url';
-import axios from 'axios';
-import cookies from '../../utils/cookie';
 // import ProfileRemake from './Profile/ProfileRemake';
 
 function TabPanel(props) {
@@ -41,6 +36,7 @@ TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
+  
 };
 
 function a11yProps(index) {
@@ -59,12 +55,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ScrollableTabsButtonForce() {
+export default function ScrollableTabsButtonForce(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [statusGetCollection, setStatusGetCollection] = React.useState({loading: true, error: "false"})
   const [imagesData, setImagesData] = React.useState([]);
   const [videosData, setVideosData] = React.useState([]);
+
+  let imgData=[], vidData=[];
   // const [infoUser, setInfoUser] = React.useState({loading: true, error: ""})
 
   const handleChange = (event, newValue) => {
@@ -72,57 +69,26 @@ export default function ScrollableTabsButtonForce() {
   };
   
   useEffect(()=>{
-    const accessToken = cookies.get("accessToken");
-
-    let config = {
-      url: COLLECTIONS_URL,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `bearer ${accessToken}`
-      },
+    // console.log(props);
+    // props.dataOfCollection.forEach(element => {
+      for(const element of props.dataOfCollection){
+      if(element["type"]==="picture")
+      {
+        imgData.push(element);
+      }
+      else {
+        vidData.push(element);
+      }
     };
+    setImagesData(imgData);
+    setVideosData(vidData);
+    // console.log(imagesData);
+  }, [props.dataOfCollection]);
 
-    // get data for collection
-    axios.request(config)
-      .then(res => res.data)
-      .then(data=>{
-        if(data){
-          let imagesData = [];
-          let videosData = [];
 
-          data['favorites'].forEach(el => {
-            if(el['type']==="picture")
-              imagesData.push(el);
-            else
-              videosData.push(el);
-          });
-
-          setStatusGetCollection({
-            loading: false,
-            error: ""
-          })
-
-          setImagesData(imagesData);
-          setVideosData(videosData);
-        }
-      })
-      .catch(error => {
-        console.log("Error occurred when trying to get your collection.");
-        if (error.response) {
-          setStatusGetCollection({
-            loading:false,
-            error: error.response.data
-          })
-          // alert(error.response.data);
-        }
-        else {
-            alert("Something went wrong. Please check your internet connection.");
-        }
-      })
-  }, []);
 
   return (
+
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Tabs
@@ -138,11 +104,11 @@ export default function ScrollableTabsButtonForce() {
       </AppBar>
 
       <TabPanel value={value} index={0}>
-        <ImageStorage status={statusGetCollection} data={imagesData}/>
+        <ImageStorage data={imagesData}/>
       </TabPanel>
       
       <TabPanel value={value} index={1}>
-        <VideoStorage status={statusGetCollection} data={videosData}/>
+        <VideoStorage  data={videosData}/>
       </TabPanel>
     </div>
   );
