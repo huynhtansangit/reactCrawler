@@ -37,9 +37,9 @@ const items = [
     title: 'List Users'
   },
   {
-    href: '/admin/search-history',
+    href: '/admin/activity-history',
     icon: ShoppingBagIcon,
-    title: 'Search History'
+    title: 'Activity History'
   },
   {
     href: '/admin/chart',

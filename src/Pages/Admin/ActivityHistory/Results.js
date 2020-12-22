@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -30,7 +30,24 @@ const Results = ({ className, data, ...rest }) => {
     const [selectedUserIds, setSelectedUserIds] = useState([]); // eslint-disable-line
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
+    const [firstRender, setFirstRender] = useState(true);
+    const [timeUpdate, setTimeUpdate] = useState(0);
 
+
+    // ComponentDidMount
+    useEffect(()=>{
+        console.log("did mount");
+        setFirstRender(false);
+    },[])
+
+    //DidUpdate
+    useEffect(()=>{
+        console.log(`Update ${timeUpdate}`);
+        setTimeout(()=>{setTimeUpdate(timeUpdate+1)},2000);
+        // return ()=>{
+        //     clearTimeout(time);
+        // }
+    },[timeUpdate])
 
     // NOTE This checkbox can not work by now because every user need a unique ID.
     // Maybe this won't be used in the near future.
@@ -92,8 +109,9 @@ const Results = ({ className, data, ...rest }) => {
                                         onChange={handleSelectAll}/>
                                 </TableCell>
                                 <TableCell>User's ID</TableCell>
-                                <TableCell>Platform</TableCell>
-                                <TableCell>URL</TableCell>
+                                <TableCell>Activity</TableCell>
+                                <TableCell>Time</TableCell>
+                                <TableCell>Detail</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -122,7 +140,10 @@ const Results = ({ className, data, ...rest }) => {
                                         </Box>
                                     </TableCell>
                                     <TableCell>
-                                        Instagram
+                                        Crawl
+                                    </TableCell>
+                                    <TableCell>
+                                        12-12-2020
                                     </TableCell>
                                     <TableCell>
                                         https://www.instagram.com/selenagomez

@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const SearchHistory = () => {
+const ActivityHistory = () => {
     const classes = useStyles();
     const [history] = useState(data);
 
@@ -40,4 +40,4 @@ const SearchHistory = () => {
     );
 };
 
-export default SearchHistory;
+export default ActivityHistory;

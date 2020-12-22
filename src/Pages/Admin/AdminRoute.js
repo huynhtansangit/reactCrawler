@@ -14,7 +14,7 @@ class AdminRoute extends Component {
             <ThemeProvider theme={theme}>
                 <GlobalStyles />
                 <Route exact path={`${this.props.match.path}/users`} component={ListUser} />
-                <Route exact path={`${this.props.match.path}/search-history`} component={SearchHistory} />
+                <Route exact path={`${this.props.match.path}/activity-history`} component={SearchHistory} />
                 <Route exact path={`${this.props.match.path}/chart`} component={Chart} />
             </ThemeProvider>
             

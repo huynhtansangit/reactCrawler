@@ -16,7 +16,8 @@ import {
     TableRow,
     Typography,
 } from 'ver-4-11';
-import {makeStyles} from '@material-ui/core'
+import {makeStyles} from '@material-ui/core';
+import { Button} from 'react-bootstrap';
 // import getInitials from 'src/utils/getInitials';
 
 const useStyles = makeStyles((theme) => ({
@@ -97,6 +98,7 @@ const Results = ({ className, data, ...rest }) => {
                                 <TableCell>Email</TableCell>
                                 <TableCell>Birthday</TableCell>
                                 <TableCell>Total search</TableCell>
+                                <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -135,6 +137,29 @@ const Results = ({ className, data, ...rest }) => {
                                     </TableCell>
                                     <TableCell>
                                         {user.totalSearch ? user.totalSearch : 0}
+                                    </TableCell>
+                                    <TableCell>
+                                    <Box
+                                        // alignItems="center"
+                                        display="flex"
+                                        flexDirection="column"
+                                        p={2}>
+                                        <TableRow className="mt-2">
+                                            <Button style={{width: "100%" }} variant="success" onClick={()=>console.log("Acitve")}>
+                                                Active
+                                            </Button>
+                                        </TableRow>
+                                        <TableRow className="mt-2">
+                                            <Button style={{width: "100%" }} variant="danger" onClick={()=>console.log("disable")}>
+                                                Disable
+                                            </Button>
+                                        </TableRow>
+                                        <TableRow className="mt-2">
+                                            <Button style={{width: "100%" }} variant="primary" onClick={()=>console.log("Detail")}>
+                                                Detail
+                                            </Button>
+                                        </TableRow>
+                                        </Box>
                                     </TableCell>
                                 </TableRow>
                             ))}

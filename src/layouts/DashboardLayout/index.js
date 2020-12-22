@@ -6,7 +6,7 @@ import ListUser from '../../Pages/Admin/ListUser/ListUser';
 import TopBar from './TopBar';
 import {Route} from 'react-router-dom';
 import Chart from '../../Pages/Admin/Chart/Chart'
-import SearchHistory from '../../Pages/Admin/SearchHistory/SearchHistory'
+import ActivityHistory from '../../Pages/Admin/ActivityHistory/ActivityHistory'
 import { ThemeProvider } from '@material-ui/core';
 import theme from '../../theme/index';
 import GlobalStyles from '../../components/GlobalStyles'
@@ -58,7 +58,7 @@ const DashboardLayout = (props) => {
             <ThemeProvider theme={theme}>
               <GlobalStyles />
               <Route exact path={`${props.match.path}/users`} component={ListUser} />
-              <Route exact path={`${props.match.path}/search-history`} component={SearchHistory} />
+              <Route exact path={`${props.match.path}/activity-history`} component={ActivityHistory} />
               <Route exact path={`${props.match.path}/chart`} component={Chart} />
             </ThemeProvider>
           </div>
