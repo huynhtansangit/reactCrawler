@@ -3,7 +3,7 @@ const BASE_URL = 'https://dacnhk1.herokuapp.com';
 const REGISTER_URL = BASE_URL + "/register";
 const VERIFY_REGISTER_URL = REGISTER_URL + "/verify";
 
-const TOKEN_URL = BASE_URL+"/token";
+const TOKEN_URL = BASE_URL+"/user/token";
 
 const RESET_PASSWORD_URL = BASE_URL + "/user/reset-password";
 const VERIFY_RESET_PASSWORD_URL = RESET_PASSWORD_URL + "/verify";

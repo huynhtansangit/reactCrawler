@@ -7,6 +7,8 @@ import {
 import Page from '../../../components/Page';
 import Results from './Results';
 import data from '../ListUser/testData';
+import { ClearAllTwoTone } from '@material-ui/icons';
+import historyApi from './api/historyApi';
 // import axios from "axios";
 
 
@@ -23,10 +25,32 @@ const ActivityHistory = () => {
     const classes = useStyles();
     const [history] = useState(data);
 
-    useEffect(()=>{
+    // didmount
+    useEffect(() => {
         // API here
         // axios.request({});
-    },[]);
+        const fetchHistoryList = async () => {
+            try {
+                const params = {
+                    offset: 0,
+                    limit: 10,
+                    type: 'crawl',
+                    from: 0,
+                    to: 1789789789
+                }
+                const response = await historyApi.get10Elements(params);
+                console.log(response);
+            } catch (error) {
+                console.log('Fail to fetch: ', error);
+            }
+        }
+        fetchHistoryList();
+    }, []);
+
+    // didupdate
+    useEffect(() => {
+
+    });
 
     return (
         <Page className={classes.root} title="Users">
