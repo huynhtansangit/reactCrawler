@@ -213,19 +213,27 @@ class Gallery extends Component {
         });
     }
     // Click favorite btn again to un-favorite
-    clickUnFavorite = (collectionId, itemId) => {
+    clickUnFavorite = (collectionIds, itemId) => {
         // TODO Remove khỏi collection đã được nhưng chưa cập nhật cái icon tim,
         // NOTE Nếu add 1 item tới hơn 1 collection thì phải xóa số collection mà item đó được gắn vô, cd item thuộc về 2 collection thì phải xóa 2 lần.
-        console.log("Un-favorite");
         (async () => {
+        if (this.state.selectedCollectionIds.length) {
             if (window.confirm("Are you sure want to remove this item from collection?")) {
-                await removeItemFromCollection(collectionId, itemId);
+                for (const idCollection of this.state.selectedCollectionIds){
+                    if(collectionIds.includes(idCollection))
+                        await removeItemFromCollection(idCollection, itemId);
+                    else
+                        alert ("This item does not belong to this collection");
+                }
                 
                 // this.updateIsAddedHashedTable(itemId, this.state.itemType); // Như này cũng được
                 await this.updateIsAddedHashedTable(this.state.mediaDTO.id, this.state.itemType);
                 // whatever opening, after add to collection, all modals will be close immediately.
                 await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
             }
+        }
+        else
+            alert("No collection selected.")
         })()
     } 
 
@@ -634,6 +642,9 @@ class Gallery extends Component {
                         <Modal.Footer>
                             <Button variant="secondary" onClick={() => this.clickAddToCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Add to this collection
+                            </Button>
+                            <Button variant="secondary" onClick={() => this.clickUnFavorite(this.state.mediaDTO.collectionId)} disabled={this.state.disableThreeBtnCollectionModal}>
+                                Remove item from this collection
                             </Button>
                             <Button variant="secondary" onClick={() => this.clickCreateCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Create a new collection
