@@ -40,6 +40,7 @@ class Gallery extends Component {
             disableThreeBtnCollectionModal: false,
             isImageAddedHashedTable: {},
             isVideoAddedHashedTable: {},
+            showCollectionItemBelong: false,
         };
     }
 
@@ -52,13 +53,13 @@ class Gallery extends Component {
         
         if(this.props.nameNetwork !== 'tiktok'){
             for(const item of dataGallery.imagesData)
-                dataImageHashedTable[item.id] = item.isAdded;
+                dataImageHashedTable[item.id] = item.collectionId ? item.collectionId : [];
             
             for(const item of dataGallery.videosData)
-                dataVideoHashedTable[item.id] = item.isAdded;
+                dataVideoHashedTable[item.id] = item.collectionId ? item.collectionId : [];
         }
         else{
-            dataVideoHashedTable[additionalInfoTiktok.id] = additionalInfoTiktok.isAdded;
+            dataVideoHashedTable[additionalInfoTiktok.id] = additionalInfoTiktok.collectionId;
         }
         await this.setState({
             isImageAddedHashedTable: dataImageHashedTable,
@@ -66,16 +67,28 @@ class Gallery extends Component {
         })
     }
 
-    async updateIsAddedHashedTable(id, type){
+    async updateIsAddedHashedTable(itemId, collectionId, type, action){
         if(type === "picture"){
-            let newIsImageAddedHashedTable = this.state.isImageAddedHashedTable;
-            newIsImageAddedHashedTable[id] = !newIsImageAddedHashedTable[id];
+            let newIsImageAddedHashedTable = {...this.state.isImageAddedHashedTable};
+            
+            if(action==='add'){
+                newIsImageAddedHashedTable[itemId].push(collectionId);
+            }
+            else if(action==='remove'){
+                newIsImageAddedHashedTable[itemId].splice(newIsImageAddedHashedTable[itemId].indexOf(collectionId), 1);
+            }
 
             await this.setState({isImageAddedHashedTable: newIsImageAddedHashedTable});
         }
         else if(type === 'video'){
-            let newIsVideoAddedHashedTable = this.state.isVideoAddedHashedTable;
-            newIsVideoAddedHashedTable[id] = !newIsVideoAddedHashedTable[id];
+            let newIsVideoAddedHashedTable = {...this.state.isVideoAddedHashedTable};
+            
+            if(action==='add'){
+                newIsVideoAddedHashedTable[itemId].push(collectionId);
+            }
+            else if(action==='remove'){
+                newIsVideoAddedHashedTable[itemId].splice(newIsVideoAddedHashedTable[itemId].indexOf(collectionId), 1);
+            }
 
             await this.setState({isVideoAddedHashedTable: newIsVideoAddedHashedTable});
         }
@@ -98,11 +111,24 @@ class Gallery extends Component {
             });
             await this.setState({ dataCollections: dataCollections, isLoadingCollections: false });
         }
+        else if(this.state.showCollectionItemBelong){
+            if(this.state.itemType === "picture"){
+                await this.setState({
+                    selectedCollectionIds: this.state.isImageAddedHashedTable[this.state.mediaDTO.id].length ? this.state.isImageAddedHashedTable[this.state.mediaDTO.id] : [], 
+                    showCollectionItemBelong: false});
+            }
+            else{
+                await this.setState({
+                    selectedCollectionIds: this.state.isVideoAddedHashedTable[this.state.mediaDTO.id].length ? this.state.isVideoAddedHashedTable[this.state.mediaDTO.id] : [], 
+                    showCollectionItemBelong: false});
+            }
+            
+        }
         else if(!this.props.dataGallery?.loading){
             // This case will include componentDidMount.
             if(this.props.dataGallery?.imagesData?.length !== prevProps.dataGallery?.imagesData?.length && 
                 this.props.dataGallery?.videosData?.length !== prevProps.dataGallery?.videosData?.length){
-                    this.processIsAddedHashedTable(this.props.dataGallery, this.props.additionalInfoTiktok);
+                    await this.processIsAddedHashedTable(this.props.dataGallery, this.props.additionalInfoTiktok);
                 }
         }
     }
@@ -154,14 +180,14 @@ class Gallery extends Component {
 
     handleSelectCollection = (event, id) => {
         let selectedIndex = this.state.selectedCollectionIds.indexOf(id);
-        let newSelectedCollectionIds = this.state.selectedCollectionIds;
+        // let newSelectedCollectionIds = [...this.state.selectedCollectionIds];
 
-        if (selectedIndex === -1)
-            newSelectedCollectionIds.push(id);
-        else
-            newSelectedCollectionIds.splice(selectedIndex, 1);
+        // if (selectedIndex === -1)
+        //     newSelectedCollectionIds.push(id);
+        // else
+        //     newSelectedCollectionIds.splice(selectedIndex, 1);
 
-        this.setState({ selectedCollectionIds: newSelectedCollectionIds });
+        this.setState({ selectedCollectionIds: selectedIndex === -1 ? [...this.state.selectedCollectionIds, id]: [...this.state.selectedCollectionIds].filter((item,index)=>index!==selectedIndex)  });
     }
 
 
@@ -190,42 +216,53 @@ class Gallery extends Component {
                 itemUrl: itemDTO.imgSrc,
                 itemType: itemDTO.type,
                 mediaDTO: {
-                    isAdding: itemDTO.isAdding,
                     id: itemDTO.id,
                     source: itemDTO.source,
                     collectionId: itemDTO.collectionId,
-                }
+                },
+                // For showing modal select collection
+                isOpenModalSelectCollection: true,
+                willUpdateModalCollections: true,
             });
-    
-            if(this.state.mediaDTO.isAdding)
-                this.clickFavoriteBtn();
-            else if(this.state.mediaDTO.isAdding === false) // Condition should compare with false, not check falsy.
-                this.clickUnFavorite(this.state.mediaDTO.collectionId, this.state.mediaDTO.id);
+            // Tell apart because I think this will change the flow of render
+            await this.setState({ showCollectionItemBelong: true,});
         })();
     }
     
     // Click favorite btn to add image to a collection.
-    clickFavoriteBtn = () => {
+    clickFavoriteBtn = async () => {
         // Change state and react will do the rest in componentDidUpdate
-        this.setState({
+        await this.setState({
             isOpenModalSelectCollection: true,
-            willUpdateModalCollections: true
+            willUpdateModalCollections: true,
+        });
+
+        await this.setState({
+            showCollectionItemBelong: true,
         });
     }
     // Click favorite btn again to un-favorite
-    clickUnFavorite = (collectionId, itemId) => {
-        // TODO Remove khỏi collection đã được nhưng chưa cập nhật cái icon tim,
-        // NOTE Nếu add 1 item tới hơn 1 collection thì phải xóa số collection mà item đó được gắn vô, cd item thuộc về 2 collection thì phải xóa 2 lần.
-        console.log("Un-favorite");
+    clickUnFavorite = (collectionIds, itemId) => {
+        // CollectionIds: array containing collection where item is current in.
         (async () => {
+        if (this.state.selectedCollectionIds.length) {
             if (window.confirm("Are you sure want to remove this item from collection?")) {
-                await removeItemFromCollection(collectionId, itemId);
-                
-                // this.updateIsAddedHashedTable(itemId, this.state.itemType); // Như này cũng được
-                await this.updateIsAddedHashedTable(this.state.mediaDTO.id, this.state.itemType);
+                for (const idCollection of this.state.selectedCollectionIds){
+                    // only able to remove from collection if item is in it.
+                    if(collectionIds.includes(idCollection)){
+                        await removeItemFromCollection(idCollection, itemId);
+                        await this.updateIsAddedHashedTable(this.state.mediaDTO.id, idCollection, this.state.itemType, "remove");
+                    }
+                    else
+                        alert ("This item does not belong to this collection");
+                }
+            
                 // whatever opening, after add to collection, all modals will be close immediately.
                 await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
             }
+        }
+        else
+            alert("No collection selected.")
         })()
     } 
 
@@ -234,11 +271,14 @@ class Gallery extends Component {
             await this.setState({ disableThreeBtnCollectionModal: true })
             if (this.state.selectedCollectionIds.length) {
                 // if (window.confirm("Are you sure want to delete selected collection(s)?")) {
-                    for (const idCollection of this.state.selectedCollectionIds)
+                    for (const idCollection of this.state.selectedCollectionIds){
                         await addToCollection(this.state.itemUrl, "", this.state.itemType, 
                             this.props.nameNetwork, this.state.mediaDTO.id, this.state.mediaDTO.source, 
                             idCollection);
 
+                        await this.updateIsAddedHashedTable(this.state.mediaDTO.id, idCollection, this.state.itemType, "add");
+                    }
+                    
                     // whatever opening, after add to collection, all modals will be close immediately.
                     await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
                 // }
@@ -246,7 +286,6 @@ class Gallery extends Component {
             else
                 alert("No collection selected.")
 
-            await this.updateIsAddedHashedTable(this.state.mediaDTO.id, this.state.itemType);
             await this.setState({disableThreeBtnCollectionModal: false });
         })()
         
@@ -311,9 +350,9 @@ class Gallery extends Component {
                             isClickAddToCollection={(itemDTO)=>{
                                 this.clickFavoriteBtnFromItem(itemDTO);
                             }} 
-                            key={idx} history={this.props.history} isAdded={this.state.isImageAddedHashedTable[img.id]}
+                            key={idx} history={this.props.history} isAdded={this.state.isImageAddedHashedTable[img.id]?.length ? true : false}
                             id={img.id} source={img.source} platform={this.props.nameNetwork}
-                            collectionId={img.collectionId} 
+                            collectionId={this.state.isImageAddedHashedTable[img.id]} 
                         />)
                 }
                 else {
@@ -375,9 +414,10 @@ class Gallery extends Component {
                             isClickAddToCollection={(itemDTO)=>{
                                 this.clickFavoriteBtnFromItem(itemDTO);
                             }} 
-                            isAuth={this.props.isAuth} isAdded={this.state.isVideoAddedHashedTable[this.props.additionalInfoTiktok.id]}
+                            isAuth={this.props.isAuth} isAdded={this.state.isVideoAddedHashedTable[this.props.additionalInfoTiktok.id]?.length ? true: false}
                             id={this.props.additionalInfoTiktok.id} source={this.props.additionalInfoTiktok.source}
-                            platform="tiktok" collectionId={this.props.additionalInfoTiktok.collectionId}>
+                            platform="tiktok" 
+                            collectionId={this.state.isVideoAddedHashedTable[this.props.additionalInfoTiktok.id]}>
                         </VideoItem>)
                     }
                     else {
@@ -391,9 +431,9 @@ class Gallery extends Component {
                                         isClickAddToCollection={(itemDTO)=>{
                                             this.clickFavoriteBtnFromItem(itemDTO);
                                         }} 
-                                        isAuth={this.props.isAuth} isAdded={this.state.isVideoAddedHashedTable[video.id]}
+                                        isAuth={this.props.isAuth} isAdded={this.state.isVideoAddedHashedTable[video.id]?.length ? true: false}
                                         id={video.id} source={video.source} platform={this.props.nameNetwork} 
-                                        collectionId={video.collectionId}/>
+                                        collectionId={this.state.isVideoAddedHashedTable[video.id]}/>
                                 )))
                     }
                 }
@@ -500,29 +540,6 @@ class Gallery extends Component {
                 </div>)
             }
         }
-        const renderAddToCollection = ()=>{
-            // Khi add to collection rồi, thì tắt modal, sau đó mở modal lên lại thì nút vẫn là add to collection thay vì remove from collection
-            if(this.state.mediaDTO?.isAdding){
-                return (
-                    <Button variant="secondary" onClick={
-                        () => {
-                            this.clickFavoriteBtn();
-                        }
-                    }>
-                        Add to my collection
-                    </Button>)
-            }
-            else if(!this.state.mediaDTO?.isAdding){
-                return (
-                    <Button variant="secondary" onClick={
-                        () => {
-                            this.clickUnFavorite(this.state.mediaDTO.collectionId, this.state.mediaDTO.id);
-                        }
-                    }>
-                        Remove this from collection
-                    </Button>)
-            }
-        }
 
         return (
             <section id="gallery-section">
@@ -593,7 +610,12 @@ class Gallery extends Component {
                                 onClick={this.clickDownload}>
                                 Download
                             </Button>
-                            {renderAddToCollection()}
+                            <Button variant="secondary" onClick={
+                                () => {
+                                    this.clickFavoriteBtn();
+                                }}>
+                                Add to my collection
+                            </Button>
                         </Modal.Footer>
                     </Modal>
                     <Modal
@@ -615,7 +637,12 @@ class Gallery extends Component {
                             }
                         </Modal.Body>
                         <Modal.Footer>
-                            {renderAddToCollection()}
+                            <Button variant="secondary" onClick={
+                                () => {
+                                    this.clickFavoriteBtn();
+                                }}>
+                                Add to my collection
+                            </Button>
                         </Modal.Footer>
                     </Modal>
                     <Modal
@@ -635,6 +662,15 @@ class Gallery extends Component {
                             <Button variant="secondary" onClick={() => this.clickAddToCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Add to this collection
                             </Button>
+                            {
+                                this.state.itemType === 'picture' ? 
+                                <Button variant="secondary" onClick={() => this.clickUnFavorite(this.state.isImageAddedHashedTable[this.state.mediaDTO.id], this.state.mediaDTO.id)} disabled={this.state.disableThreeBtnCollectionModal}>
+                                    Remove image from this collection
+                                </Button> :
+                                <Button variant="secondary" onClick={() => this.clickUnFavorite(this.state.isVideoAddedHashedTable[this.state.mediaDTO.id], this.state.mediaDTO.id)} disabled={this.state.disableThreeBtnCollectionModal}>
+                                    Remove video from this collection
+                                </Button> 
+                            }
                             <Button variant="secondary" onClick={() => this.clickCreateCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Create a new collection
                             </Button>

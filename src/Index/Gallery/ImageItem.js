@@ -20,8 +20,8 @@ class ImageItem extends Component {
     }
 
     async prepareData(){
+        console.log("prepared");
         await this.setState({itemDTO: {
-            isAdding: !this.props.isAdded,
             imgSrc: this.props.itemSrc,
             thumbnail: "",
             type:"picture",
@@ -64,6 +64,7 @@ class ImageItem extends Component {
         })
     }
     
+
     render() {
         return (
             <div className="img-card" variant="primary">
