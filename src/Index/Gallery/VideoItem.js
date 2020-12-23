@@ -22,7 +22,6 @@ class VideoItem extends Component {
 
     async prepareData(){
         await this.setState({itemDTO: {
-            isAdding: !this.props.isAdded,
             imgSrc: this.props.url,
             thumbnail: "",
             type:"video",

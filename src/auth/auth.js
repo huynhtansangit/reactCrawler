@@ -1,9 +1,9 @@
 import cookies from '../utils/cookie'
 import axios from 'axios'
 import qs from 'querystring'
+import {TOKEN_URL} from '../utils/config.url'
 
 
-const TOKEN_ENDPOINT = "https://dacnhk1.herokuapp.com/token";
 
 
 class Auth {
@@ -34,7 +34,7 @@ class Auth {
         };
 
         const config = {
-            url: TOKEN_ENDPOINT,
+            url: TOKEN_URL,
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
