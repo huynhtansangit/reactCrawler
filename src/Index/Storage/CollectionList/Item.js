@@ -35,6 +35,7 @@ class Item extends Component {
             firstRender: true,
             statusGetDataOfCollection: { loading: true, error: "false" },
             dataOfCollection: [],
+            isShowItem: true,
         }
     }
     onClickItem = (event, index) => {
@@ -43,8 +44,8 @@ class Item extends Component {
 
     async componentDidUpdate() {
         if (this.state.willLoadContent && this.state.firstRender) {
-            this.setState({willLoadContent: false});
-            
+            this.setState({ willLoadContent: false });
+
             const accessToken = cookies.get("accessToken");
 
             const config = {
@@ -79,9 +80,10 @@ class Item extends Component {
         }
     }
 
-    clickDeleteCollection = (idCollection)=>{
-        if(window.confirm("Are you sure want to delete this collection?")){
+    clickDeleteCollection = (idCollection) => {
+        if (window.confirm("Are you sure want to delete this collection?")) {
             deleteCollection(idCollection);
+            this.setState({ isShowItem: false });
         }
     }
     renderTabMenu = (classes) => {
@@ -100,6 +102,34 @@ class Item extends Component {
             )
         }
     }
+    renderCollapse = (classes) => (
+        <>
+            <ListItem
+                button
+                selected='true'
+                onClick={(event) => this.onClickItem(event, 1)}
+            >
+                <ListItemIcon>
+                    <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={this.props.MainPrimary} />
+                {this.state.isOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={this.state.isOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding >
+                    <ListItem button className={classes.nested}
+                        onClick={(e) => this.clickDeleteCollection(this.props.id)}>
+                        <ListItemIcon>
+                            <RemoveOutlinedIcon style={{ color: '#F91A2C', fontSize: 40 }} />
+                        </ListItemIcon>
+                        <ListItemText primary="Delete" />
+                    </ListItem>
+                    {this.renderTabMenu(classes)}
+                </List>
+            </Collapse>
+        </>
+    )
+
     renderProfile = (type, classes) => {
         if (type === "profile") {
             return (
@@ -129,29 +159,7 @@ class Item extends Component {
         else
             return (
                 <div>
-                    <ListItem
-                        button
-                        selected='true'
-                        onClick={(event) => this.onClickItem(event, 1)}
-                    >
-                        <ListItemIcon>
-                            <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={this.props.MainPrimary} />
-                        {this.state.isOpen ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse in={this.state.isOpen} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding >
-                            <ListItem button className={classes.nested}
-                                onClick={(e) => this.clickDeleteCollection(this.props.id)}>
-                                <ListItemIcon>
-                                    <RemoveOutlinedIcon style={{ color: '#F91A2C', fontSize: 40 }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Delete" />
-                            </ListItem>
-                            {this.renderTabMenu(classes)}
-                        </List>
-                    </Collapse>
+                    {this.state.isShowItem && <this.renderCollapse />}
                 </div>
             )
     }
