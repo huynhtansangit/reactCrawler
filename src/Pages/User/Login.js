@@ -17,7 +17,7 @@ import axios from 'axios'
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import cookies from '../../utils/cookie'
-import { TOKEN_URL, MY_ACCOUNT_INFO_URL, TOKEN_ADMIN_URL } from "../../utils/config.url";
+import { TOKEN_URL, MY_ACCOUNT_INFO_URL, ADMIN_TOKEN_URL } from "../../utils/config.url";
 import auth from '../../auth/auth';
 import {Redirect} from 'react-router-dom'
 import addToCollection, {downloadImageByUrl} from '../../services/user.services'
@@ -154,7 +154,7 @@ export default function SignInSide(props) {
     };
     
     if(isLoginAsAdmin)
-        configRequest['url']= TOKEN_ADMIN_URL;
+        configRequest['url']= ADMIN_TOKEN_URL;
     else
         configRequest['url']= TOKEN_URL;
 
@@ -198,23 +198,29 @@ export default function SignInSide(props) {
             data: formData
           };
           
-          axios.request(config)
-            .then(res=> res.data)
-            .then(data =>{
-              if(data){
-                localStorage.setItem('firstname', data['firstname'])
-                localStorage.setItem('lastname', data['lastname'])
-              }
-            })
-            .catch(error =>{
-              console.log("Error occurred when get user's info.");
-              if(error.response){
-                console.log(error.response.data);
-              }
-              else{
-                console.log("Something went wrong. Please check your internet connection.");
-              }
-            })
+          if(isLoginAsAdmin){
+            localStorage.setItem('firstname', 'admin')
+            localStorage.setItem('lastname', '')
+          }
+          else{
+            axios.request(config)
+              .then(res=> res.data)
+              .then(data =>{
+                if(data){
+                  localStorage.setItem('firstname', data['firstname'])
+                  localStorage.setItem('lastname', data['lastname'])
+                }
+              })
+              .catch(error =>{
+                console.log("Error occurred when get user's info.");
+                if(error.response){
+                  console.log(error.response.data);
+                }
+                else{
+                  console.log("Something went wrong. Please check your internet connection.");
+                }
+              })
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -239,11 +245,10 @@ export default function SignInSide(props) {
 
   // Function below equal to componentDidMount
   useEffect(()=>{
-    console.log(props.location.state.loginAsAdmin);
-    if(props.location.state?.loginAsAdmin){
+    if(props.location?.state?.loginAsAdmin || props.loginAsAdmin){
       setLoginAsAdmin(true);
     }
-  },[])
+  },[]); //eslint-disable-line
 
   useEffect(()=>{
     const verifyProcess = async () => {
@@ -257,7 +262,7 @@ export default function SignInSide(props) {
 
     if(!isLoggedIn)
       verifyProcess();
-    }, [isLoggedIn]);
+    }, [isLoggedIn]); //eslint-disable-line
 
   // Function below equal to componentDidUpdate
   useEffect(()=>{
@@ -267,7 +272,7 @@ export default function SignInSide(props) {
   });
 
   const RedirectToDestinationOrActionIfAny = ()=>{
-    if(props.location.state?.to?.pathname){
+    if(props.location?.state?.to?.pathname){
       if(props.location.state?.to?.state?.imgSrc){
         return <Redirect
           to={{
@@ -291,7 +296,7 @@ export default function SignInSide(props) {
         )
       }
     }
-    else if(props.location.state?.action){
+    else if(props.location?.state?.action){
       if(props.location.state.action === "addToCollection")
         addToCollection(props.location.state.imgSrc, props.location.state.thumbnail, props.location.state.type);
       else if(props.location.state.action === "downloadSingleImage"){
@@ -306,6 +311,17 @@ export default function SignInSide(props) {
               }
           }}/>
           )
+    }
+    else if(props.loginAsAdmin){
+      return (
+        <Redirect
+          to={{
+            pathname: '/admin/activity-history',
+            state: {
+                from: props.location
+            }
+        }}/>
+      )
     }
     else{
       return (

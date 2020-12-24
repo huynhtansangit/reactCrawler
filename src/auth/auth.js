@@ -1,7 +1,7 @@
 import cookies from '../utils/cookie'
 import axios from 'axios'
 import qs from 'querystring'
-import {TOKEN_URL, TOKEN_ADMIN_URL} from '../utils/config.url'
+import {TOKEN_URL, ADMIN_TOKEN_URL} from '../utils/config.url'
 
 
 
@@ -46,7 +46,7 @@ class Auth {
             data: qs.stringify(refreshForm)
         };
         if(this.isAdmin)
-            config['url']= TOKEN_ADMIN_URL;
+            config['url']= ADMIN_TOKEN_URL;
         else
             config['url']= TOKEN_URL;
 

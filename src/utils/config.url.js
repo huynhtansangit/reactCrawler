@@ -5,7 +5,12 @@ const VERIFY_REGISTER_URL = REGISTER_URL + "/verify";
 
 const TOKEN_URL = BASE_URL+"/user/token";
 
-const TOKEN_ADMIN_URL = BASE_URL +"/admin/token";
+const ADMIN_URL = BASE_URL + "/admin";
+const ADMIN_TOKEN_URL = ADMIN_URL +"/token";
+const ADMIN_MANAGE_USER_URL = ADMIN_URL + "/users";
+const ADMIN_LOG_URL = ADMIN_URL + "/logs";
+const ADMIN_STATISTIC_URL = ADMIN_URL + "/statistics";
+
 
 const RESET_PASSWORD_URL = BASE_URL + "/user/reset-password";
 const VERIFY_RESET_PASSWORD_URL = RESET_PASSWORD_URL + "/verify";
@@ -31,5 +36,8 @@ export {
     ADD_TO_COLLECTION_URL,
     MY_AVATAR_URL,
     GET_MY_COLLECTION_URL,
-    TOKEN_ADMIN_URL,
+    ADMIN_TOKEN_URL,
+    ADMIN_MANAGE_USER_URL,
+    ADMIN_LOG_URL,
+    ADMIN_STATISTIC_URL
 };

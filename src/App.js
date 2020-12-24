@@ -29,7 +29,7 @@ function App() {
       <Route path="/register" exact component={Register}></Route>
       <Route path="/reset" exact component={ResetPassword}></Route>
       <ProtectedRoute path="/me" exact component ={Storage}></ProtectedRoute>
-      <Route path="/admin/login" exact component={Login}></Route>
+      <Route path="/admin/login" exact component={()=><Login loginAsAdmin={true}/>}></Route>
       <ProtectedAdminRoute path="/admin" component={Admin}></ProtectedAdminRoute>
       <Route path="/" exact component ={Index}/>
       <Route path="*" component ={NotFound}/>
