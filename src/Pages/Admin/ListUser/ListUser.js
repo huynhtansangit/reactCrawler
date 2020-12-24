@@ -6,9 +6,8 @@ import {
 } from '@material-ui/core';
 import Page from '../../../components/Page';
 import Results from './Results';
-import data from './testData';
 import Toolbar from './Toolbar';
-// import axios from "axios";
+import ListUserAPI from './ListUserAPI'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,11 +21,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ListUser = () => {
     const classes = useStyles();
-    const [users, setUsers] = useState(data); // eslint-disable-line
+    const [users, setUsers] = useState([]);
 
     useEffect(()=>{
-        // API here
-        // axios.request({});
+        (async ()=>{
+            const data = await ListUserAPI.getUsers();
+            setUsers(data['users']);
+        })()
     },[]);
 
     return (

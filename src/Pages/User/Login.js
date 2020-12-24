@@ -227,7 +227,10 @@ export default function SignInSide(props) {
           if (error.response) {
             console.error('Error:', error.response.data);
             // setState for showing errors here.
-            if (error.response.status === 401 || error.response.status === 404)
+            if(error.response.data['message'] === 'Account has been disable'){
+              setError("Your account has been disabled.")
+            }
+            else if (error.response.status === 401 || error.response.status === 404)
               setError("Phone or password is incorrect.")
             else
               setError(error.response.data['message']);

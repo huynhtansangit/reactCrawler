@@ -7,7 +7,7 @@ const TOKEN_URL = BASE_URL+"/user/token";
 
 const ADMIN_URL = BASE_URL + "/admin";
 const ADMIN_TOKEN_URL = ADMIN_URL +"/token";
-const ADMIN_MANAGE_USER_URL = ADMIN_URL + "/users";
+const ADMIN_USER_URL = ADMIN_URL + "/users";
 const ADMIN_LOG_URL = ADMIN_URL + "/logs";
 const ADMIN_STATISTIC_URL = ADMIN_URL + "/statistics";
 
@@ -37,7 +37,7 @@ export {
     MY_AVATAR_URL,
     GET_MY_COLLECTION_URL,
     ADMIN_TOKEN_URL,
-    ADMIN_MANAGE_USER_URL,
+    ADMIN_USER_URL,
     ADMIN_LOG_URL,
     ADMIN_STATISTIC_URL
 };

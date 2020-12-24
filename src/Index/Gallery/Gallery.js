@@ -16,7 +16,6 @@ import { Button, Modal } from 'react-bootstrap';
 import {Link,} from "react-router-dom";
 import addToCollection, { downloadImageByUrl, downloadMultiImagesByUrlsVers2 } from '../../services/user.services'
 import './Gallery.css';
-import historyApi from '../../Pages/Admin/ActivityHistory/api/historyApi';
 class Gallery extends Component {
     constructor(props) {
         super(props);

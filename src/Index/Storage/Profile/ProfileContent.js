@@ -8,6 +8,9 @@ import { withStyles } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import './style.css';
 import Tooltip from '@material-ui/core/Tooltip';
+import { convertTimeStampToDate } from '../../../utils/convertTools';
+
+
 const accessToken = cookies.get('accessToken');
 let config = {
     url: '',
@@ -17,6 +20,8 @@ let config = {
         'Authorization': `bearer ${accessToken}`
     },
 };
+
+
 const useStyles = makeStyles((theme) => ({
     input: {
         display: "none",
@@ -81,7 +86,7 @@ class ProfileContent extends Component {
                     this.setState({ [key]: dataProfile[key] })
                 }
 
-                this.setState({ birthdayIsoStandard: this.convertTimeStampToDate() });
+                this.setState({ birthdayIsoStandard: convertTimeStampToDate(this.state.birthday) });
             }
 
             // Get avatar
@@ -102,11 +107,6 @@ class ProfileContent extends Component {
                 console.log("Something went wrong. Please check your internet connection.");
             }
         }
-    }
-
-    convertTimeStampToDate = () => {
-        console.log("converting");
-        return new Date(this.state.birthday * 1000).toISOString().substr(0, 10);
     }
 
     componentDidUpdate() {

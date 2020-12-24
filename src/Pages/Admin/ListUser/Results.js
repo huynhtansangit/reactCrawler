@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
     Avatar,
     Box,
     Card,
-    Checkbox,
     Table,
     TableBody,
     TableCell,
@@ -18,7 +16,9 @@ import {
 } from 'ver-4-11';
 import {makeStyles} from '@material-ui/core';
 import { Button} from 'react-bootstrap';
-// import getInitials from 'src/utils/getInitials';
+import ListUserApi from './ListUserAPI';
+import { convertTimeStampToDate } from '../../../utils/convertTools'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -29,43 +29,25 @@ const useStyles = makeStyles((theme) => ({
 
 const Results = ({ className, data, ...rest }) => {
     const classes = useStyles();
-    const [selectedUserIds, setSelectedUserIds] = useState([]); // eslint-disable-line
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
+    const [isUserActiveHashmap, setIsUserActiveHashmap] = useState({});
 
 
-    // NOTE This checkbox can not work by now because every user need a unique ID.
-    // Maybe this won't be used in the near future.
-    const handleSelectAll = (event) => {
-        // let newSelectedUserIds;
+    // DidMount
+    useEffect(()=>{
+        let hashmap = {};
+        for(const user of data){
+            hashmap[user.phone] = user.is_active;
+        }
+        setIsUserActiveHashmap(hashmap);
+    }, [data])
 
-        // if (event.target.checked) {
-        //     newSelectedUserIds = data.map((User) => User.id);
-        // } else {
-        //     newSelectedUserIds = [];
-        // }
+    const updateIsUserActiveHashmap = (phone) => {
+        let newHashmap = {...isUserActiveHashmap};
+        newHashmap[phone] = !newHashmap[phone];
 
-        // setSelectedUserIds(newSelectedUserIds);
-    };
-
-    const handleSelectOne = (event, id) => {
-        // const selectedIndex = selectedUserIds.indexOf(id);
-        // let newSelectedUserIds = [];
-
-        // if (selectedIndex === -1) {
-        //     newSelectedUserIds = newSelectedUserIds.concat(selectedUserIds, id);
-        // } else if (selectedIndex === 0) {
-        //     newSelectedUserIds = newSelectedUserIds.concat(selectedUserIds.slice(1));
-        // } else if (selectedIndex === selectedUserIds.length - 1) {
-        //     newSelectedUserIds = newSelectedUserIds.concat(selectedUserIds.slice(0, -1));
-        // } else if (selectedIndex > 0) {
-        //     newSelectedUserIds = newSelectedUserIds.concat(
-        //         selectedUserIds.slice(0, selectedIndex),
-        //         selectedUserIds.slice(selectedIndex + 1)
-        //     );
-        // }
-
-        // setSelectedUserIds(newSelectedUserIds);
+        setIsUserActiveHashmap(newHashmap);
     };
 
     const handleLimitChange = (event) => {
@@ -76,6 +58,16 @@ const Results = ({ className, data, ...rest }) => {
         setPage(newPage);
     };
 
+    const clickActivateUser = async (phone) =>{
+        await ListUserApi.activateUser(phone);
+        updateIsUserActiveHashmap(phone);
+    };
+    
+    const clickDeactivateUser = async (phone) =>{
+        await ListUserApi.deactivateUser(phone);
+        updateIsUserActiveHashmap(phone);
+    };
+
     return (
         <Card className={clsx(classes.root, className)} {...rest}>
             <PerfectScrollbar>
@@ -83,16 +75,6 @@ const Results = ({ className, data, ...rest }) => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                        checked={selectedUserIds.length === data.length}
-                                        color="primary"
-                                        indeterminate={
-                                            selectedUserIds.length > 0
-                                            && selectedUserIds.length < data.length
-                                        }
-                                        onChange={handleSelectAll}/>
-                                </TableCell>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Phone</TableCell>
                                 <TableCell>Email</TableCell>
@@ -105,15 +87,7 @@ const Results = ({ className, data, ...rest }) => {
                             {data.slice(0, limit).map((user) => (
                                 <TableRow
                                     hover
-                                    key={user.id}
-                                    selected={selectedUserIds.indexOf(user.id) !== -1}>
-                                    <TableCell padding="checkbox">
-                                        <Checkbox
-                                            checked={selectedUserIds.indexOf(user.id) !== -1}
-                                            onChange={(event) => handleSelectOne(event, user.id)}
-                                            value="true"
-                                        />
-                                    </TableCell>
+                                    key={user.id}>
                                     <TableCell>
                                         <Box
                                             alignItems="center"
@@ -122,7 +96,7 @@ const Results = ({ className, data, ...rest }) => {
                                                 {/* {getInitials(user.name)} */}
                                             </Avatar>
                                             <Typography color="textPrimary" variant="body1">
-                                                {user.name}
+                                                {user.firstname} {user.lastname}
                                             </Typography>
                                         </Box>
                                     </TableCell>
@@ -133,7 +107,7 @@ const Results = ({ className, data, ...rest }) => {
                                         {user.email}
                                     </TableCell>
                                     <TableCell>
-                                        {moment(user.createdAt).format('DD/MM/YYYY')}
+                                        {convertTimeStampToDate(user.birthday)}
                                     </TableCell>
                                     <TableCell>
                                         {user.totalSearch ? user.totalSearch : 0}
@@ -145,18 +119,29 @@ const Results = ({ className, data, ...rest }) => {
                                         flexDirection="column"
                                         p={2}>
                                         <TableRow className="mt-2">
-                                            <Button style={{width: "100%" }} variant="success" onClick={()=>console.log("Acitve")}>
+                                            <Button style={{width: "100%" }} variant="success" 
+                                                onClick={()=> clickActivateUser(user.phone)}
+                                                disabled={isUserActiveHashmap[user.phone] ? true : false}>
                                                 Active
                                             </Button>
                                         </TableRow>
                                         <TableRow className="mt-2">
-                                            <Button style={{width: "100%" }} variant="danger" onClick={()=>console.log("disable")}>
+                                            <Button style={{width: "100%" }} variant="danger" 
+                                                onClick={()=> clickDeactivateUser(user.phone)}
+                                                disabled={!isUserActiveHashmap[user.phone] ? true : false}>
                                                 Disable
                                             </Button>
                                         </TableRow>
                                         <TableRow className="mt-2">
-                                            <Button style={{width: "100%" }} variant="primary" onClick={()=>console.log("Detail")}>
+                                            <Button style={{width: "100%" }} variant="primary" 
+                                                onClick={()=> ListUserApi.getUser(user.phone)}>
                                                 Detail
+                                            </Button>
+                                        </TableRow>
+                                        <TableRow className="mt-2">
+                                            <Button style={{width: "100%" }} variant="info" 
+                                                onClick={()=> console.log("User's activity")}>
+                                                Activities
                                             </Button>
                                         </TableRow>
                                         </Box>

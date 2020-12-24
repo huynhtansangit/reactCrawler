@@ -1,15 +1,15 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import {BASE_URL} from '../../../../utils/config.url'
+import Cookies from './cookie'
 
-const strAccessToken="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoiYWRtaW4iLCJwaG9uZSI6IjA1Njg4OTk4ODEiLCJlbWFpbCI6bnVsbCwiZmlyc3RuYW1lIjoiTWFpIiwibGFzdG5hbWUiOiJIdW5nIiwic3RhcnRfYXQiOjE2MDg2MzAzMzYsImV4cCI6MTYwODYzMzkzNn0.0wSY7eChtO9RCdkWhlzWr-zx0TJ4902TSvUigGEt1V8";
+
+const accessToken=Cookies.get('accessToken');
+
 // set up default config for http requests here
-// ???? base url làm gì?
-const axiosClient =axios.create({
-    baseURL: BASE_URL,
+const axiosClient = axios.create({
+    // baseURL: BASE_URL,
     headers:{
-        
-        'Authorization': `Bearer ${strAccessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
         'Accept': 'application/json',
         'content-type':'application/x-www-form-urlencoded',
 
