@@ -5,6 +5,8 @@ const VERIFY_REGISTER_URL = REGISTER_URL + "/verify";
 
 const TOKEN_URL = BASE_URL+"/user/token";
 
+const TOKEN_ADMIN_URL = BASE_URL +"/admin/token";
+
 const RESET_PASSWORD_URL = BASE_URL + "/user/reset-password";
 const VERIFY_RESET_PASSWORD_URL = RESET_PASSWORD_URL + "/verify";
 
@@ -28,5 +30,6 @@ export {
     UPDATE_MY_ACCOUNT_INFO_URL,
     ADD_TO_COLLECTION_URL,
     MY_AVATAR_URL,
-    GET_MY_COLLECTION_URL
+    GET_MY_COLLECTION_URL,
+    TOKEN_ADMIN_URL,
 };

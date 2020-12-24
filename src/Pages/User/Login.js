@@ -17,7 +17,7 @@ import axios from 'axios'
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import cookies from '../../utils/cookie'
-import { TOKEN_URL, MY_ACCOUNT_INFO_URL } from "../../utils/config.url";
+import { TOKEN_URL, MY_ACCOUNT_INFO_URL, TOKEN_ADMIN_URL } from "../../utils/config.url";
 import auth from '../../auth/auth';
 import {Redirect} from 'react-router-dom'
 import addToCollection, {downloadImageByUrl} from '../../services/user.services'
@@ -87,6 +87,8 @@ export default function SignInSide(props) {
   const [isRememberChecked, setRemember] = React.useState(localStorage.getItem('phone') ? true : false);
   const [isLoggedIn, setLoggedIn] = React.useState("");
 
+  const [isLoginAsAdmin, setLoginAsAdmin] = React.useState(false);
+
   const validatePhone = ()=>{
     let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
     // let phone = event.target.value ? event.target.value : cookies.get('phone');
@@ -141,8 +143,8 @@ export default function SignInSide(props) {
 
     const formData = qs.stringify(loginForm);
 
-    const configRequest = {
-      url: TOKEN_URL,
+    let configRequest = {
+      url: "",
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -150,6 +152,11 @@ export default function SignInSide(props) {
       },
       data: formData
     };
+    
+    if(isLoginAsAdmin)
+        configRequest['url']= TOKEN_ADMIN_URL;
+    else
+        configRequest['url']= TOKEN_URL;
 
     if (isValidatePhone && isValidatePwd) {
       setShowAlert(false);
@@ -232,8 +239,19 @@ export default function SignInSide(props) {
 
   // Function below equal to componentDidMount
   useEffect(()=>{
+    console.log(props.location.state.loginAsAdmin);
+    if(props.location.state?.loginAsAdmin){
+      setLoginAsAdmin(true);
+    }
+  },[])
+
+  useEffect(()=>{
     const verifyProcess = async () => {
-        const result = await auth.verifyAccessToken();
+        let result;
+        if(isLoginAsAdmin)
+            result = await auth.verifyAccessToken(true);
+        else
+            result = await auth.verifyAccessToken();
         setLoggedIn(result);
     };
 
@@ -353,7 +371,7 @@ export default function SignInSide(props) {
               label="Remember me"
             />
             <Collapse in={((messagePhone || messagePwd) && isShowAlert)? true: false}>
-              <Alert severity="error">
+              <Alert severity="error">  
                 <AlertTitle>Error</AlertTitle>
                 <p> {messagePhone} <br/> {messagePwd}</p> 
               </Alert>
