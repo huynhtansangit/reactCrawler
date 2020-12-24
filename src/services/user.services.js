@@ -279,7 +279,7 @@ const handleDeleteCollection = async (id) => {
         .then(response => response.data)
         .then(data => {
             if (data && data['message'] === 'Success') {
-                // alert("Deleted collection");
+                alert("Deleted collection");
             }
         })
         .catch(error => {

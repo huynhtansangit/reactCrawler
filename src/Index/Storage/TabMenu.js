@@ -61,7 +61,6 @@ export default function ScrollableTabsButtonForce(props) {
   const [imagesData, setImagesData] = React.useState([]);
   const [videosData, setVideosData] = React.useState([]);
 
-  let imgData=[], vidData=[];
   // const [infoUser, setInfoUser] = React.useState({loading: true, error: ""})
 
   const handleChange = (event, newValue) => {
@@ -69,9 +68,8 @@ export default function ScrollableTabsButtonForce(props) {
   };
   
   useEffect(()=>{
-    // console.log(props);
-    // props.dataOfCollection.forEach(element => {
-      for(const element of props.dataOfCollection){
+    let imgData=[], vidData=[];
+    for(const element of props.dataOfCollection){
       if(element["type"]==="picture")
       {
         imgData.push(element);
@@ -82,8 +80,7 @@ export default function ScrollableTabsButtonForce(props) {
     };
     setImagesData(imgData);
     setVideosData(vidData);
-    // console.log(imagesData);
-  }, [props.dataOfCollection]);
+  }, [props.dataOfCollection]); //eslint-disable-line
 
 
 

@@ -270,18 +270,16 @@ class Gallery extends Component {
         (async () => {
             await this.setState({ disableThreeBtnCollectionModal: true })
             if (this.state.selectedCollectionIds.length) {
-                // if (window.confirm("Are you sure want to delete selected collection(s)?")) {
-                    for (const idCollection of this.state.selectedCollectionIds){
-                        await addToCollection(this.state.itemUrl, "", this.state.itemType, 
-                            this.props.nameNetwork, this.state.mediaDTO.id, this.state.mediaDTO.source, 
-                            idCollection);
+                for (const idCollection of this.state.selectedCollectionIds){
+                    await addToCollection(this.state.itemUrl, "", this.state.itemType, 
+                        this.props.nameNetwork, this.state.mediaDTO.id, this.state.mediaDTO.source, 
+                        idCollection);
 
-                        await this.updateIsAddedHashedTable(this.state.mediaDTO.id, idCollection, this.state.itemType, "add");
-                    }
-                    
-                    // whatever opening, after add to collection, all modals will be close immediately.
-                    await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
-                // }
+                    await this.updateIsAddedHashedTable(this.state.mediaDTO.id, idCollection, this.state.itemType, "add");
+                }
+                
+                // whatever opening, after add to collection, all modals will be close immediately.
+                await this.setState({isOpenModalSelectCollection: false, isOpenModal: false, isOpenModalVideo: false});
             }
             else
                 alert("No collection selected.")

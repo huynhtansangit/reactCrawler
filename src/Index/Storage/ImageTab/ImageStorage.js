@@ -10,6 +10,8 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { downloadImageByUrl } from "../../../services/user.services";
 import { Button, Modal } from 'react-bootstrap';
 import { Link, } from "react-router-dom";
+import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
+import { removeItemFromCollection } from '../../../services/user.services'
 // import Skeleton from '@material-ui/lab/Skeleton';
 
 
@@ -26,14 +28,24 @@ export default function MasonryImageList(props) {
   const classes = useStyles();
   const [isShowModal, setShowModal] = React.useState(false);
   const [imgSrc, setImgSrc] = React.useState("");
-  // const [temp, setTemp] = React.useState("");
+  const [mediaDTO, setMediaDTO] = React.useState("");
+  
 
-  function handleShow(source) {
+  function handleShow(source, dto) {
     // Set image url whenever modal is showed, not when it closed.
-    if(!isShowModal)
+    if(!isShowModal){
       setImgSrc(source);
+      setMediaDTO(dto);
+    }
     setShowModal(!isShowModal);
   }
+
+  const clickUnFavorite = async (collectionId, itemId) => {
+    if(window.confirm("Are you sure want to remove this item from collection?")){
+        await removeItemFromCollection(collectionId, itemId);
+        await setShowModal(false);
+    }
+}
 
   useEffect(() => {
 
@@ -49,12 +61,20 @@ export default function MasonryImageList(props) {
               alt={item.title}
             />
             <div className="card__text">
-              <p className="card__title"><button onClick={() => handleShow(item.url)} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon /></button></p>
+              <p className="card__title"><button onClick={() => handleShow(item.url, {id: item.id, collectionId: item.collection_id})} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon /></button></p>
               <p className="card__title"><button onClick={() => { downloadImageByUrl(item.url) }} type="button" className="btn btn-outline-secondary"><GetAppOutlinedIcon /></button></p>
-              <p className="card__body">
+              <p className="card__title">
                 <Link to={{ pathname: '/editor', state: { imgSrc: item.url } }}>
                   <button type="button" className="btn btn-outline-secondary"><EditOutlinedIcon /></button>
                 </Link>
+              </p>
+              <p className="card__title">
+                  <button onClick={()=>{
+                          clickUnFavorite(item.collection_id,item.id);
+                      }} 
+                      type="button" className={`btn btn-outline-secondary selectedBtn`}>
+                      <FavoriteTwoToneIcon />
+                  </button>
               </p>
             </div>
           </ImageListItem>
@@ -79,6 +99,7 @@ export default function MasonryImageList(props) {
               <Button variant="secondary">Edit</Button>
             </Link>
             <Button variant="secondary" onClick={() => { downloadImageByUrl(imgSrc) }}>Download</Button>
+            <Button variant="secondary" onClick={() => { clickUnFavorite(mediaDTO.collectionId, mediaDTO.id) }}>Remove this from collection</Button>
           </Modal.Footer>
         </Modal>
       </ImageList>

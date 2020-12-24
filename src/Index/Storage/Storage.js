@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import TabMenu from './TabMenu';
 import './Storage.css';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from "@material-ui/core/styles";
-import { makeStyles } from '@material-ui/core/styles';
 import CollectionList from './CollectionList/CollectionList';
 import axios from 'axios';
 import cookies from '../../utils/cookie';

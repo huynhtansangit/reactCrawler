@@ -16,6 +16,7 @@ import axios from 'axios';
 import cookies from '../../../utils/cookie';
 import { COLLECTIONS_URL } from '../../../utils/config.url';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { deleteCollection } from '../../../services/user.services'
 
 
 const useStyles = theme => ({
@@ -41,11 +42,11 @@ class Item extends Component {
     }
 
     async componentDidUpdate() {
-
         if (this.state.willLoadContent && this.state.firstRender) {
+            this.setState({willLoadContent: false});
+            
             const accessToken = cookies.get("accessToken");
-            console.log(`${COLLECTIONS_URL}/${this.props.id}`);
-            console.log(`${accessToken}`);
+
             const config = {
                 url: `${COLLECTIONS_URL}/${this.props.id}`,
                 method: 'GET',
@@ -62,7 +63,6 @@ class Item extends Component {
                     if (data) {
                         this.setState({ statusGetDataOfCollection: { loading: false, error: "" } });
                         this.setState({ dataOfCollection: data["items"] });
-                        console.log(this.state.dataOfCollection);
                     }
                 })
                 .catch(error => {
@@ -76,6 +76,12 @@ class Item extends Component {
                     }
                 })
             await this.setState({ firstRender: false });
+        }
+    }
+
+    clickDeleteCollection = (idCollection)=>{
+        if(window.confirm("Are you sure want to delete this collection?")){
+            deleteCollection(idCollection);
         }
     }
     renderTabMenu = (classes) => {
@@ -94,7 +100,7 @@ class Item extends Component {
             )
         }
     }
-     renderProfile = (type, classes) => {
+    renderProfile = (type, classes) => {
         if (type === "profile") {
             return (
                 <div>
@@ -136,7 +142,8 @@ class Item extends Component {
                     </ListItem>
                     <Collapse in={this.state.isOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding >
-                            <ListItem button className={classes.nested}>
+                            <ListItem button className={classes.nested}
+                                onClick={(e) => this.clickDeleteCollection(this.props.id)}>
                                 <ListItemIcon>
                                     <RemoveOutlinedIcon style={{ color: '#F91A2C', fontSize: 40 }} />
                                 </ListItemIcon>

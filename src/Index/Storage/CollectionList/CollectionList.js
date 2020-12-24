@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import Item from './Item';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
+
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -22,27 +24,7 @@ export default function SelectedListItem(props) {
     }, []);
 
     const classes = useStyles();
-    const renderCollectionList = () => {
-        if (props.statusGetCollection.loading) {
-            return (<div>
 
-            </div>)
-
-        }
-        else {
-            console.log("else");
-            return (
-                <List component="div" aria-label="main mailbox folders">
-                    <Item MainPrimary="Profile" key="1" type="profile" />
-                    {props.listCollectionId.map((element, idx) => {
-                        return (
-                            <Item MainPrimary={element.name} key={idx} />
-                        )
-                    })}
-                </List>
-            )
-        }
-    }
     return (
         <div className={classes.root}>
             { props.statusGetCollection.loading? "" :
