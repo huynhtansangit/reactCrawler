@@ -15,7 +15,10 @@ import {
     TableRow,
     Typography,
 } from 'ver-4-11';
-import {makeStyles} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
+import HistoryApi from './api/historyApi';
+import { convertTimeStampToDate } from '../../../utils/convertTools';
+
 // import getInitials from 'src/utils/getInitials';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,23 +35,47 @@ const Results = ({ className, data, ...rest }) => {
     const [page, setPage] = useState(0);
     const [firstRender, setFirstRender] = useState(true);
     const [timeUpdate, setTimeUpdate] = useState(0);
+    const timestamp = Date.now();
 
+    const [filters, setFilter] = useState({
+        offset: 0,
+        limit: 10,
+        type: 'crawl',
+        from: 0,
+        to: 1789789789,
+        user: '0868952131',
+        platform: 'instagram',
+    });
+
+    const [fetchedData, setData] = useState("");
 
     // ComponentDidMount
-    useEffect(()=>{
+    useEffect(() => {
         console.log("did mount");
         setFirstRender(false);
-    },[])
+        const fetchHistoryList = async () => {
+            try {
+                const responseData = await HistoryApi.get10Elements(filters);
+                setData(responseData['logs']);
+            } catch (error) {
+                console.log('Fail to fetch: ', error);
+            }
+        }
+        fetchHistoryList();
+    }, [])
 
     //DidUpdate
-    useEffect(()=>{
+    useEffect(() => {
         console.log(`Update ${timeUpdate}`);
-        setTimeout(()=>{setTimeUpdate(timeUpdate+1)},2000);
+        setTimeout(() => { setTimeUpdate(timeUpdate + 1) }, 2000);
         // return ()=>{
         //     clearTimeout(time);
         // }
-    },[timeUpdate])
+    }, [timeUpdate])
 
+    const returnDateNow = (timestamp) => {
+        return new Date(timestamp).toLocaleDateString("en-US");
+    }
     // NOTE This checkbox can not work by now because every user need a unique ID.
     // Maybe this won't be used in the near future.
     const handleSelectAll = (event) => {
@@ -106,50 +133,58 @@ const Results = ({ className, data, ...rest }) => {
                                             selectedUserIds.length > 0
                                             && selectedUserIds.length < data.length
                                         }
-                                        onChange={handleSelectAll}/>
+                                        onChange={handleSelectAll} />
                                 </TableCell>
                                 <TableCell>User's ID</TableCell>
-                                <TableCell>Activity</TableCell>
+                                <TableCell>User's Name</TableCell>
                                 <TableCell>Time</TableCell>
                                 <TableCell>Detail</TableCell>
+                                <TableCell>Activity</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.slice(0, limit).map((user) => (
-                                <TableRow
-                                    hover
-                                    key={user.id}
-                                    selected={selectedUserIds.indexOf(user.id) !== -1}>
-                                    <TableCell padding="checkbox">
-                                        <Checkbox
-                                            checked={selectedUserIds.indexOf(user.id) !== -1}
-                                            onChange={(event) => handleSelectOne(event, user.id)}
-                                            value="true"
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Box
-                                            alignItems="center"
-                                            display="flex">
-                                            <Avatar className={classes.avatar} src={user.avatarUrl}>
-                                                {/* {getInitials(user.name)} */}
-                                            </Avatar>
-                                            <Typography color="textPrimary" variant="body1">
-                                                {user.name}
-                                            </Typography>
-                                        </Box>
-                                    </TableCell>
-                                    <TableCell>
-                                        Crawl
-                                    </TableCell>
-                                    <TableCell>
-                                        12-12-2020
-                                    </TableCell>
-                                    <TableCell>
-                                        https://www.instagram.com/selenagomez
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                            {/* Sao ko co data? */}
+                            {
+                                !fetchedData ? "" :
+                                    fetchedData.map((log) => (
+                                        <TableRow
+                                            hover
+                                            key={log.id}
+                                            selected={selectedUserIds.indexOf(log.id) !== -1}>
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    checked={selectedUserIds.indexOf(log.id) !== -1}
+                                                    onChange={(event) => handleSelectOne(event, log.id)}
+                                                    value="true"
+                                                />
+                                            </TableCell>
+                                            {/* Checkbox kko xai, do xoa sau. Do data vo giao dien di */}
+                                            <TableCell>
+                                                <Box
+                                                    alignItems="center"
+                                                    display="flex">
+                                                    <Avatar className={classes.avatar} src={log.id}>
+                                                        {/* {getInitials(user.name)} */}
+                                                    </Avatar>
+                                                    <Typography color="textPrimary" variant="body1">
+                                                        {log.id}
+                                                    </Typography>
+                                                </Box>
+                                            </TableCell>
+                                            <TableCell>
+                                                {!log['user'] ? "null" : log['user'].firstname + " " + log['user'].lastname}
+                                            </TableCell>
+                                            <TableCell>
+                                                {convertTimeStampToDate(log['time'])}
+                                            </TableCell>
+                                            <TableCell>
+                                                {log['url']}
+                                            </TableCell>
+                                            <TableCell>
+                                                {log['type']}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                         </TableBody>
                     </Table>
                 </Box>
