@@ -18,6 +18,7 @@ import { makeStyles, } from '@material-ui/core';
 import { Button, Modal } from 'react-bootstrap';
 import ListUserApi from './ListUserAPI';
 import { convertTimeStampToDate } from '../../../utils/convertTools'
+import Skeleton from '@material-ui/lab/Skeleton';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Results = ({ className, data, onLimitChange, onPageChange, ...rest }) => {
+const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest }) => {
     const classes = useStyles();
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
@@ -82,6 +83,104 @@ const Results = ({ className, data, onLimitChange, onPageChange, ...rest }) => {
         setCurrentUserActivities("hello");
     }
 
+    const RenderListUsers = () => {
+        if(!data.length){
+            return (
+                <TableRow>
+                    <TableCell>
+                        <Skeleton/><Skeleton/><Skeleton/>
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton/><Skeleton/><Skeleton/>
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton/><Skeleton/><Skeleton/>
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton/><Skeleton/><Skeleton/>
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton/><Skeleton/><Skeleton/>
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton/><Skeleton/><Skeleton/>
+                    </TableCell>
+                </TableRow>) 
+        }
+        else {
+            return (
+                data.map((user) => (
+                    <TableRow
+                        hover
+                        key={user.id}>
+                        <TableCell>
+                            <Box
+                                alignItems="center"
+                                display="flex">
+                                <Avatar className={classes.avatar} src={user.avatarUrl}>
+                                    {/* {getInitials(user.name)} */}
+                                </Avatar>
+                                <Typography color="textPrimary" variant="body1">
+                                {/* eslint-disable-next-line */}
+                                <a onClick={()=>{clickViewInfoUser(user)}}>{user.firstname} {user.lastname}</a> 
+                                </Typography>
+                            </Box>
+                        </TableCell>
+                        <TableCell>
+                            {/* eslint-disable-next-line */}
+                            <a onClick={()=>{clickViewInfoUser(user)}}>{user.phone}</a> 
+                        </TableCell>
+                        <TableCell>
+                            {user.email}
+                        </TableCell>
+                        <TableCell>
+                            {convertTimeStampToDate(user.birthday)}
+                        </TableCell>
+                        <TableCell>
+                            {user.totalSearch ? user.totalSearch : 0}
+                        </TableCell>
+                        <TableCell>
+                            <Box
+                                // alignItems="center"
+                                display="flex"
+                                flexDirection="column"
+                                p={2}>
+                                <TableRow className="mt-2">
+                                    <Button style={{ width: "100%" }} variant="success"
+                                        onClick={() => clickActivateUser(user.phone)}
+                                        disabled={isUserActiveHashmap[user.phone] ? true : false}
+                                        hidden={isUserActiveHashmap[user.phone] ? true : false}>
+                                        Active
+                            </Button>
+                                </TableRow>
+                                <TableRow className="mt-2">
+                                    <Button style={{ width: "100%" }} variant="danger"
+                                        onClick={() => clickDeactivateUser(user.phone)}
+                                        disabled={!isUserActiveHashmap[user.phone] ? true : false}
+                                        hidden={!isUserActiveHashmap[user.phone] ? true : false}>
+                                        Disable
+                            </Button>
+                                </TableRow>
+                                <TableRow className="mt-2">
+                                    <Button style={{ width: "100%" }} variant="primary"
+                                        onClick={() => clickViewInfoUser(user)}>
+                                        Detail
+                            </Button>
+                                </TableRow>
+                                <TableRow className="mt-2">
+                                    <Button style={{ width: "100%" }} variant="info"
+                                        onClick={() => clickViewActivitiesUser()}>
+                                        Activities
+                            </Button>
+                                </TableRow>
+                            </Box>
+                        </TableCell>
+                    </TableRow>
+                )) 
+            )
+        }
+    };
+
     return (
         <>
             <Card className={clsx(classes.root, className)} {...rest}>
@@ -99,77 +198,14 @@ const Results = ({ className, data, onLimitChange, onPageChange, ...rest }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data.map((user) => (
-                                    <TableRow
-                                        hover
-                                        key={user.id}>
-                                        <TableCell>
-                                            <Box
-                                                alignItems="center"
-                                                display="flex">
-                                                <Avatar className={classes.avatar} src={user.avatarUrl}>
-                                                    {/* {getInitials(user.name)} */}
-                                                </Avatar>
-                                                <Typography color="textPrimary" variant="body1">
-                                                    {user.firstname} {user.lastname}
-                                                </Typography>
-                                            </Box>
-                                        </TableCell>
-                                        <TableCell>
-                                            {user.phone}
-                                        </TableCell>
-                                        <TableCell>
-                                            {user.email}
-                                        </TableCell>
-                                        <TableCell>
-                                            {convertTimeStampToDate(user.birthday)}
-                                        </TableCell>
-                                        <TableCell>
-                                            {user.totalSearch ? user.totalSearch : 0}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Box
-                                                // alignItems="center"
-                                                display="flex"
-                                                flexDirection="column"
-                                                p={2}>
-                                                <TableRow className="mt-2">
-                                                    <Button style={{ width: "100%" }} variant="success"
-                                                        onClick={() => clickActivateUser(user.phone)}
-                                                        disabled={isUserActiveHashmap[user.phone] ? true : false}>
-                                                        Active
-                                            </Button>
-                                                </TableRow>
-                                                <TableRow className="mt-2">
-                                                    <Button style={{ width: "100%" }} variant="danger"
-                                                        onClick={() => clickDeactivateUser(user.phone)}
-                                                        disabled={!isUserActiveHashmap[user.phone] ? true : false}>
-                                                        Disable
-                                            </Button>
-                                                </TableRow>
-                                                <TableRow className="mt-2">
-                                                    <Button style={{ width: "100%" }} variant="primary"
-                                                        onClick={() => clickViewInfoUser(user)}>
-                                                        Detail
-                                            </Button>
-                                                </TableRow>
-                                                <TableRow className="mt-2">
-                                                    <Button style={{ width: "100%" }} variant="info"
-                                                        onClick={() => clickViewActivitiesUser()}>
-                                                        Activities
-                                            </Button>
-                                                </TableRow>
-                                            </Box>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                <RenderListUsers/>
                             </TableBody>
                         </Table>
                     </Box>
                 </PerfectScrollbar>
                 <TablePagination
                     component="div"
-                    count={data.length}
+                    count={count}
                     onChangePage={handlePageChange}
                     onChangeRowsPerPage={handleLimitChange}
                     page={page}

@@ -22,14 +22,20 @@ const useStyles = makeStyles((theme) => ({
 const ListUser = () => {
     const classes = useStyles();
     const [users, setUsers] = useState([]);
+    const [count, setCount] = useState("");
     const [filteredUsers, setFilteredUsers] = useState("");
+    const [params, setParams] = useState({
+        limit: 10,
+        offset: 0
+    });
 
     useEffect(()=>{
         (async ()=>{
-            const data = await ListUserAPI.getUsers();
+            const data = await ListUserAPI.getUsers(params);
             setUsers(data['users']);
+            setCount(data['count']);
         })()
-    },[]);
+    },[params]);
 
     const filterUser = (searchValue) => {
         if(searchValue){
@@ -47,11 +53,17 @@ const ListUser = () => {
     };
     
     const clickChangeLimit = (limit) => {
-        console.log(limit);
+        setParams(prevParams=>{
+            prevParams['limit']= limit;
+            return {...prevParams};
+        });
     };
 
     const clickChangePage = (page) => {
-        console.log(page);
+        setParams(prevParams=>{
+            prevParams['offset']= page;
+            return {...prevParams};
+        })
     };
 
     return (
@@ -62,6 +74,7 @@ const ListUser = () => {
                     <Results 
                         onLimitChange={(limit)=>{clickChangeLimit(limit)}}
                         onPageChange={(page)=>{clickChangePage(page)}}
+                        count={count}
                         data={filteredUsers ? filteredUsers : users}>
                     </Results>
                 </Box>

@@ -47,7 +47,7 @@ const DashboardLayout = (props) => {
 
   return (
     <div className={classes.root}>
-      <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
+      <TopBar history={props.history} onMobileNavOpen={() => setMobileNavOpen(true)} />
       <NavBar
         onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}

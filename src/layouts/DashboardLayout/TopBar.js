@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
   AppBar,
-  Badge,
   Box,
   Hidden,
   IconButton,
@@ -12,7 +11,6 @@ import {
 } from 'ver-4-11';
 import {makeStyles} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import auth from '../../auth/auth'
 // import Logo from 'src/components/Logo';
@@ -28,10 +26,11 @@ const useStyles = makeStyles(() => ({
 const TopBar = ({
   className,
   onMobileNavOpen,
+  history,
   ...rest
 }) => {
   const classes = useStyles();
-  const [notifications] = useState([]);
+  // const [notifications] = useState([]);
 
   return (
     <AppBar
@@ -44,16 +43,16 @@ const TopBar = ({
         </RouterLink>
         <Box flexGrow={1} />
         <Hidden mdDown>
-          <IconButton color="inherit">
+          {/* <IconButton color="inherit">
             <Badge
               badgeContent={notifications.length}
               color="primary"
               variant="dot">
               <NotificationsIcon />
             </Badge>
-          </IconButton>
+          </IconButton> */}
           <IconButton color="inherit">
-            <InputIcon onClick={()=>{console.log("asfd")}}/>
+            <InputIcon onClick={()=>{auth.logout(()=>history.push('/admin/login'))}}/>
           </IconButton>
         </Hidden>
         <Hidden lgUp>
