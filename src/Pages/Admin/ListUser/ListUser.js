@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const ListUser = () => {
     const classes = useStyles();
     const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState("");
 
     useEffect(()=>{
         (async ()=>{
@@ -30,12 +31,39 @@ const ListUser = () => {
         })()
     },[]);
 
+    const filterUser = (searchValue) => {
+        if(searchValue){
+            let res = users.filter((val)=>{
+                if(val.firstname.toLowerCase().includes(searchValue) || val.lastname.toLowerCase().includes(searchValue)
+                    || val.phone.includes(searchValue))
+                    return true;
+                return false;
+            });
+            setFilteredUsers(res);
+        }
+        else{
+            setFilteredUsers("");
+        }
+    };
+    
+    const clickChangeLimit = (limit) => {
+        console.log(limit);
+    };
+
+    const clickChangePage = (page) => {
+        console.log(page);
+    };
+
     return (
         <Page className={classes.root} title="Users">
             <Container maxWidth={false}>
-                <Toolbar/>
+                <Toolbar onChangeSearchValue={(searchValue)=>filterUser(searchValue)}/>
                 <Box mt={3}>
-                    <Results data={users} />
+                    <Results 
+                        onLimitChange={(limit)=>{clickChangeLimit(limit)}}
+                        onPageChange={(page)=>{clickChangePage(page)}}
+                        data={filteredUsers ? filteredUsers : users}>
+                    </Results>
                 </Box>
             </Container>
         </Page>

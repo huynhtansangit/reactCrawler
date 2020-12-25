@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -22,8 +22,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ className, ...rest }) => {
+const Toolbar = ({ className, onChangeSearchValue, ...rest }) => {
   const classes = useStyles();
+  const [searchValue, setSearchValue] = useState("");
+
+  useEffect(()=>{
+    onChangeSearchValue(searchValue)
+  },[searchValue]); //eslint-disable-line
 
   return (
     <div
@@ -47,8 +52,9 @@ const Toolbar = ({ className, ...rest }) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search customer"
+                placeholder="Search customer by name or phone number"
                 variant="outlined"
+                onChange={(e)=>{setSearchValue(e.target.value);}}
               />
             </Box>
           </CardContent>

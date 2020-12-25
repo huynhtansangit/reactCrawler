@@ -246,6 +246,12 @@ export default function SignInSide(props) {
     }
   }
 
+  const handleHitEnter = (e)=>{
+    if(e.key === 'Enter'){
+        handleLogin();
+    }
+}
+
   // Function below equal to componentDidMount
   useEffect(()=>{
     if(props.location?.state?.loginAsAdmin || props.loginAsAdmin){
@@ -369,6 +375,7 @@ export default function SignInSide(props) {
               value={phone}
               error={!isValidatePhone}
               helperText={messagePhone}
+              onKeyDown={handleHitEnter}
             />
             <TextField
               variant="outlined"
@@ -384,6 +391,7 @@ export default function SignInSide(props) {
               value={pwd}
               error={!isValidatePwd}
               helperText={messagePwd}
+              onKeyDown={handleHitEnter}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" checked={isRememberChecked} onClick={checkRemember} />}
