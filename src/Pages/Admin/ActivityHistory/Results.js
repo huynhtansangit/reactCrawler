@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import Skeleton from '@material-ui/lab/Skeleton';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
     Avatar,
@@ -16,7 +17,6 @@ import {
     Typography,
 } from 'ver-4-11';
 import { makeStyles } from '@material-ui/core'
-import HistoryApi from './api/historyApi';
 import { convertTimeStampToDate } from '../../../utils/convertTools';
 
 // import getInitials from 'src/utils/getInitials';
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Results = ({ className, data, ...rest }) => {
+const Results = ({ className, data, count,onLimitChange, onPageChange, ...rest }) => {
     const classes = useStyles();
     const [selectedUserIds, setSelectedUserIds] = useState([]); // eslint-disable-line
     const [limit, setLimit] = useState(10);
@@ -37,37 +37,18 @@ const Results = ({ className, data, ...rest }) => {
     const [timeUpdate, setTimeUpdate] = useState(0);
     const timestamp = Date.now();
 
-    const [filters, setFilter] = useState({
-        offset: 0,
-        limit: 10,
-        type: 'crawl',
-        from: 0,
-        to: 1789789789,
-        user: '0868952131',
-        platform: 'instagram',
-    });
-
-    const [fetchedData, setData] = useState("");
 
     // ComponentDidMount
     useEffect(() => {
-        console.log("did mount");
+        console.log(data);
         setFirstRender(false);
-        const fetchHistoryList = async () => {
-            try {
-                const responseData = await HistoryApi.get10Elements(filters);
-                setData(responseData['logs']);
-            } catch (error) {
-                console.log('Fail to fetch: ', error);
-            }
-        }
-        fetchHistoryList();
-    }, [])
+
+    }, [data])  
 
     //DidUpdate
     useEffect(() => {
-        console.log(`Update ${timeUpdate}`);
-        setTimeout(() => { setTimeUpdate(timeUpdate + 1) }, 2000);
+        // console.log(`Update ${timeUpdate}`);
+        // setTimeout(() => { setTimeUpdate(timeUpdate + 1) }, 2000);
         // return ()=>{
         //     clearTimeout(time);
         // }
@@ -111,13 +92,79 @@ const Results = ({ className, data, ...rest }) => {
     };
 
     const handleLimitChange = (event) => {
-        setLimit(event.target.value);
+        const limit = event.target.value;
+        setLimit(limit);
+        onLimitChange(limit);
     };
 
     const handlePageChange = (event, newPage) => {
         setPage(newPage);
+        onPageChange(newPage);
     };
-
+    const RenderListLogs = () => {
+        if (!data.length) {
+            return (
+                <TableRow>
+                    <TableCell>
+                        <Skeleton animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton animation="wave" />
+                    </TableCell>
+                    <TableCell>
+                        <Skeleton animation="wave" />
+                    </TableCell>
+                </TableRow>
+            )
+        }
+        else return (
+            data.map((log) => (
+                <TableRow
+                    hover
+                    key={log.id}
+                    selected={selectedUserIds.indexOf(log.id) !== -1}>
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            checked={selectedUserIds.indexOf(log.id) !== -1}
+                            onChange={(event) => handleSelectOne(event, log.id)}
+                            value="true"
+                        />
+                    </TableCell>
+                    {/* Checkbox kko xai, do xoa sau. Do data vo giao dien di */}
+                    <TableCell>
+                        <Box
+                            alignItems="center"
+                            display="flex">
+                            <Typography color="textPrimary" variant="body1">
+                                {log.id}
+                            </Typography>
+                        </Box>
+                    </TableCell>
+                    <TableCell>
+                        {!log['user'] ? "null" : log['user'].firstname + " " + log['user'].lastname}
+                    </TableCell>
+                    <TableCell>
+                        {convertTimeStampToDate(log['time'])}
+                    </TableCell>
+                    <TableCell>
+                        {log['url']}
+                    </TableCell>
+                    <TableCell>
+                        {log['type']}
+                    </TableCell>
+                </TableRow>
+            )
+            ))
+    }
     return (
         <Card className={clsx(classes.root, className)} {...rest}>
             <PerfectScrollbar>
@@ -144,59 +191,19 @@ const Results = ({ className, data, ...rest }) => {
                         </TableHead>
                         <TableBody>
                             {/* Sao ko co data? */}
-                            {
-                                !fetchedData ? "" :
-                                    fetchedData.map((log) => (
-                                        <TableRow
-                                            hover
-                                            key={log.id}
-                                            selected={selectedUserIds.indexOf(log.id) !== -1}>
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    checked={selectedUserIds.indexOf(log.id) !== -1}
-                                                    onChange={(event) => handleSelectOne(event, log.id)}
-                                                    value="true"
-                                                />
-                                            </TableCell>
-                                            {/* Checkbox kko xai, do xoa sau. Do data vo giao dien di */}
-                                            <TableCell>
-                                                <Box
-                                                    alignItems="center"
-                                                    display="flex">
-                                                    <Avatar className={classes.avatar} src={log.id}>
-                                                        {/* {getInitials(user.name)} */}
-                                                    </Avatar>
-                                                    <Typography color="textPrimary" variant="body1">
-                                                        {log.id}
-                                                    </Typography>
-                                                </Box>
-                                            </TableCell>
-                                            <TableCell>
-                                                {!log['user'] ? "null" : log['user'].firstname + " " + log['user'].lastname}
-                                            </TableCell>
-                                            <TableCell>
-                                                {convertTimeStampToDate(log['time'])}
-                                            </TableCell>
-                                            <TableCell>
-                                                {log['url']}
-                                            </TableCell>
-                                            <TableCell>
-                                                {log['type']}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                        <RenderListLogs/>
                         </TableBody>
                     </Table>
                 </Box>
             </PerfectScrollbar>
             <TablePagination
                 component="div"
-                count={data.length}
+                count={count}
                 onChangePage={handlePageChange}
                 onChangeRowsPerPage={handleLimitChange}
                 page={page}
                 rowsPerPage={limit}
-                rowsPerPageOptions={[5, 10, 25]}
+                rowsPerPageOptions={[1, 5, 10, 25]}
             />
         </Card>
     );
