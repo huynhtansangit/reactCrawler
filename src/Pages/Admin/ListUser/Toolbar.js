@@ -11,6 +11,7 @@ import {
 } from 'ver-4-11';
 import {makeStyles} from '@material-ui/core'
 import { Search as SearchIcon } from 'react-feather';
+import { Button } from 'react-bootstrap';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ className, onChangeSearchValue, ...rest }) => {
+const Toolbar = ({ className, onChangeSearchValue, onAdvanceSearch, ...rest }) => {
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState("");
 
@@ -37,7 +38,7 @@ const Toolbar = ({ className, onChangeSearchValue, ...rest }) => {
       <Box mt={3}>
         <Card>
           <CardContent>
-            <Box maxWidth={500}>
+            <Box maxWidth={500} >
               <TextField
                 fullWidth
                 id="searchUserBar"
@@ -52,11 +53,12 @@ const Toolbar = ({ className, onChangeSearchValue, ...rest }) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search customer by name or phone number"
+                placeholder="Search user in this page by name or phone number"
                 variant="outlined"
                 onChange={(e)=>{setSearchValue(e.target.value);}}
               />
             </Box>
+            <Button variant="primary" onClick={(e)=>{onAdvanceSearch(searchValue)}}>Advance Searching</Button>
           </CardContent>
         </Card>
       </Box>

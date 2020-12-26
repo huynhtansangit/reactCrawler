@@ -19,6 +19,10 @@ import { Button, Modal } from 'react-bootstrap';
 import ListUserApi from './ListUserAPI';
 import { convertTimeStampToDate } from '../../../utils/convertTools'
 import Skeleton from '@material-ui/lab/Skeleton';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import { withStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +31,16 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2)
     }
 }));
+
+const GreenCheckbox = withStyles({
+    root: {
+        color: green[400],
+        '&$checked': {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest }) => {
     const classes = useStyles();
@@ -84,28 +98,28 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
     }
 
     const RenderListUsers = () => {
-        if(!data.length){
+        if (!data.length) {
             return (
                 <TableRow>
                     <TableCell>
-                        <Skeleton/><Skeleton/><Skeleton/>
+                        <Skeleton /><Skeleton /><Skeleton />
                     </TableCell>
                     <TableCell>
-                        <Skeleton/><Skeleton/><Skeleton/>
+                        <Skeleton /><Skeleton /><Skeleton />
                     </TableCell>
                     <TableCell>
-                        <Skeleton/><Skeleton/><Skeleton/>
+                        <Skeleton /><Skeleton /><Skeleton />
                     </TableCell>
                     <TableCell>
-                        <Skeleton/><Skeleton/><Skeleton/>
+                        <Skeleton /><Skeleton /><Skeleton />
                     </TableCell>
                     <TableCell>
-                        <Skeleton/><Skeleton/><Skeleton/>
+                        <Skeleton /><Skeleton /><Skeleton />
                     </TableCell>
                     <TableCell>
-                        <Skeleton/><Skeleton/><Skeleton/>
+                        <Skeleton /><Skeleton /><Skeleton />
                     </TableCell>
-                </TableRow>) 
+                </TableRow>)
         }
         else {
             return (
@@ -121,23 +135,28 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                                     {/* {getInitials(user.name)} */}
                                 </Avatar>
                                 <Typography color="textPrimary" variant="body1">
-                                {/* eslint-disable-next-line */}
-                                <a onClick={()=>{clickViewInfoUser(user)}}>{user.firstname} {user.lastname}</a> 
+                                    {/* eslint-disable-next-line */}
+                                    <a onClick={() => { clickViewInfoUser(user) }}>{user.firstname} {user.lastname}</a>
                                 </Typography>
                             </Box>
                         </TableCell>
                         <TableCell>
                             {/* eslint-disable-next-line */}
-                            <a onClick={()=>{clickViewInfoUser(user)}}>{user.phone}</a> 
+                            <a onClick={() => { clickViewInfoUser(user) }}>{user.phone}</a>
                         </TableCell>
                         <TableCell>
-                            {user.email}
+                            {/* eslint-disable-next-line */}
+                            <a onClick={() => { clickViewInfoUser(user) }}>{user.email}</a>
                         </TableCell>
                         <TableCell>
-                            {convertTimeStampToDate(user.birthday)}
+                            {/* eslint-disable-next-line */}
+                            <a onClick={() => { clickViewInfoUser(user) }}>{convertTimeStampToDate(user.birthday)}</a>
                         </TableCell>
                         <TableCell>
-                            {user.totalSearch ? user.totalSearch : 0}
+                            <FormControlLabel
+                                control={<GreenCheckbox checked={user.verified? true: false} disabled name="is_verified" />}
+                                // label="Custom color"
+                            />
                         </TableCell>
                         <TableCell>
                             <Box
@@ -150,7 +169,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                                         onClick={() => clickActivateUser(user.phone)}
                                         disabled={isUserActiveHashmap[user.phone] ? true : false}
                                         hidden={isUserActiveHashmap[user.phone] ? true : false}>
-                                        Active
+                                        Activate User
                             </Button>
                                 </TableRow>
                                 <TableRow className="mt-2">
@@ -158,25 +177,25 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                                         onClick={() => clickDeactivateUser(user.phone)}
                                         disabled={!isUserActiveHashmap[user.phone] ? true : false}
                                         hidden={!isUserActiveHashmap[user.phone] ? true : false}>
-                                        Disable
+                                        Disable User
                             </Button>
                                 </TableRow>
                                 <TableRow className="mt-2">
                                     <Button style={{ width: "100%" }} variant="primary"
                                         onClick={() => clickViewInfoUser(user)}>
-                                        Detail
+                                        User's Detail
                             </Button>
                                 </TableRow>
                                 <TableRow className="mt-2">
                                     <Button style={{ width: "100%" }} variant="info"
                                         onClick={() => clickViewActivitiesUser()}>
-                                        Activities
+                                        User's Activities
                             </Button>
                                 </TableRow>
                             </Box>
                         </TableCell>
                     </TableRow>
-                )) 
+                ))
             )
         }
     };
@@ -193,12 +212,12 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                                     <TableCell>Phone</TableCell>
                                     <TableCell>Email</TableCell>
                                     <TableCell>Birthday</TableCell>
-                                    <TableCell>Total search</TableCell>
+                                    <TableCell>Is verified?</TableCell>
                                     <TableCell>Action</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <RenderListUsers/>
+                                <RenderListUsers />
                             </TableBody>
                         </Table>
                     </Box>
@@ -220,7 +239,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                 scrollable={false}
                 centered
                 show={currentUserInfo ? true : false}
-                onHide={()=>setCurrentUserInfo("")}>
+                onHide={() => setCurrentUserInfo("")}>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         User's info
@@ -236,14 +255,14 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success"
-                        onClick={()=> clickActivateUser(currentUserInfo.phone)}
+                        onClick={() => clickActivateUser(currentUserInfo.phone)}
                         disabled={isUserActiveHashmap[currentUserInfo.phone] ? true : false}>
                         Activate
                     </Button>
                     <Button variant="danger"
-                        onClick={()=> clickDeactivateUser(currentUserInfo.phone)}
+                        onClick={() => clickDeactivateUser(currentUserInfo.phone)}
                         disabled={!isUserActiveHashmap[currentUserInfo.phone] ? true : false}>
-                        Deactivate
+                        Disable
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -254,7 +273,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                 scrollable={true}
                 centered
                 show={currentUserActivities ? true : false}
-                onHide={()=>setCurrentUserActivities("")}>
+                onHide={() => setCurrentUserActivities("")}>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         User's activities
@@ -268,7 +287,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary"
-                        onClick={()=> setCurrentUserActivities("")}>
+                        onClick={() => setCurrentUserActivities("")}>
                         Close
                     </Button>
                 </Modal.Footer>
