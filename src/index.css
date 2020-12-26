@@ -23,3 +23,6 @@ code {
   height: 2rem !important;
   border-bottom: 0 !important;
 }
+#btn-advance-search .MuiButton-label{
+  font-size: 15px !important;
+}

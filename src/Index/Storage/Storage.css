@@ -59,7 +59,7 @@ section{
     align-items: center !important;
 }
 
-input{
+.storage-container input{
     height: 2.5rem !important;
     padding-left: 20px !important;
 }

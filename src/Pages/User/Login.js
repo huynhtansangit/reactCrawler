@@ -182,6 +182,7 @@ export default function SignInSide(props) {
               localStorage.setItem('password', "");
             }
             // props.history.push("/");
+            setLoggedIn(true);
             return data['accessToken'];
           }
         })
@@ -304,7 +305,7 @@ export default function SignInSide(props) {
         )
       }
     }
-    else if(props.location.state?.action){
+    else if(props.location?.state?.action){
       if(props.location.state.action === "addToCollection"){
         addToCollection(props.location.state.imgSrc, props.location.state.thumbnail, props.location.state.type, 
                         props.location.state.platform, props.location.state.id, props.location.state.source);

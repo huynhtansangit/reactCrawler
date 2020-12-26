@@ -10,9 +10,11 @@ import {
     Divider,
     Typography,
     colors,
+} from 'ver-4-11';
+import {
     makeStyles,
     useTheme
-} from 'ver-4-11';
+} from '@material-ui/core'
 
 const useStyles = makeStyles(() => ({
     root: {

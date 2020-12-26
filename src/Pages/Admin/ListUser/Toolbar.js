@@ -59,6 +59,7 @@ const Toolbar = ({ className, onChangeSearchValue, onAdvanceSearch, ...rest }) =
                 onChange={(e)=>{setSearchValue(e.target.value);}}
               />
             <Button 
+              id="btn-advance-search"
               className={classes.searchButton} 
               color="primary"
               variant="contained" 

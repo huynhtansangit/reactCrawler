@@ -159,7 +159,7 @@ class Index extends Component {
 
             const firstName = await localStorage.getItem('firstname');
             const lastName = await localStorage.getItem('lastname');
-            if(firstName && lastName)
+            if(firstName || lastName)
                 this.setState({fullname: `${firstName} ${lastName}`}); 
         }
         

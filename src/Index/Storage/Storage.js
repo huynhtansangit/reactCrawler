@@ -54,7 +54,7 @@ class Storage extends Component {
                 console.log("Error occurred when trying to get your collection.");
                 if (error.response) {
                     this.setState({ statusGetCollection: { loading: false, error: error.response.data['message'] } })
-                    alert(error.response.data);
+                    alert(error.response.data.message);
                 }
                 else {
                     alert("Something went wrong. Please check your internet connection.");
