@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const ListUser = () => {
     const classes = useStyles();
     const [users, setUsers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [count, setCount] = useState("");
     const [filteredUsers, setFilteredUsers] = useState("");
     const [params, setParams] = useState({
@@ -31,9 +32,23 @@ const ListUser = () => {
 
     useEffect(()=>{
         (async ()=>{
-            const data = await ListUserAPI.getUsers(params);
-            setUsers(data['users']);
-            setCount(data['count']);
+            setIsLoading(true);
+            try {
+                const data = await ListUserAPI.getUsers(params);
+                if(data){
+                    setUsers(data['users']);
+                    setCount(data['count']);
+                }
+                setIsLoading(false);    
+            } catch (error) {
+                if(error.response){
+                    if(error.response.status === 401)
+                        alert("Can not authenticate admin, try to refresh page or re-login if necessary.")
+                    else
+                        alert(error.response.data['message']);
+                }
+            }
+            
         })()
     },[params]);
 
@@ -75,6 +90,7 @@ const ListUser = () => {
                         onLimitChange={(limit)=>{clickChangeLimit(limit)}}
                         onPageChange={(page)=>{clickChangePage(page)}}
                         count={count}
+                        isLoading={isLoading}
                         data={filteredUsers ? filteredUsers : users}>
                     </Results>
                 </Box>

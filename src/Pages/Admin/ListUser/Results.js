@@ -42,7 +42,7 @@ const GreenCheckbox = withStyles({
     checked: {},
 })((props) => <Checkbox color="default" {...props} />);
 
-const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest }) => {
+const Results = ({ className, isLoading, data, count, onLimitChange, onPageChange, ...rest }) => {
     const classes = useStyles();
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
@@ -98,7 +98,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
     }
 
     const RenderListUsers = () => {
-        if (!data.length) {
+        if (isLoading) {
             return (
                 <TableRow>
                     <TableCell>
@@ -120,6 +120,13 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                         <Skeleton /><Skeleton /><Skeleton />
                     </TableCell>
                 </TableRow>)
+        }
+        else if(!data.length){
+            return(
+                <TableRow>
+                    <TableCell>Nothing to show here...</TableCell>
+                </TableRow>
+            )
         }
         else {
             return (

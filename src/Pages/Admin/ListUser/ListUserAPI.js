@@ -17,5 +17,9 @@ class ListUserApi{
     getUser = (phone, params) => {
         return axiosClient.get(`${ADMIN_USER_URL}/${phone}`,{params});
     }
+
+    searchUser = (params) => {
+        return axiosClient.get(`${ADMIN_USER_URL}`,{params});
+    }
 }
 export default new ListUserApi();

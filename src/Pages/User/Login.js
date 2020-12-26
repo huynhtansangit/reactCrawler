@@ -167,11 +167,11 @@ export default function SignInSide(props) {
       
       axios.request(configRequest)
         .then(response => response.data)
-        .then(data => {
+        .then(async data => {
           if (data) {
-            cookies.set('accessToken', data['accessToken'], { path: '/'});
-            cookies.set('refreshToken', data['refreshToken'], { path: '/'});
-            cookies.set('expireAt', data['expireAt'], { path: '/'});
+            await cookies.set('accessToken', data['accessToken'], { path: '/'});
+            await cookies.set('refreshToken', data['refreshToken'], { path: '/'});
+            await cookies.set('expireAt', data['expireAt'], { path: '/'});
 
             if (isRememberChecked) {
               localStorage.setItem('phone', phone);
