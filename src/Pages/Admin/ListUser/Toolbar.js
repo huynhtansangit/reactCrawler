@@ -8,19 +8,19 @@ import {
   TextField,
   InputAdornment,
   SvgIcon,
+  Button
 } from 'ver-4-11';
 import {makeStyles} from '@material-ui/core'
 import { Search as SearchIcon } from 'react-feather';
-import { Button } from 'react-bootstrap';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  importButton: {
-    marginRight: theme.spacing(1)
+  searchButton: {
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    fontSize: 12,
   },
-  exportButton: {
-    marginRight: theme.spacing(1)
-  }
 }));
 
 const Toolbar = ({ className, onChangeSearchValue, onAdvanceSearch, ...rest }) => {
@@ -38,7 +38,8 @@ const Toolbar = ({ className, onChangeSearchValue, onAdvanceSearch, ...rest }) =
       <Box mt={3}>
         <Card>
           <CardContent>
-            <Box maxWidth={500} >
+            <Box display="flex"
+                justifyContent="flex-start">
               <TextField
                 fullWidth
                 id="searchUserBar"
@@ -57,8 +58,16 @@ const Toolbar = ({ className, onChangeSearchValue, onAdvanceSearch, ...rest }) =
                 variant="outlined"
                 onChange={(e)=>{setSearchValue(e.target.value);}}
               />
+            <Button 
+              className={classes.searchButton} 
+              color="primary"
+              variant="contained" 
+              onClick={(e)=>{onAdvanceSearch(searchValue)}}
+              style={{fontSize: '10px'}} size="small"
+              labelStyle={{ fontSize: 10 }}>
+                Advance Searching
+              </Button>
             </Box>
-            <Button variant="primary" onClick={(e)=>{onAdvanceSearch(searchValue)}}>Advance Searching</Button>
           </CardContent>
         </Card>
       </Box>
