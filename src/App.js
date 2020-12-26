@@ -13,7 +13,11 @@ import Register from './Pages/User/Register';
 import ResetPassword from './Pages/User/ResetPassword';
 import history from '../src/utils/history'
 import { ProtectedRoute } from './auth/protectedRoute' // This one for middleware
+import { ProtectedAdminRoute } from './auth/protectedAdminRoute' // This one for admin middleware
 import Storage from './Index/Storage/Storage';
+import Admin from './layouts/DashboardLayout';
+import NotFound from './Pages/NotFound'
+
 
 function App() {
   return (
@@ -25,7 +29,10 @@ function App() {
       <Route path="/register" exact component={Register}></Route>
       <Route path="/reset" exact component={ResetPassword}></Route>
       <ProtectedRoute path="/me" exact component ={Storage}></ProtectedRoute>
-      <Route path="/" component ={Index}/>
+      <Route path="/admin/login" exact component={()=><Login loginAsAdmin={true}/>}></Route>
+      <ProtectedAdminRoute path="/admin" component={Admin}></ProtectedAdminRoute>
+      <Route path="/" exact component ={Index}/>
+      <Route path="*" component ={NotFound}/>
     </Switch>
     </div>
     </Router>

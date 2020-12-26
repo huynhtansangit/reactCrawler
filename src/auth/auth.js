@@ -1,17 +1,20 @@
 import cookies from '../utils/cookie'
 import axios from 'axios'
 import qs from 'querystring'
-import {TOKEN_URL} from '../utils/config.url'
-
+import {TOKEN_URL, ADMIN_TOKEN_URL} from '../utils/config.url'
 
 
 
 class Auth {
     constructor() {
         this.authenticated = false;
+        this.isAdmin = false;
     }
 
-    async verifyAccessToken(){
+    async verifyAccessToken(isAdmin){
+        if(isAdmin){
+            this.isAdmin = true;
+        }
         const refreshToken = cookies.get('refreshToken');
 
         if(cookies.get('accessToken') && Math.floor(Date.now() / 1000) <= cookies.get('expireAt')){
@@ -33,8 +36,8 @@ class Auth {
             'grant_type': 'refresh_token'
         };
 
-        const config = {
-            url: TOKEN_URL,
+        let config = {
+            url: "",
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -42,6 +45,11 @@ class Auth {
             },
             data: qs.stringify(refreshForm)
         };
+        if(this.isAdmin)
+            config['url']= ADMIN_TOKEN_URL;
+        else
+            config['url']= TOKEN_URL;
+
         try {
             const res = await axios.request(config);
             

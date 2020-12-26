@@ -17,7 +17,7 @@ import axios from 'axios'
 import Collapse from '@material-ui/core/Collapse';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import cookies from '../../utils/cookie'
-import { TOKEN_URL, MY_ACCOUNT_INFO_URL } from "../../utils/config.url";
+import { TOKEN_URL, MY_ACCOUNT_INFO_URL, ADMIN_TOKEN_URL } from "../../utils/config.url";
 import auth from '../../auth/auth';
 import {Redirect} from 'react-router-dom'
 import {addToCollection, downloadImageByUrl} from '../../services/user.services'
@@ -87,6 +87,8 @@ export default function SignInSide(props) {
   const [isRememberChecked, setRemember] = React.useState(localStorage.getItem('phone') ? true : false);
   const [isLoggedIn, setLoggedIn] = React.useState("");
 
+  const [isLoginAsAdmin, setLoginAsAdmin] = React.useState(false);
+
   const validatePhone = ()=>{
     let vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
     // let phone = event.target.value ? event.target.value : cookies.get('phone');
@@ -141,8 +143,8 @@ export default function SignInSide(props) {
 
     const formData = qs.stringify(loginForm);
 
-    const configRequest = {
-      url: TOKEN_URL,
+    let configRequest = {
+      url: "",
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -150,6 +152,11 @@ export default function SignInSide(props) {
       },
       data: formData
     };
+    
+    if(isLoginAsAdmin)
+        configRequest['url']= ADMIN_TOKEN_URL;
+    else
+        configRequest['url']= TOKEN_URL;
 
     if (isValidatePhone && isValidatePwd) {
       setShowAlert(false);
@@ -160,11 +167,11 @@ export default function SignInSide(props) {
       
       await axios.request(configRequest)
         .then(response => response.data)
-        .then(data => {
+        .then(async data => {
           if (data) {
-            cookies.set('accessToken', data['accessToken'], { path: '/'});
-            cookies.set('refreshToken', data['refreshToken'], { path: '/'});
-            cookies.set('expireAt', data['expireAt'], { path: '/'});
+            await cookies.set('accessToken', data['accessToken'], { path: '/'});
+            await cookies.set('refreshToken', data['refreshToken'], { path: '/'});
+            await cookies.set('expireAt', data['expireAt'], { path: '/'});
 
             if (isRememberChecked) {
               localStorage.setItem('phone', phone);
@@ -190,32 +197,39 @@ export default function SignInSide(props) {
             data: formData
           };
           
-          await axios.request(config)
-            .then(res=> res.data)
-            .then(async data =>{
-              if(data){
-                await localStorage.setItem('firstname', data['firstname'])
-                await localStorage.setItem('lastname', data['lastname'])
-              }
-            })
-            .catch(error =>{
-              console.log("Error occurred when get user's info.");
-              if(error.response){
-                console.log(error.response.data);
-              }
-              else{
-                console.log("Something went wrong. Please check your internet connection.");
-              }
-            })
-
-            setLoggedIn(true);
+          if(isLoginAsAdmin){
+            localStorage.setItem('firstname', 'admin')
+            localStorage.setItem('lastname', '')
+          }
+          else{
+            axios.request(config)
+              .then(res=> res.data)
+              .then(data =>{
+                if(data){
+                  localStorage.setItem('firstname', data['firstname'])
+                  localStorage.setItem('lastname', data['lastname'])
+                }
+              })
+              .catch(error =>{
+                console.log("Error occurred when get user's info.");
+                if(error.response){
+                  console.log(error.response.data);
+                }
+                else{
+                  console.log("Something went wrong. Please check your internet connection.");
+                }
+              })
+          }
         })
         .catch((error) => {
           console.log(error);
           if (error.response) {
             console.error('Error:', error.response.data);
             // setState for showing errors here.
-            if (error.response.status === 401 || error.response.status === 404)
+            if(error.response.data['message'] === 'Account has been disable'){
+              setError("Your account has been disabled.")
+            }
+            else if (error.response.status === 401 || error.response.status === 404)
               setError("Phone or password is incorrect.")
             else
               setError(error.response.data['message']);
@@ -231,16 +245,32 @@ export default function SignInSide(props) {
     }
   }
 
+  const handleHitEnter = (e)=>{
+    if(e.key === 'Enter'){
+        handleLogin();
+    }
+}
+
   // Function below equal to componentDidMount
   useEffect(()=>{
+    if(props.location?.state?.loginAsAdmin || props.loginAsAdmin){
+      setLoginAsAdmin(true);
+    }
+  },[]); //eslint-disable-line
+
+  useEffect(()=>{
     const verifyProcess = async () => {
-        const result = await auth.verifyAccessToken();
+        let result;
+        if(isLoginAsAdmin)
+            result = await auth.verifyAccessToken(true);
+        else
+            result = await auth.verifyAccessToken();
         setLoggedIn(result);
     };
     // console.log(props.location);
     if(!isLoggedIn)
       verifyProcess();
-    }, [isLoggedIn]);
+    }, [isLoggedIn]); //eslint-disable-line
 
   // Function below equal to componentDidUpdate
   useEffect(()=>{
@@ -250,7 +280,7 @@ export default function SignInSide(props) {
   });
 
   const RedirectToDestinationOrActionIfAny = ()=>{
-    if(props.location.state?.to?.pathname){
+    if(props.location?.state?.to?.pathname){
       if(props.location.state?.to?.state?.imgSrc){
         return <Redirect
           to={{
@@ -291,6 +321,17 @@ export default function SignInSide(props) {
               }
           }}/>
           )
+    }
+    else if(props.loginAsAdmin){
+      return (
+        <Redirect
+          to={{
+            pathname: '/admin/dashboard',
+            state: {
+                from: props.location
+            }
+        }}/>
+      )
     }
     else{
       return (
@@ -335,6 +376,7 @@ export default function SignInSide(props) {
               value={phone}
               error={!isValidatePhone}
               helperText={messagePhone}
+              onKeyDown={handleHitEnter}
             />
             <TextField
               variant="outlined"
@@ -350,13 +392,14 @@ export default function SignInSide(props) {
               value={pwd}
               error={!isValidatePwd}
               helperText={messagePwd}
+              onKeyDown={handleHitEnter}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" checked={isRememberChecked} onClick={checkRemember} />}
               label="Remember me"
             />
             <Collapse in={((messagePhone || messagePwd) && isShowAlert)? true: false}>
-              <Alert severity="error">
+              <Alert severity="error">  
                 <AlertTitle>Error</AlertTitle>
                 <p> {messagePhone} <br/> {messagePwd}</p> 
               </Alert>

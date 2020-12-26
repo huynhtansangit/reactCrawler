@@ -19,3 +19,7 @@ code {
   color: black !important;
   background-color: rgb(253 213 211) !important;
 }
+#searchUserBar{
+  height: 2rem !important;
+  border-bottom: 0 !important;
+}

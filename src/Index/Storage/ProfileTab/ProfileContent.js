@@ -8,6 +8,9 @@ import { withStyles } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import './style.css';
 import Tooltip from '@material-ui/core/Tooltip';
+import { convertTimeStampToDate } from '../../../utils/convertTools';
+
+
 const accessToken = cookies.get('accessToken');
 let config = {
     url: '',
@@ -17,6 +20,8 @@ let config = {
         'Authorization': `bearer ${accessToken}`
     },
 };
+
+
 const useStyles = makeStyles((theme) => ({
     input: {
         display: "none",
@@ -72,16 +77,25 @@ class ProfileContent extends Component {
         //     })
 
         try {
-            const data = (await axios.request(config))['data'];
+            const dataProfile = (await axios.request(config))['data'];
 
-            if (data) {
+            if (dataProfile) {
                 this.setState({ loading: false });
 
-                for (const key in data) {
-                    this.setState({ [key]: data[key] })
+                for (const key in dataProfile) {
+                    this.setState({ [key]: dataProfile[key] })
                 }
 
-                this.setState({ birthdayIsoStandard: this.convertTimeStampToDate() });
+                this.setState({ birthdayIsoStandard: convertTimeStampToDate(this.state.birthday) });
+            }
+
+            // Get avatar
+            config['url'] = MY_AVATAR_URL;
+            const dataAvatar = (await axios.request(config))['data'];
+
+            if (dataAvatar) {
+                // const binary =  new Buffer(dataAvatar.data.toString(), 'binary')
+                // await this.setState({avatar: `data:image/jpeg;base64,${binary}`});
             }
         } catch (error) {
             if (error.response) {
@@ -111,11 +125,6 @@ class ProfileContent extends Component {
         } catch (error) {
             console.log(error);
         }
-    }
-
-    convertTimeStampToDate = () => {
-        console.log("converting");
-        return new Date(this.state.birthday * 1000).toISOString().substr(0, 10);
     }
 
     componentDidUpdate() {
@@ -197,7 +206,7 @@ class ProfileContent extends Component {
                             <input accept="image/*" className="d-none" id="icon-button-file" type="file" />
                             <label htmlFor="icon-button-file">
                                 <Tooltip title="Change avatar" arrow>
-                                    <Avatar src="https://www.w3schools.com/howto/img_avatar.png" />
+                                    <Avatar src={this.state.avatar}/>
                                 </Tooltip>
                             </label>
                             <img src={this.state.avatarSrc} alt="avatar"/>
