@@ -325,7 +325,7 @@ export default function SignInSide(props) {
       return (
         <Redirect
           to={{
-            pathname: '/admin/activity-history',
+            pathname: '/admin/dashboard',
             state: {
                 from: props.location
             }

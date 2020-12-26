@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
 import ListUser from '../../Pages/Admin/ListUser/ListUser';
+import Dashboard from '../../Pages/Admin/Dashboard/Dashboard';
 import TopBar from './TopBar';
 import {Route} from 'react-router-dom';
 import Chart from '../../Pages/Admin/Chart/Chart'
@@ -57,6 +58,7 @@ const DashboardLayout = (props) => {
           <div className={classes.content}>
             <ThemeProvider theme={theme}>
               <GlobalStyles />
+              <Route exact path={`${props.match.path}/dashboard`} component={Dashboard} />
               <Route exact path={`${props.match.path}/users`} component={ListUser} />
               <Route exact path={`${props.match.path}/activity-history`} component={ActivityHistory} />
               <Route exact path={`${props.match.path}/chart`} component={Chart} />
