@@ -6,6 +6,7 @@ import AboutUs from './Aboutus/Aboutus';
 import Footer from './Footer/Footer';
 import {DOWNLOAD_URL} from '../utils/config.url'
 import auth from '../auth/auth'
+import cookies from '../utils/cookie'
 
 
 class Index extends Component {
@@ -21,16 +22,21 @@ class Index extends Component {
             disableLoadMoreBtn: false,
             fullname: "User",
             isAuth: false,
+            additionalInfoTiktok: {isAdded: null, id: null, source: null, collectionId: null}
         }
     }
 
     async getMedia(inputUrl, nameNetwork, cursor){
+        let headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+
+        if(this.state.isAuth)
+            headers['Authorization']=`bearer ${cookies.get('accessToken')}`;
         let option = {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
+            headers: headers
         };
         
         try {
@@ -38,7 +44,6 @@ class Index extends Component {
             if(nameNetwork === 'tiktok'){
                 option['method']='GET';
                 fetchUrl = `${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`
-                // response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`, option);
             }
             else{
                 if(cursor){
@@ -76,6 +81,15 @@ class Index extends Component {
                 });
             }
             else{
+                if(nameNetwork==='tiktok'){
+                    this.setState({additionalInfoTiktok: {
+                        isAdded: data['isAdded'],
+                        id: data['id'], 
+                        source: data['source'],
+                        collectionId: data['collectionId'],
+                    }});
+                    this.setState({isAddedTiktok: data['isAdded']});
+                }
                 videosData = data['data'];
             }
             
@@ -131,19 +145,20 @@ class Index extends Component {
         // console.log("onUpdateBannerInput");
         this.setState({ 
             inputUrl: inputUrl,
-            nameNetwork: nameNetwork ,
             clickedBtnSearch: true
-        }) 
+        })
+        if(nameNetwork){
+            this.setState({nameNetwork: nameNetwork});}
     }
 
     async componentDidMount(){
         // Authenticating process.
         const authProcess = await auth.verifyAccessToken();
         if(authProcess){
-            this.setState({isAuth: true});
+            await this.setState({isAuth: true});
 
-            const firstName = localStorage.getItem('firstname');
-            const lastName = localStorage.getItem('lastname');
+            const firstName = await localStorage.getItem('firstname');
+            const lastName = await localStorage.getItem('lastname');
             if(firstName && lastName)
                 this.setState({fullname: `${firstName} ${lastName}`}); 
         }
@@ -168,6 +183,9 @@ class Index extends Component {
                 <Header
                     onUpdateBannerInput={this.onUpdateBannerInput.bind(this)} 
                     sticky="fixed-top"
+                    isAuth={this.state.isAuth}
+                    fullname={this.state.fullname}
+                    history={this.props.history}
                 ></Header>
                 <Banner 
                     onUpdateBannerInput={this.onUpdateBannerInput.bind(this)}
@@ -177,6 +195,7 @@ class Index extends Component {
                 ></Banner>
                 <Gallery 
                     dataGallery= {this.state.dataGallery}
+                    additionalInfoTiktok= {this.state.additionalInfoTiktok}
                     nameNetwork= {this.state.nameNetwork}
                     inputUrl= {this.state.inputUrl}
                     getMoreMedia={this.getMoreMedia.bind(this)}
@@ -184,7 +203,6 @@ class Index extends Component {
                     history={this.props.history}
                     isAuth={this.state.isAuth}>
                 </Gallery>
-                {/* <Storage></Storage> */}
                 <AboutUs></AboutUs>
                 <Footer></Footer>
             </div>

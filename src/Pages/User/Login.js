@@ -20,7 +20,7 @@ import cookies from '../../utils/cookie'
 import { TOKEN_URL, MY_ACCOUNT_INFO_URL, ADMIN_TOKEN_URL } from "../../utils/config.url";
 import auth from '../../auth/auth';
 import {Redirect} from 'react-router-dom'
-import addToCollection, {downloadImageByUrl} from '../../services/user.services'
+import {addToCollection, downloadImageByUrl} from '../../services/user.services'
 
 
 function Copyright() {
@@ -165,7 +165,7 @@ export default function SignInSide(props) {
       // Temporary disable btn after clicked.
       setDisableLoginBtn(true);
       
-      axios.request(configRequest)
+      await axios.request(configRequest)
         .then(response => response.data)
         .then(async data => {
           if (data) {
@@ -182,11 +182,10 @@ export default function SignInSide(props) {
               localStorage.setItem('password', "");
             }
             // props.history.push("/");
-            setLoggedIn(true);
             return data['accessToken'];
           }
         })
-        .then((accessToken)=>{
+        .then(async (accessToken)=>{
           const config = {
             url: MY_ACCOUNT_INFO_URL,
             method: 'GET',
@@ -268,7 +267,7 @@ export default function SignInSide(props) {
             result = await auth.verifyAccessToken();
         setLoggedIn(result);
     };
-
+    // console.log(props.location);
     if(!isLoggedIn)
       verifyProcess();
     }, [isLoggedIn]); //eslint-disable-line
@@ -305,9 +304,11 @@ export default function SignInSide(props) {
         )
       }
     }
-    else if(props.location?.state?.action){
-      if(props.location.state.action === "addToCollection")
-        addToCollection(props.location.state.imgSrc, props.location.state.thumbnail, props.location.state.type);
+    else if(props.location.state?.action){
+      if(props.location.state.action === "addToCollection"){
+        addToCollection(props.location.state.imgSrc, props.location.state.thumbnail, props.location.state.type, 
+                        props.location.state.platform, props.location.state.id, props.location.state.source);
+      }
       else if(props.location.state.action === "downloadSingleImage"){
         downloadImageByUrl(props.location.state.imgSrc);
       }

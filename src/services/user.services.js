@@ -1,5 +1,5 @@
 import auth from '../auth/auth'
-import { ADD_TO_COLLECTION_URL } from '../utils/config.url'
+import { COLLECTIONS_URL } from '../utils/config.url'
 import cookies from '../utils/cookie'
 import axios from 'axios'
 import download from 'downloadjs'
@@ -50,13 +50,13 @@ export const downloadMultiImagesByUrlsVers2 = async (listImage, callback) => {
 
     const result = await auth.verifyAccessToken();
     if (result === true) {
-        const folder = zip.folder("Downloaded-Image-From-InstaDown")
+        const folder = zip.folder("From InstaDown With Love")
         let count = 0;
 
-        for( const [idx, el] of listImage.entries()) {
+        for (const [idx, el] of listImage.entries()) {
             // loading a file and add it in a zip file
             // eslint-disable-next-line
-            JSZipUtils.getBinaryContent(el.url, (err, data) =>{
+            JSZipUtils.getBinaryContent(el.url, (err, data) => {
                 let filename = `image-${idx}.jpg`;
                 if (err) {
                     throw err; // or handle the error
@@ -64,8 +64,8 @@ export const downloadMultiImagesByUrlsVers2 = async (listImage, callback) => {
                 folder.file(filename, data, { binary: true });
                 count++; // eslint-no-loop-func
                 // NOTE Need to figure out if count can be less then length or not?
-                if (count === listImage.length) {    
-                zip.generateAsync({ type: 'blob' }).then(function (content) {
+                if (count === listImage.length) {
+                    zip.generateAsync({ type: 'blob' }).then(function (content) {
                         saveAs(content, "FromInstaDownWithLove.zip");
                     });
                 }
@@ -77,18 +77,154 @@ export const downloadMultiImagesByUrlsVers2 = async (listImage, callback) => {
     }
 }
 
-const handleAddToCollection = async (url, thumbnail, type) => {
+
+// addToCollection, createCollection, deleteCollection won't need callback anymore 
+// because getCollections is taking responsibility for redirect if user not logged in yet.
+const handleGetCollections = async () => {
+    const accessToken = cookies.get("accessToken");
+
+    let config = {
+        method: 'GET',
+        url: COLLECTIONS_URL,
+        headers: {
+            'Authorization': `bearer ${accessToken}`
+        }
+    };
+
+    try {
+        const res = await axios.request(config);
+            
+        if(res.data){
+            return res.data;
+        }
+    } catch (error) {
+        console.log("Error occurred when trying to add to collection.");
+        if (error.response) {
+            return ({error: error.response.data.message});
+        }
+        else {
+            return ({error: "Something went wrong. Please check your internet connection."});
+        }
+    }
+}
+
+export async function getCollections (callback) {
+    const verifyProcess = await auth.verifyAccessToken();
+
+    if (verifyProcess) {
+        return(await handleGetCollections());
+    }
+    else {
+        callback();
+    }
+};
+
+const handleAddToCollection = async (url, thumbnail, type, platform, id, source, collectionId) => {
     const accessToken = cookies.get("accessToken");
 
     const data = {
         "url": url,
         "thumbnail": thumbnail,
-        "type": type
+        "type": type,
+        "platform": platform,
+        "id": id,
+        "source": source
     };
 
     let config = {
-        method: 'post',
-        url: ADD_TO_COLLECTION_URL,
+        method: 'POST',
+        url: `${COLLECTIONS_URL}/${collectionId}`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${accessToken}`
+        },
+        data: JSON.stringify(data)
+    };
+
+    await axios.request(config)
+        .then(response => response.data)
+        .then(data => {
+            if (data && data['message'] === 'Success') {
+                alert("Added to collection");
+            }
+        })
+        .catch(error => {
+            console.log("Error occurred when trying to add to collection.");
+            if (error.response) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong. Please check your internet connection.");
+            }
+        })
+}
+
+export async function addToCollection(url, thumbnail, type, platform, id, source, collectionId, callback) {
+    // No need to verify here.
+    const verifyProcess = await auth.verifyAccessToken();
+
+    if (verifyProcess) {
+        await handleAddToCollection(url, thumbnail, type, platform, id, source, collectionId);
+    }
+    else {
+        // Callback will never be used.
+        callback();
+    }
+};
+
+const handleItemRemoveFromCollection = async (collectionId, itemId) => {
+    const accessToken = cookies.get("accessToken");
+
+    let config = {
+        method: 'DELETE',
+        url: `${COLLECTIONS_URL}/${collectionId}/items/${itemId}`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${accessToken}`
+        },
+    };
+
+    await axios.request(config)
+        .then(response => response.data)
+        .then(data => {
+            if (data && data['message'] === 'Success') {
+                alert("Removed item from collection");
+            }
+        })
+        .catch(error => {
+            console.log("Error occurred when trying to add to collection.");
+            if (error.response) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong. Please check your internet connection.");
+            }
+        })
+}
+
+export async function removeItemFromCollection(collectionId, itemId, callback) {
+    // No need to verify here.
+    const verifyProcess = await auth.verifyAccessToken();
+
+    if (verifyProcess) {
+        await handleItemRemoveFromCollection(collectionId, itemId);
+    }
+    else {
+        // Callback will never be used.
+        callback();
+    }
+};
+
+const handleCreateCollection = (name) => {
+    const accessToken = cookies.get("accessToken");
+
+    const data = {
+        name: name
+    };
+
+    let config = {
+        method: 'POST',
+        url: COLLECTIONS_URL,
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `bearer ${accessToken}`
@@ -100,27 +236,72 @@ const handleAddToCollection = async (url, thumbnail, type) => {
         .then(response => response.data)
         .then(data => {
             if (data && data['message'] === 'Success') {
-                alert("Added to collection");
+                // alert("Created to collection");
             }
         })
         .catch(error => {
-            console.log("Error occurred when trying to add to collection.");
+            console.log("Error occurred when trying to create collection.");
             if (error.response) {
-                alert(error.response.data);
+                alert(error.response.data.message);
             }
             else {
                 alert("Something went wrong. Please check your internet connection.");
             }
         })
-}
+};
 
-export default async function addToCollection(url, thumbnail, type, callback) {
+export async function createCollection(nameCollection, callback) {
+    // No need to verify here.
     const verifyProcess = await auth.verifyAccessToken();
 
     if (verifyProcess) {
-        handleAddToCollection(url, thumbnail, type);
+        handleCreateCollection(nameCollection);
     }
     else {
+        // Callback will never be used.
+        callback();
+    }
+};
+
+const handleDeleteCollection = async (id) => {
+    const accessToken = cookies.get("accessToken");
+
+    const config = {
+        method: 'DELETE',
+        url: `${COLLECTIONS_URL}/${id}`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${accessToken}`
+        },
+    };
+
+    await axios.request(config)
+        .then(response => response.data)
+        .then(data => {
+            if (data && data['message'] === 'Success') {
+                alert("Deleted collection");
+            }
+        })
+        .catch(error => {
+            console.log("Error occurred when trying to delete collection.");
+            if (error.response) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong. Please check your internet connection.");
+            }
+        })
+};
+
+export async function deleteCollection(idCollection, callback) {
+    // No need to verify here.
+    const verifyProcess = await auth.verifyAccessToken();
+
+    if (verifyProcess) {
+        await handleDeleteCollection(idCollection);
+    }
+    else {
+        // Callback will never be used.
         callback();
     }
 };

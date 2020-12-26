@@ -42,7 +42,7 @@ class ProfileContent extends Component {
             email: "",
             loading: true,
             birthdayIsoStandard: "2020-10-12", //yyyy-mm-dd
-            avatar: "https://www.w3schools.com/howto/img_avatar.png"
+            avatarSrc: ""
         };
     }
 
@@ -106,6 +106,24 @@ class ProfileContent extends Component {
             else {
                 console.log("Something went wrong. Please check your internet connection.");
             }
+        }
+
+        // CÁCH 1:
+        // LỖI KHÔNG HIỂN THỊ ĐƯỢC AVATAR Ở ĐÂY, LƯU URL VÀO STATE.AVATAR SRC.
+        // CÁCH DƯỚI ĐÃ THỬ, RA URL NHƯNG KHÔNG SHOW.
+
+        // CÁCH 2: https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+        config['url'] = MY_AVATAR_URL;
+        try {
+            const rawAvatar = (await axios.request(config))['data'];
+
+            if(rawAvatar){
+                const b64Avatar = window.btoa(unescape(encodeURIComponent(rawAvatar)));
+                console.log(b64Avatar);
+                this.setState({avatarSrc: 'data:image/png,base64,'+b64Avatar});
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -191,6 +209,7 @@ class ProfileContent extends Component {
                                     <Avatar src={this.state.avatar}/>
                                 </Tooltip>
                             </label>
+                            <img src={this.state.avatarSrc} alt="avatar"/>
                         </div>
                         <div className="form-group">
                             <div className="mt-2 w-50 ">

@@ -5,7 +5,7 @@ import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
-import addToCollection from '../../services/user.services'
+import {addToCollection} from '../../services/user.services'
 
 
 class ImageItem extends Component {
@@ -15,7 +15,21 @@ class ImageItem extends Component {
             imgSrc: "",
             isRedirect: false,
             isOpenModal: false,
+            itemDTO: {},
         }
+    }
+
+    async prepareData(){
+        console.log("prepared");
+        await this.setState({itemDTO: {
+            imgSrc: this.props.itemSrc,
+            thumbnail: "",
+            type:"picture",
+            platform: this.props.platform, 
+            id: this.props.id, 
+            source: this.props.source,
+            collectionId: this.props.collectionId,
+        }})
     }
 
     // arrow 2 level cho ngầu. :v điều này sẽ làm thay đổi khi gọi hàm this.handleShow ở dưới.
@@ -35,31 +49,36 @@ class ImageItem extends Component {
 
     clickAddToCollection = ()=>{
         const tempThis = this;
-        addToCollection(this.props.itemSrc,"","picture",()=>{
+        addToCollection(this.props.itemSrc, "", "picture", this.props.platform, this.props.id, this.props.source, ()=>{
             // If not login -> redirect to login.
             this.props.history.push("/login", {
                 from: tempThis.props.location,
                 action: "addToCollection",
                 imgSrc: tempThis.props.itemSrc,
                 thumbnail: "",
-                type:"picture"
+                type:"picture",
+                platform: this.props.platform, 
+                id: this.props.id, 
+                source: this.props.source
             });
         })
     }
     
+
     render() {
         return (
             <div className="img-card" variant="primary">
                 <img src={this.props.itemSrc} alt="Img-error" />
                 <div className="card__text">
-                    <p className="card__title"><button onClick={ ()=>{
-                        // this.handleShow()
-                        
-                        // Click here will trigger show modal in Gallery.
-                        this.props.handleModal(this.props.itemSrc)
-                    }} type="button" className="btn btn-outline-secondary">
-                    <VisibilityOutlinedIcon/>
-                    </button>
+                    <p className="card__title">
+                        <button 
+                            onClick={ ()=>{
+                                // Click here will trigger show modal in Gallery.
+                                this.props.handleModal(this.props.itemSrc, {id: this.props.id, source: this.props.source, platform: this.props.platform, isAdding: !this.props.isAdded, collectionId: this.props.collectionId})
+                            }} 
+                            type="button" className="btn btn-outline-secondary">
+                            <VisibilityOutlinedIcon/>
+                        </button>
                     </p>
                     <p className="card__title"><button onClick={this.clickDownload} type="button" className="btn btn-outline-secondary">
                     <GetAppOutlinedIcon/>
@@ -71,42 +90,15 @@ class ImageItem extends Component {
                         </Link>
                     </p>
                     <p className="card__title">
-                            <button type="button" className="btn btn-outline-secondary"
-                            onClick={this.clickAddToCollection}>
+                            <button type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}
+                            onClick={async ()=>{
+                                await this.prepareData();
+                                this.props.isClickAddToCollection(this.state.itemDTO);
+                            }}>
                                 <FavoriteTwoToneIcon/>
                             </button>
                     </p>
                 </div>
-
-                {/* Modal will be moved to Gallery unless react will have to create 40 modal 
-                corresponding to 40 ImageItem every time it render, and this render func called a lot.  */}
-                {/* <Modal
-                    size="xl"
-                    scrollable={false}
-                    aria-labelledby="contained-modal-title-vcenter"
-                    centered
-                    show={this.state.isOpenModal}
-                    onHide={this.handleShow()}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Image previewer</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            <img className='img-fluid' width={1100} height={1000} style={{objectFit: 'cover'}} src={this.props.itemSrc} alt="Img-error" />
-                        </p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Link to={{ pathname: '/editor', state: { imgSrc: this.props.itemSrc } }}>
-                            <Button variant="secondary">
-                                Edit
-                            </Button>
-                        </Link>
-                        <Button variant="secondary" 
-                        onClick={this.clickDownload}>
-                            Download
-                        </Button>
-                    </Modal.Footer>
-                </Modal> */}
             </div>
         );
     }

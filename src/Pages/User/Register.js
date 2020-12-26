@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
 }
-export default function SignUp() {
+export default function SignUp(props) {
     const classes = useStyles();
 
     const [lastName, setLastName] = React.useState("");
@@ -257,6 +257,7 @@ export default function SignUp() {
                     if (data['status'] === 'success') {
                         console.log("success");
                         console.log(`Server msg: ${data['message']}`);
+                        props.history.push('/login');
                     }
                 }
             })

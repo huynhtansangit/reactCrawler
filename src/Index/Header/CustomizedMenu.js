@@ -62,10 +62,8 @@ export default function CustomizedMenus(props) {
         id="dropdownMenuButton"
         aria-controls="customized-menu"
         aria-haspopup="true"
-        variant="contained"
-        color="secondary"
         onClick={handleClick}>
-        Open Menu
+        Account
       </Button>
       <StyledMenu
         id="customized-menu"

@@ -1,0 +1,14 @@
+/* .dropdown-menu-container{
+    position: absolute;
+    top: 70px !important;
+    left: 77% !important;
+}
+#dropdownMenuButton {
+    border-radius: 10px ;
+} */
+.MuiButton-label{
+    font-family: MuseoSlab700;
+    font-size: 20px;
+    text-transform: none;
+    color: black;
+}
