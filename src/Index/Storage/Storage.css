@@ -60,9 +60,8 @@ section{
 }
 
 input{
-    border-bottom: solid 0.2rem rgb(204, 1, 1) !important;
-
-    height: 3.5rem !important;
+    height: 2.5rem !important;
+    padding-left: 20px !important;
 }
 .btn-apply{
     background-color: #212B36 !important;

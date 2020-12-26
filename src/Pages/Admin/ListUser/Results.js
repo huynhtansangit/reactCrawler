@@ -70,7 +70,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
     const handleLimitChange = (event) => {
         const limit = event.target.value;
         setLimit(limit);
-        onLimitChange(limit)
+        onLimitChange(limit);
     };
 
     const handlePageChange = (event, newPage) => {
@@ -229,7 +229,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
                     onChangeRowsPerPage={handleLimitChange}
                     page={page}
                     rowsPerPage={limit}
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[1,5, 10, 25]}
                 />
             </Card>
 
