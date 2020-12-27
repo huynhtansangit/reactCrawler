@@ -3,16 +3,15 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
     Avatar,
-    Box,
     Card,
     CardContent,
     Grid,
-    LinearProgress,
     Typography,
     makeStyles,
-    colors
+    colors,
+    Box
 } from 'ver-4-11';
-import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
+import PublicIcon from '@material-ui/icons/Public';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -25,7 +24,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const TasksProgress = ({ className, ...rest }) => {
+const TotalDifferentLink = ({ className, totalDifferentLink, ...rest }) => {
     const classes = useStyles();
 
     return (
@@ -45,34 +44,36 @@ const TasksProgress = ({ className, ...rest }) => {
                             gutterBottom
                             variant="h6"
                         >
-                            TOTAL LOGIN
+                            COVERAGE
                         </Typography>
-                        <Typography
-                            color="textPrimary"
-                            variant="h4"
-                        >
-                            75 times
-                        </Typography>
+                        <Box display="inline">
+                            <Typography style={{ flex: 1 }}
+                                color="textPrimary"
+                                variant="h4"
+                            >
+                                {totalDifferentLink}
+                            </Typography>
+                            <Typography
+                                color="textPrimary"
+                                variant="h5"
+                            >
+                                different URLs
+                            </Typography>
+                        </Box>
                     </Grid>
                     <Grid item>
                         <Avatar className={classes.avatar}>
-                            <InsertChartIcon />
+                            <PublicIcon />
                         </Avatar>
                     </Grid>
                 </Grid>
-                <Box mt={3}>
-                    <LinearProgress
-                        value={75.5}
-                        variant="determinate"
-                    />
-                </Box>
             </CardContent>
         </Card>
     );
 };
 
-TasksProgress.propTypes = {
+TotalDifferentLink.propTypes = {
     className: PropTypes.string
 };
 
-export default TasksProgress;
+export default TotalDifferentLink;

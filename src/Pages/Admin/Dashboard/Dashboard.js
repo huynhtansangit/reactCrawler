@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Container,
     Grid,
     makeStyles
 } from '@material-ui/core';
 import Page from '../../../components/Page';
-// import Budget from './Budget';
-// import LatestOrders from './LatestOrders';
-// import LatestProducts from './LatestProducts';
-// import Sales from './Sales';
-import TotalAddToCollection from './TotalAddToCollection';
+import TotalDifferentLink from './TotalDifferentLink';
 import TotalCollection from './TotalCollection';
 import TotalCrawl from './TotalCrawl';
 import TotalUsers from './TotalUsers';
 import Link from './TrafficCrawl';
 import Platform from './TrafficPlatform';
+import MostSearchingUser from './MostSearchingUser'
+import MostSearchingUrl from './MostSearchingUrl'
+import MostAddedItem from './MostAddedItem'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
     const classes = useStyles();
+    const [countDifferentLink, setCountDifferentLink] = useState(0);
 
     return (
         <Page
@@ -63,7 +63,7 @@ const Dashboard = () => {
                         xl={3}
                         xs={12}
                     >
-                        <TotalAddToCollection />
+                        <TotalDifferentLink totalDifferentLink={countDifferentLink} />
                     </Grid>
                     <Grid
                         item
@@ -74,51 +74,24 @@ const Dashboard = () => {
                     >
                         <TotalCollection />
                     </Grid>
-                    {/*<Grid
+                    <Grid
                         item
-                        lg={8}
+                        lg={6}
                         md={12}
                         xl={9}
                         xs={12}
                     >
-                        <Sales />
+                        <MostSearchingUrl onReceiveCountLink={(count)=>setCountDifferentLink(count)} />
                     </Grid>
                     <Grid
                         item
-                        lg={4}
+                        lg={6}
                         md={6}
                         xl={3}
                         xs={12}
                     >
-                        <TrafficByDevice />
+                        <MostAddedItem />
                     </Grid>
-                    <Grid
-                        item
-                        lg={4}
-                        md={6}
-                        xl={3}
-                        xs={12}
-                    >
-                        <LatestProducts />
-                    </Grid>
-                    <Grid
-                        item
-                        lg={8}
-                        md={12}
-                        xl={9}
-                        xs={12}
-                    >
-                        <LatestOrders />
-                    </Grid>
-                    <Grid
-                        item
-                        lg={4}
-                        md={6}
-                        xl={3}
-                        xs={12}
-                    >
-                        <Link/>
-                    </Grid> */}
                     <Grid
                         item
                         lg={4}
@@ -136,6 +109,15 @@ const Dashboard = () => {
                         xs={12}
                     >
                         <Platform/>
+                    </Grid>
+                    <Grid
+                        item
+                        lg={4}
+                        md={6}
+                        xl={3}
+                        xs={12}
+                    >
+                        <MostSearchingUser />
                     </Grid>
                 </Grid>
             </Container>

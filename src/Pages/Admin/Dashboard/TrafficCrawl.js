@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Doughnut } from 'react-chartjs-2';
@@ -8,13 +8,17 @@ import {
     CardContent,
     CardHeader,
     Divider,
-    Typography,
     colors,
 } from 'ver-4-11';
 import {
     makeStyles,
     useTheme,
-} from '@material-ui/core'
+} from '@material-ui/core';
+import DashboardAPI from './DashboardAPI';
+import {roundPercentNumber} from '../../../utils/convertTools';
+import {axiosRequestErrorHandler} from '../../../utils/axiosRequestErrorHandler';
+import CustomPieChart from './CustomPieChart';
+
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -22,14 +26,20 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const TrafficByDevice = ({ className, ...rest }) => {
+const TrafficByCrawl = ({ className, ...rest }) => {
     const classes = useStyles();
     const theme = useTheme();
+    
+    const [percentUser, setPercentUser] = useState(0.0);
+    const [countUser, setCountUser] = useState(0);
+    const [percentAnonymous, setPercentAnonymous] = useState(0.0);
+    const [countAnonymous, setCountAnonymous] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     const data = {
         datasets: [
             {
-                data: [85, 15],
+                data: [percentUser, percentAnonymous],
                 backgroundColor: [
                     colors.indigo[500],
                     // colors.red[600],
@@ -40,7 +50,7 @@ const TrafficByDevice = ({ className, ...rest }) => {
                 hoverBorderColor: colors.common.white
             }
         ],
-        labels: ['User', 'Anonymous']
+        labels: [`User (${countUser} times)`, `Anonymous (${countAnonymous} times)`]
     };
 
     const options = {
@@ -65,26 +75,43 @@ const TrafficByDevice = ({ className, ...rest }) => {
         }
     };
 
-    const devices = [
+    const crawl = [
         {
             title: 'User',
-            value: 86,
+            value: percentUser,
             icon: "user-shield",
             color: colors.indigo[500]
         },
         {
             title: 'Anonymous',
-            value: 14,
+            value: percentAnonymous,
             icon: "user-secret",
             color: colors.red[600]
         },
     ];
 
+    useEffect(()=>{
+        (async ()=>{
+            const data = await axiosRequestErrorHandler(()=>DashboardAPI.getStatistic({type:"crawl"}));
+            if(!data['error'] && data['data']){
+                let crawlData = {};
+                for(const el of data['data']['data']){
+                    crawlData[el['type']] = el['count'];
+                }
+                setCountUser(crawlData['user']);
+                setCountAnonymous(crawlData['anonymous']);
+                setPercentUser(roundPercentNumber(crawlData['user']/crawlData['total'], 1));
+                setPercentAnonymous(roundPercentNumber(crawlData['anonymous']/crawlData['total'], 1));
+            }
+            setIsLoading(false);
+        })()
+    },[])
+
     return (
         <Card
             className={clsx(classes.root, className)}
             {...rest}>
-            <CardHeader title="Traffic by User's Crawl" />
+            <CardHeader title="Traffic by User's Search" />
             <Divider />
             <CardContent>
                 <Box
@@ -94,42 +121,14 @@ const TrafficByDevice = ({ className, ...rest }) => {
                         data={data}
                         options={options}/>
                 </Box>
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    mt={2}>
-                    {devices.map(({
-                        color,
-                        icon,
-                        title,
-                        value
-                    }) => (
-                        <Box
-                            key={title}
-                            p={1}
-                            textAlign="center">
-                            {/* <Icon color="action" /> */}
-                            <i class={`fas fa-${icon}`}></i>
-                            <Typography
-                                color="textPrimary"
-                                variant="body1">
-                                {title}
-                            </Typography>
-                            <Typography
-                                style={{ color }}
-                                variant="h5">
-                                {value}%
-                            </Typography>
-                        </Box>
-                    ))}
-                </Box>
+                <CustomPieChart type="crawl" isLoading={isLoading} data={crawl}/>
             </CardContent>
         </Card>
     );
 };
 
-TrafficByDevice.propTypes = {
+TrafficByCrawl.propTypes = {
     className: PropTypes.string
 };
 
-export default TrafficByDevice;
+export default TrafficByCrawl;

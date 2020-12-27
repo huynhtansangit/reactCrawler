@@ -52,11 +52,13 @@ class Gallery extends Component {
         let dataVideoHashedTable = {};
         
         if(this.props.nameNetwork !== 'tiktok'){
-            for(const item of dataGallery.imagesData)
-                dataImageHashedTable[item.id] = item.collectionId ? item.collectionId : [];
+            if(dataGallery?.imagesData)
+                for(const item of dataGallery.imagesData)
+                    dataImageHashedTable[item.id] = item.collectionId ? item.collectionId : [];
             
-            for(const item of dataGallery.videosData)
-                dataVideoHashedTable[item.id] = item.collectionId ? item.collectionId : [];
+            if(dataGallery?.videosData)
+                for(const item of dataGallery.videosData)
+                    dataVideoHashedTable[item.id] = item.collectionId ? item.collectionId : [];
         }
         else{
             dataVideoHashedTable[additionalInfoTiktok.id] = additionalInfoTiktok.collectionId;

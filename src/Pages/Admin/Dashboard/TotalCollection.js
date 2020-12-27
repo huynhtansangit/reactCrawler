@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -11,8 +11,12 @@ import {
     colors,
     makeStyles
 } from 'ver-4-11';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
+import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
+import CollectionsIcon from '@material-ui/icons/Collections';
+import DashboardAPI from './DashboardAPI';
+import {axiosRequestErrorHandler} from '../../../utils/axiosRequestErrorHandler';
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,16 +28,34 @@ const useStyles = makeStyles((theme) => ({
         width: 56
     },
     differenceIcon: {
-        color: colors.red[900]
+        // color: colors.red[900],
+        marginRight: theme.spacing(1)
     },
     differenceValue: {
-        color: colors.red[900],
+        // color: colors.red[900],
         marginRight: theme.spacing(1)
     }
 }));
 
 const Budget = ({ className, ...rest }) => {
     const classes = useStyles();
+
+    const [collectionData, setCollectionData] = useState(0);
+    // const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(()=>{
+        (async ()=>{
+            const data = await axiosRequestErrorHandler(()=>DashboardAPI.getStatistic({type:"collection"}));
+            if(!data['error'] && data['data']){
+                let collectionData = {};
+                for(const el of data['data']['data']){
+                    collectionData[el['type']] = el['count'];
+                }
+                setCollectionData(collectionData);
+            }
+            // setIsLoading(false);
+        })()
+    },[])
 
     return (
         <Card
@@ -58,12 +80,12 @@ const Budget = ({ className, ...rest }) => {
                             color="textPrimary"
                             variant="h4"
                         >
-                            24,052
+                            {collectionData.create}
                         </Typography>
                     </Grid>
                     <Grid item>
                         <Avatar className={classes.avatar}>
-                            <MoneyIcon />
+                            <CollectionsIcon />
                         </Avatar>
                     </Grid>
                 </Grid>
@@ -72,18 +94,18 @@ const Budget = ({ className, ...rest }) => {
                     display="flex"
                     alignItems="center"
                 >
-                    <ArrowDownwardIcon className={classes.differenceIcon} />
+                    <AddToPhotosIcon className={classes.differenceIcon} />
                     <Typography
                         className={classes.differenceValue}
-                        variant="body2"
+                        variant="h7"
                     >
-                        12%
+                        {collectionData.addItem}
                     </Typography>
                     <Typography
                         color="textSecondary"
                         variant="caption"
                     >
-                        Since last month
+                        times add to collections
                     </Typography>
                 </Box>
             </CardContent>

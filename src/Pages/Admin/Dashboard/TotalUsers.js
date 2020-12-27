@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -13,6 +13,8 @@ import {
 } from 'ver-4-11';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import DashboardAPI from './DashboardAPI';
+import {axiosRequestErrorHandler} from '../../../utils/axiosRequestErrorHandler';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         width: 56
     },
     differenceIcon: {
+        marginRight: theme.spacing(1),
         color: colors.green[900]
     },
     differenceValue: {
@@ -34,6 +37,25 @@ const useStyles = makeStyles((theme) => ({
 
 const TotalCustomers = ({ className, ...rest }) => {
     const classes = useStyles();
+
+    const [countRegister, setCountRegister] = useState(0);
+    const [countRegisterSuccess, setCountRegisterSuccess] = useState(0);
+    // const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(()=>{
+        (async ()=>{
+            const data = await axiosRequestErrorHandler(()=>DashboardAPI.getStatistic({type:"register"}));
+            if(!data['error'] && data['data']){
+                let userData = {};
+                for(const el of data['data']['data']){
+                    userData[el['type']] = el['count'];
+                }
+                setCountRegister(userData['register']);
+                setCountRegisterSuccess(userData['registerSuccess']);
+            }
+            // setIsLoading(false);
+        })()
+    },[])
 
     return (
         <Card
@@ -58,7 +80,7 @@ const TotalCustomers = ({ className, ...rest }) => {
                             color="textPrimary"
                             variant="h4"
                         >
-                            1,600
+                            {countRegister}
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -77,7 +99,7 @@ const TotalCustomers = ({ className, ...rest }) => {
                         color="textSecondary"
                         variant="caption"
                     >
-                         1540 users are verified
+                        {countRegisterSuccess} users are verified
                     </Typography>
                 </Box>
             </CardContent>

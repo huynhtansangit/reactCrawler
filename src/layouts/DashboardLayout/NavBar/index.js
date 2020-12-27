@@ -15,7 +15,6 @@ import {
   BarChart as BarChartIcon,
   ShoppingBag as ShoppingBagIcon,
   Users as UsersIcon,
-  BarChart2 as ChartIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -40,12 +39,7 @@ const items = [
     href: '/admin/activity-history',
     icon: ShoppingBagIcon,
     title: 'Activity History'
-  },
-  {
-    href: '/admin/chart',
-    icon: ChartIcon,
-    title: 'Chart'
-  },
+  }
   // {
   //   href: '/admin/settings',
   //   icon: SettingsIcon,

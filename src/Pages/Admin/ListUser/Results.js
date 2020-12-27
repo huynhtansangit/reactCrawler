@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-    Avatar,
     Box,
     Card,
     Table,
@@ -138,9 +137,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                             <Box
                                 alignItems="center"
                                 display="flex">
-                                <Avatar className={classes.avatar} src={user.avatarUrl}>
-                                    {/* {getInitials(user.name)} */}
-                                </Avatar>
+                                {/* <Avatar className={classes.avatar} src={user.avatarUrl}/> */}
                                 <Typography color="textPrimary" variant="body1">
                                     {/* eslint-disable-next-line */}
                                     <a onClick={() => { clickViewInfoUser(user) }}>{user.firstname} {user.lastname}</a>
