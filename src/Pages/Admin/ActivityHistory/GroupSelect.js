@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GroupedSelect({ isType, ...rest }) {
+export default function GroupedSelect({ isType, onTypeChange, onPlatformChange, ...rest }) {
   const classes = useStyles();
   const [value, setValue] = useState("");
   useEffect(() => {
@@ -22,9 +22,12 @@ export default function GroupedSelect({ isType, ...rest }) {
 
   }, [isType]);
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  // const handleChange = (event) => {
+  //   const value=event.target.value;
+  //   setValue(value);
+    
+  //   onTypeChange(value);
+  // };
   const renderTypeSelect = () => {
     return (
       <FormControl className={classes.formControl}>
@@ -32,28 +35,27 @@ export default function GroupedSelect({ isType, ...rest }) {
           <FilterListIcon />
         Type</InputLabel>
         <Select
-          onChange={handleChange}
+          onChange={(event)=>{onTypeChange(event.target.value)}}
           defaultValue="" id="grouped-select">
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
           <ListSubheader>Type</ListSubheader>
-          <MenuItem value={1} primaryText="login">Login</MenuItem>
-          <MenuItem value={2}>Register</MenuItem>
-          <MenuItem value={3}>Register success</MenuItem>
-          <MenuItem value={4}>Reset password</MenuItem>
-          <MenuItem value={5}>Reset password success</MenuItem>
-          <MenuItem value={6}>Create collection</MenuItem>
-          <MenuItem value={7}>Remove collection</MenuItem>
-          <MenuItem value={8}>Add item</MenuItem>
-          <MenuItem value={9}>Remove item</MenuItem>
-          <MenuItem value={10}>Crawl</MenuItem>
-          <MenuItem value={11}>Add item</MenuItem>
-          <MenuItem value={12}>Admin login</MenuItem>
-          <MenuItem value={13}>Admin reset password</MenuItem>
-          <MenuItem value={14}>Admin reset password success</MenuItem>
-          <MenuItem value={15}>De-activate account</MenuItem>
-          <MenuItem value={16}>Activate account</MenuItem>
+          <MenuItem value={'login'} primaryText="login">Login</MenuItem>
+          <MenuItem value={'register'}>Register</MenuItem>
+          <MenuItem value={'register_success'}>Register success</MenuItem>
+          <MenuItem value={'reset_password'}>Reset password</MenuItem>
+          <MenuItem value={'reset_password_success'}>Reset password success</MenuItem>
+          <MenuItem value={'create_collection'}>Create collection</MenuItem>
+          <MenuItem value={'remove_collection'}>Remove collection</MenuItem>
+          <MenuItem value={'add_item'}>Add item</MenuItem>
+          <MenuItem value={'remove_item'}>Remove item</MenuItem>
+          <MenuItem value={'crawl'}>Crawl</MenuItem>
+          <MenuItem value={'admin_login'}>Admin login</MenuItem>
+          <MenuItem value={'admin_reset_password'}>Admin reset password</MenuItem>
+          <MenuItem value={'admin_reset_password_success'}>Admin reset password success</MenuItem>
+          <MenuItem value={'deactivate_account'}>De-activate account</MenuItem>
+          <MenuItem value={'activate_account'}>Activate account</MenuItem>
           {/* <ListSubheader>Category 2</ListSubheader>
           <MenuItem value={3}>Option 3</MenuItem>
           <MenuItem value={4}>Option 4</MenuItem> */}
@@ -66,14 +68,16 @@ export default function GroupedSelect({ isType, ...rest }) {
       <InputLabel htmlFor="grouped-select">
         <FilterListIcon />
         Platform</InputLabel>
-      <Select defaultValue="" id="grouped-select">
+      <Select defaultValue="" id="grouped-select"
+        onChange={(event)=>{onPlatformChange(event.target.value)}}
+      >
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
         <ListSubheader>Platform</ListSubheader>
-        <MenuItem value={1}>Instagram</MenuItem>
-        <MenuItem value={2}>Facebook</MenuItem>
-        <MenuItem value={3}>Tiktok</MenuItem>
+        <MenuItem value={'Instagram'}>Instagram</MenuItem>
+        <MenuItem value={'Facebook'}>Facebook</MenuItem>
+        <MenuItem value={'Tiktok'}>Tiktok</MenuItem>
         {/* <ListSubheader>Category 2</ListSubheader>
           <MenuItem value={3}>Option 3</MenuItem>
           <MenuItem value={4}>Option 4</MenuItem> */}

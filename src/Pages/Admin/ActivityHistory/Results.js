@@ -17,7 +17,8 @@ import {
     Typography,
 } from 'ver-4-11';
 import { makeStyles } from '@material-ui/core'
-import { convertTimeStampToDate } from '../../../utils/convertTools';
+import { convertTimeStampToDate, convertFormatHeaderTable } from '../../../utils/convertTools';
+import { AssignmentReturnedOutlined } from '@material-ui/icons';
 
 // import getInitials from 'src/utils/getInitials';
 
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Results = ({ className, data, count,onLimitChange, onPageChange, ...rest }) => {
+const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest }) => {
     const classes = useStyles();
     const [selectedUserIds, setSelectedUserIds] = useState([]); // eslint-disable-line
     const [limit, setLimit] = useState(10);
@@ -42,8 +43,7 @@ const Results = ({ className, data, count,onLimitChange, onPageChange, ...rest }
     useEffect(() => {
         console.log(data);
         setFirstRender(false);
-
-    }, [data])  
+    }, [data])
 
     //DidUpdate
     useEffect(() => {
@@ -132,38 +132,54 @@ const Results = ({ className, data, count,onLimitChange, onPageChange, ...rest }
                     hover
                     key={log.id}
                     selected={selectedUserIds.indexOf(log.id) !== -1}>
-                    <TableCell padding="checkbox">
-                        <Checkbox
-                            checked={selectedUserIds.indexOf(log.id) !== -1}
-                            onChange={(event) => handleSelectOne(event, log.id)}
-                            value="true"
-                        />
-                    </TableCell>
-                    {/* Checkbox kko xai, do xoa sau. Do data vo giao dien di */}
-                    <TableCell>
-                        <Box
-                            alignItems="center"
-                            display="flex">
-                            <Typography color="textPrimary" variant="body1">
-                                {log.id}
-                            </Typography>
-                        </Box>
-                    </TableCell>
-                    <TableCell>
-                        {!log['user'] ? "null" : log['user'].firstname + " " + log['user'].lastname}
-                    </TableCell>
-                    <TableCell>
-                        {convertTimeStampToDate(log['time'])}
-                    </TableCell>
-                    <TableCell>
-                        {log['url']}
-                    </TableCell>
-                    <TableCell>
-                        {log['type']}
-                    </TableCell>
+
+                    {ShowContentTable(log)}
                 </TableRow>
             )
             ))
+    }
+    // Display api dynamically
+    const ShowHeaderTable = () => {
+        if (data.length)
+            return (
+                Object.entries(data[0]).map(([key, value]) => (
+                    <TableCell>{convertFormatHeaderTable(key)}</TableCell>
+                )
+                    // <div>{key} : {value.toString()}</div>
+                ))
+    }
+    const returnTimeFormat = (key, value) => {
+        if (key === 'time') {
+            return <TableCell>{convertTimeStampToDate(value)}</TableCell>;
+        }
+        else if (key === 'user') {
+            if(value !=null){
+                return (
+                    <TableCell>
+                    {value['phone'].toString()}
+                    </TableCell>
+            )
+            }
+            else {
+                return (
+                    <TableCell>null</TableCell>
+                )
+            }
+        }
+        else { return <TableCell>{value.toString()}</TableCell> }
+
+    }
+    const ShowContentTable = (object) => {
+        return (
+            Object.entries(object).map(([key, value]) => (
+
+                <>
+                    {returnTimeFormat(key, value)}
+                </>
+            )
+                // <div>{key} : {value.toString()}</div>
+            )
+        )
     }
     return (
         <Card className={clsx(classes.root, className)} {...rest}>
@@ -172,7 +188,7 @@ const Results = ({ className, data, count,onLimitChange, onPageChange, ...rest }
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell padding="checkbox">
+                                {/* <TableCell padding="checkbox">
                                     <Checkbox
                                         checked={selectedUserIds.length === data.length}
                                         color="primary"
@@ -181,17 +197,13 @@ const Results = ({ className, data, count,onLimitChange, onPageChange, ...rest }
                                             && selectedUserIds.length < data.length
                                         }
                                         onChange={handleSelectAll} />
-                                </TableCell>
-                                <TableCell>User's ID</TableCell>
-                                <TableCell>User's Name</TableCell>
-                                <TableCell>Time</TableCell>
-                                <TableCell>Detail</TableCell>
-                                <TableCell>Activity</TableCell>
+                                </TableCell> */}
+                                {ShowHeaderTable()}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {/* Sao ko co data? */}
-                        <RenderListLogs/>
+                            <RenderListLogs />
                         </TableBody>
                     </Table>
                 </Box>

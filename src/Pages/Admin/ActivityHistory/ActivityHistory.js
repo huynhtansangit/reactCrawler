@@ -23,6 +23,10 @@ import HistoryApi from './api/historyApi';
 import GroupSelect from './GroupSelect';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import { filter } from 'jszip';
+import convertTools, { convertTypeFormat } from '../../../utils/convertTools';
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.light,
@@ -32,10 +36,8 @@ const useStyles = makeStyles((theme) => ({
     },
     inputUser: {
         maxWidth: 230,
-        height: 32,
     },
     textField: {
-        marginTop: theme.spacing(2.5),
         width: 240,
         padding: 0
     },
@@ -46,12 +48,23 @@ const useStyles = makeStyles((theme) => ({
     groupSelect: {
         maxWidth: 230,
     },
-    button:{
-        width:150,
-        height:40,
-        'MuiButton-label':{
-            fontSize:'14px!important',
+    button: {
+        width: 120,
+        height: 40,
+        'MuiButton-label': {
+            fontSize: '14px!important',
         }
+    },
+    paper: {
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        whiteSpace: 'nowrap',
+        marginBottom: theme.spacing(1),
+        border: 'none',
+        height: 80,
+        borderRadius: 0,
+
     },
 }));
 
@@ -62,11 +75,11 @@ const ActivityHistory = () => {
     const [filters, setFilter] = useState({
         offset: 0,
         limit: 10,
-        type: '',
+        type: 'admin_loginig',
         from: 0,
         to: 1789789789,
-        user: '0868952131',
-        platform: 'instagram',
+        user: '',
+        platform: '',
 
     });
 
@@ -101,6 +114,13 @@ const ActivityHistory = () => {
     useEffect(() => {
         const fetchHistoryList = async () => {
             try {
+                // remove params with empty value
+                for (const key of Object.keys(filters)) {
+                    if (filters[key] === "") {
+                      delete filters[key];
+                    }
+                }
+
                 const responseData = await HistoryApi.getLogs(filters);
                 console.log(responseData);
                 setFetchedData(responseData['logs']);
@@ -110,66 +130,124 @@ const ActivityHistory = () => {
             }
         }
         fetchHistoryList();
-        console.log(fetchedData);
     }, [filters]);
 
     useEffect(() => {
 
     });
-const onTypeChange=(value)=>{
-    setFilter({
-        ...filters,
-        type:value,
-    });
-}
+    const onClickTypeChange = (value) => {
+        setFilter({
+            ...filters,
+            type: value,
+        });
+    }
+    const onClickPlatformChange = (value) => {
+        setFilter({
+            ...filters,
+            platform: value,
+        });
+    }
+    const onChangeInputUser = (value) => {
+        setFilter({
+            ...filters,
+            user: value,
+        });
+        console.log(value);
+    }
+    const onChangeDateFrom = (value) => {
+        setFilter({
+            ...filters,
+            from: value,
+        });
+    }
+    const onChangeDateTo = (value) => {
+        setFilter({
+            ...filters,
+            to: value,
+        });
+    }
     return (
         <Page className={classes.root} title="Users">
             <Container maxWidth={false}>
                 {/* <Toolbar/> */}
-                <Box mt={3}>
-                    <TableRow className={classes.tableRow}>
-                        <TableCell>
-                            <GroupSelect 
-                            className={classes.groupSelect} 
-                            isType={true}
-                            />
-                        </TableCell>
-                        <TableCell>
-                            <form noValidate autoComplete="off">
-                                <TextField id="input-user" label="Phone" className={classes.inputUser} />
-                            </form>
-                        </TableCell>
-                        <TableCell>
-                            <TextField
-                                id="date-time-from"
-                                label="From"
-                                type="datetime-local"
-                                defaultValue="1999-04-26T10:30"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </TableCell>
-                        <TableCell>
-                            <TextField
-                                id="date-time-to"
-                                label="To"
-                                type="datetime-local"
-                                defaultValue="2020-12-24T10:30"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </TableCell>
-                        <TableCell>
-                            <GroupSelect className={classes.groupSelect} isType={false}/>
-                        </TableCell>
-                        <TableCell>
-                            <Button   variant="contained" color="primary" className={classes.button}>Apply</Button>
-                        </TableCell>
-                    </TableRow>
+                <Box mt={3} minWidth={1050}>
+                    <Table>
+                        <TableRow className={classes.tableRow}>
+                            <Grid container spacing={0}>
+                                <Grid item xs={12} sm={6} md={3} spacing={1}>
+                                    <Paper className={classes.paper}>
+                                        <GroupSelect
+                                            className={classes.groupSelect}
+                                            isType={true}
+                                            onTypeChange={(type) => { onClickTypeChange(type) }}
+                                        />
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={3} spacing={1}>
+                                    <Paper className={classes.paper}>
+                                        <GroupSelect
+                                            className={classes.groupSelect}
+                                            isType={false}
+                                            onPlatformChange={(platform) => { onClickPlatformChange(platform) }}
+
+                                        />
+                                    </Paper>
+
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={3} spacing={1}>
+                                    <Paper className={classes.paper}>
+                                        <form noValidate autoComplete="off">
+                                            <TextField
+                                                id="input-user"
+                                                label="Phone"
+                                                className={classes.inputUser}
+                                                onChange={(phone) => { onChangeInputUser(phone.target.value) }}
+                                            />
+                                        </form>
+                                    </Paper>
+
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={3} spacing={1}>
+                                    <Paper className={classes.paper}>
+                                        <TextField
+                                            id="date-time-from"
+                                            label="From"
+                                            type="datetime-local"
+                                            defaultValue="1999-04-26T10:30"
+                                            className={classes.textField}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onDateFromChange={(dateFrom) => { onChangeDateFrom(dateFrom) }}
+                                        />
+                                    </Paper>
+
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={6} spacing={2}>
+                                    <Paper className={classes.paper}> <TextField
+                                        id="date-time-to"
+                                        label="To"
+                                        type="datetime-local"
+                                        defaultValue="2020-12-24T10:30"
+                                        className={classes.textField}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onDateToChange ={(dateTo)=>{onChangeDateTo(dateTo)}}
+                                    /></Paper>
+
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={6} spacing={2}>
+                                    <Paper className={classes.paper}>
+                                        <Button variant="contained" color="primary" className={classes.button}>
+                                            Apply
+                                    </Button>
+                                    </Paper>
+
+                                </Grid>
+                            </Grid>
+                        </TableRow>
+                    </Table>
                     <Results
                         onLimitChange={(limit) => { clickChangeLimit(limit) }}
                         onPageChange={(page) => { clickChangePage(page) }}

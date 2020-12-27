@@ -29,11 +29,12 @@ export default function MasonryImageList(props) {
   const [isShowModal, setShowModal] = React.useState(false);
   const [imgSrc, setImgSrc] = React.useState("");
   const [mediaDTO, setMediaDTO] = React.useState("");
-  
+  const [data, setData] = React.useState([]);
+
 
   function handleShow(source, dto) {
     // Set image url whenever modal is showed, not when it closed.
-    if(!isShowModal){
+    if (!isShowModal) {
       setImgSrc(source);
       setMediaDTO(dto);
     }
@@ -41,27 +42,29 @@ export default function MasonryImageList(props) {
   }
 
   const clickUnFavorite = async (collectionId, itemId) => {
-    if(window.confirm("Are you sure want to remove this item from collection?")){
-        await removeItemFromCollection(collectionId, itemId);
-        await setShowModal(false);
+    if (window.confirm("Are you sure want to remove this item from collection?")) {
+      await removeItemFromCollection(collectionId, itemId);
+      await setShowModal(false);
+      const newListData = data.filter((item) => item.id !== itemId);
+      setData(newListData);
     }
-}
+  }
 
   useEffect(() => {
-
-  });
+    setData(props.data);
+  }, [props.data]);
 
   return (
     <div className={classes.root}>
-      <ImageList variant="masonry" cols={6} gap={2} rowHeight={264}> 
-        {props.data.map((item) => (
+      <ImageList variant="masonry" cols={6} gap={2} rowHeight={264}>
+        {data.map((item) => (
           <ImageListItem key={item.url}>
             <img
               srcSet={item.url}
               alt={item.title}
             />
             <div className="card__text">
-              <p className="card__title"><button onClick={() => handleShow(item.url, {id: item.id, collectionId: item.collection_id})} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon /></button></p>
+              <p className="card__title"><button onClick={() => handleShow(item.url, { id: item.id, collectionId: item.collection_id })} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon /></button></p>
               <p className="card__title"><button onClick={() => { downloadImageByUrl(item.url) }} type="button" className="btn btn-outline-secondary"><GetAppOutlinedIcon /></button></p>
               <p className="card__title">
                 <Link to={{ pathname: '/editor', state: { imgSrc: item.url } }}>
@@ -69,12 +72,12 @@ export default function MasonryImageList(props) {
                 </Link>
               </p>
               <p className="card__title">
-                  <button onClick={()=>{
-                          clickUnFavorite(item.collection_id,item.id);
-                      }} 
-                      type="button" className={`btn btn-outline-secondary selectedBtn`}>
-                      <FavoriteTwoToneIcon />
-                  </button>
+                <button onClick={() => {
+                  clickUnFavorite(item.collection_id, item.id);
+                }}
+                  type="button" className={`btn btn-outline-secondary selectedBtn`}>
+                  <FavoriteTwoToneIcon />
+                </button>
               </p>
             </div>
           </ImageListItem>
