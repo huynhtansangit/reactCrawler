@@ -16,20 +16,34 @@ import {
     TableRow,
     Typography,
 } from 'ver-4-11';
-import { makeStyles } from '@material-ui/core'
+import { withStyles,makeStyles } from '@material-ui/core'
 import { convertTimeStampToDate, convertFormatHeaderTable } from '../../../utils/convertTools';
 import { AssignmentReturnedOutlined } from '@material-ui/icons';
-
+import Tooltip from '@material-ui/core/Tooltip';
+import Fade from '@material-ui/core/Fade';
 // import getInitials from 'src/utils/getInitials';
-
+const LightTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: theme.palette.common.white,
+      color: 'rgba(0, 0, 0, 0.87)',
+      boxShadow: theme.shadows[1],
+      fontSize: 11,
+    },
+  }))(Tooltip);
 const useStyles = makeStyles((theme) => ({
     root: {},
     avatar: {
         marginRight: theme.spacing(2)
-    }
+    },
+    tooltip: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+      },
 }));
 
-const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest }) => {
+const Results = ({ className, data, count, onLimitChange, onPageChange, isAllItems, ...rest }) => {
     const classes = useStyles();
     const [selectedUserIds, setSelectedUserIds] = useState([]); // eslint-disable-line
     const [limit, setLimit] = useState(10);
@@ -140,7 +154,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
     }
     // Display api dynamically
     const ShowHeaderTable = () => {
-        if (data.length)
+        if (data.length && !isAllItems)
             return (
                 Object.entries(data[0]).map(([key, value]) => (
                     <TableCell>{convertFormatHeaderTable(key)}</TableCell>
@@ -150,23 +164,37 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, ...rest 
     }
     const returnTimeFormat = (key, value) => {
         if (key === 'time') {
-            return <TableCell>{convertTimeStampToDate(value)}</TableCell>;
+            return (<Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
+                <TableCell>{convertTimeStampToDate(value)}</TableCell>
+            </Tooltip>)
+
         }
         else if (key === 'user') {
-            if(value !=null){
+            if (value != null) {
                 return (
-                    <TableCell>
-                    {value['phone'].toString()}
-                    </TableCell>
-            )
+                    <Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
+                        <TableCell>
+                            {value['phone'].toString()}
+                        </TableCell>
+                    </Tooltip>
+
+                )
             }
             else {
                 return (
-                    <TableCell>null</TableCell>
+                    <Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
+                        <TableCell>null</TableCell>
+                    </Tooltip>
                 )
             }
         }
-        else { return <TableCell>{value.toString()}</TableCell> }
+        else {
+            return (
+                <Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
+                    <TableCell>{value.toString()}</TableCell>
+                </Tooltip>
+            )
+        }
 
     }
     const ShowContentTable = (object) => {

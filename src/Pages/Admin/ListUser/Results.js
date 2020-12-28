@@ -22,7 +22,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-
+import HistoryApi from '../ActivityHistory/api/historyApi';
+import CustomCard from './CustomCard';
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -38,7 +39,7 @@ const GreenCheckbox = withStyles({
             color: green[600],
         },
     },
-    checked: {},
+    checked: {}
 })((props) => <Checkbox color="default" {...props} />);
 
 const Results = ({ className, isLoading, data, count, onLimitChange, onPageChange, ...rest }) => {
@@ -47,7 +48,8 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
     const [page, setPage] = useState(0);
     const [isUserActiveHashmap, setIsUserActiveHashmap] = useState({});
     const [currentUserInfo, setCurrentUserInfo] = useState("");
-    const [currentUserActivities, setCurrentUserActivities] = useState("");
+    // mới vào là nó khởi tạo mảng rỗng rồi
+    const [currentUserActivities, setCurrentUserActivities] = useState([]);
 
 
     // DidMount
@@ -91,9 +93,22 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
         setCurrentUserInfo(user);
     }
 
-    const clickViewActivitiesUser = async () => {
-        // await ListUserApi.getA
-        setCurrentUserActivities("hello");
+    const clickViewActivitiesUser = async (phone) => {
+        const params = {
+            offset: 0,
+            limit: 20,
+            from: 0,
+            to: 1789789789,
+            user: phone,
+        }
+        try {
+            const responseData = await HistoryApi.getLogs(params);
+
+            setCurrentUserActivities(responseData['logs']);
+
+        } catch (error) {
+
+        }
     }
 
     const RenderListUsers = () => {
@@ -120,8 +135,8 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                     </TableCell>
                 </TableRow>)
         }
-        else if(!data.length){
-            return(
+        else if (!data.length) {
+            return (
                 <TableRow>
                     <TableCell>Nothing to show here...</TableCell>
                 </TableRow>
@@ -158,8 +173,8 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                         </TableCell>
                         <TableCell>
                             <FormControlLabel
-                                control={<GreenCheckbox checked={user.verified? true: false} disabled name="is_verified" />}
-                                // label="Custom color"
+                                control={<GreenCheckbox checked={user.verified ? true : false} disabled name="is_verified" />}
+                            // label="Custom color"
                             />
                         </TableCell>
                         <TableCell>
@@ -192,7 +207,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                                 </TableRow>
                                 <TableRow className="mt-2">
                                     <Button style={{ width: "100%" }} variant="info"
-                                        onClick={() => clickViewActivitiesUser()}>
+                                        onClick={() => clickViewActivitiesUser(user['phone'])}>
                                         User's Activities
                             </Button>
                                 </TableRow>
@@ -203,7 +218,24 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
             )
         }
     };
+    const renderUserActivitiesLogs = (data) => {
+        if (data.length) {
+            console.log(data);
+            return (
+                data.map((value, idx) => (
+                    <>
+                        <hr />
+                        <div>
+                            Time: {convertTimeStampToDate(value.time)}
+                            <br />
+                            Action: {value.type}
+                        </div>
+                    </>
+                ))
+            )
+        }
 
+    }
     return (
         <>
             <Card className={clsx(classes.root, className)} {...rest}>
@@ -233,7 +265,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                     onChangeRowsPerPage={handleLimitChange}
                     page={page}
                     rowsPerPage={limit}
-                    rowsPerPageOptions={[1,5, 10, 25]}
+                    rowsPerPageOptions={[1, 5, 10, 25]}
                 />
             </Card>
 
@@ -250,12 +282,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>
-                        <p>Full name: {currentUserInfo.firstname} {currentUserInfo.lastname}</p>
-                        <p>Email: {currentUserInfo.email}</p>
-                        <p>Is active: {(currentUserInfo.is_active)?.toString()}</p>
-                        <p>Is verified: {(currentUserInfo.verified)?.toString()}</p>
-                    </div>
+                   <CustomCard data={currentUserInfo}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success"
@@ -276,7 +303,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={true}
                 centered
-                show={currentUserActivities ? true : false}
+                show={currentUserActivities?.length ? true : false}
                 onHide={() => setCurrentUserActivities("")}>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
@@ -284,10 +311,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>
-                        <p>hello t đợi m cả buổi sáng đó Sang.</p>
-                        {/* Phần này đang đợi Sang làm xong log mới có làm. */}
-                    </div>
+                    {renderUserActivitiesLogs(currentUserActivities)}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary"

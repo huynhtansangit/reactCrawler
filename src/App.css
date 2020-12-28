@@ -1,8 +1,10 @@
 .upper-canvas, .lower-canvas {
   top: 40px !important;
+  width: 680px !important;
+  height: 800px !important;
 }
 .tui-image-editor-container.top .tui-image-editor-submenu > div {
-  padding-top: 40px !important;
+  padding-top: 20px !important;
 }
 .tui-image-editor-container .tui-image-editor-checkbox-wrap.fixed-width {
   width: 287px !important;
@@ -14,4 +16,10 @@ span {font-size: 18px !important;}
 }
 .btn-outline-secondary .MuiSvgIcon-root{
   color: white ;
+}
+.tui-image-editor-menu-filter{
+  position: relative !important;
+}
+.upper-canvas, .lower-canvas {
+
 }

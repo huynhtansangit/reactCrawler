@@ -327,7 +327,9 @@ section{
         margin-left: 30px !important;
         margin-right: 30px !important;
     }
-
+    .image-video-container{
+        grid-template-columns:  auto auto  !important;
+       }
     .pink-circle-decor {
       display: none;
     }
@@ -336,7 +338,7 @@ section{
         left: 486px !important;
     }
 
-    #girl-3{
+       #girl-3{
         left: 89px !important;
        }
        #girl-2{
@@ -351,10 +353,87 @@ section{
        .navbar-brand img{
         left: 180px !important;
        }
+       .contact-icon{
+           display: none !important;
+       }
+       .navbar-brand{
+        display: none !important;
+    }
 }
  /* Extra small devices (phones, 600px and down) */
- @media only screen and (max-width: 600px) {
+ @media only screen and (max-width: 550px) {
+    #banner-section{
+        display: none !important;
+    }
+    
+    .input-header-container{
+        left: -20px !important;
+    }
+    .wonderful-gift-title{
+        font-size: 30px !important;
+    }
+    .slogan-title{
+        font-size: 20px !important;
+    }
+    .wonderful-gift-title:after{
+        width: 60px !important;
+    }
+    .dropdown-header-customize{
+        width: 460px !important;
 
+    }
+    .dropdown-header-customize button{
+        width: 280px !important;
+    }
+    #dropdownMenuButton{
+        left: 0px !important;
+    }
+    .dropdown-header-customize button:after {
+        left: 42% !important;
+        top: 10% !important;
+    }
+    .nav-link{
+        font-size: 18px !important;
+    }
+    #exampleInputEmail1 {
+        width: 253px !important;
+        height: 35px !important;
+        left: -10px !important;
+    }
+    .icon-input-header {
+        left: 98px !important;
+    }
+    .btn-input-header {
+        right: 74px !important;
+    }
+    .gallery-container{
+        margin: 0 !important;
+    }
+    .card__title .btn-outline-secondary {
+        width: 42px !important;
+        height: 38px !important;
+    }
+    .card__title .btn-outline-secondary .MuiSvgIcon-root{
+        font-size: 1.25rem !important;
+    }
+    .image-video-container{
+        grid-template-columns:  auto  !important;
+       }
+       .image-video-container .img-card:first-child{
+        grid-column-start: span 1 !important;
+    }
+    .image-video-container .img-card:nth-child(2n+3){
+        grid-row-start: span 1 !important;
+    }
+    .image-video-container .img-card:nth-child(4n+5){
+        grid-column-start: span 1 !important;
+    }
+    .image-video-container .img-card:nth-child(6n+7){
+        grid-row-start: span 1 !important;
+    }
+    .image-video-container .img-card:nth-child(8n+9){
+        grid-column-start: span 1 !important;
+    }
 }
 
 

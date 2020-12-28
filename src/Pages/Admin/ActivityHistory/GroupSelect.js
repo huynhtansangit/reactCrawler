@@ -36,7 +36,7 @@ export default function GroupedSelect({ isType, onTypeChange, onPlatformChange, 
         Type</InputLabel>
         <Select
           onChange={(event)=>{onTypeChange(event.target.value)}}
-          defaultValue="" id="grouped-select">
+          defaultValue="login" id="grouped-select">
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
