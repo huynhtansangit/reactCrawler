@@ -26,7 +26,8 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { filter } from 'jszip';
-import convertTools, { convertTypeFormat } from '../../../utils/convertTools';
+import convertTools, { convertDateToTimeStamp } from '../../../utils/convertTools';
+import { Alert, AlertTitle } from '@material-ui/lab';
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.background.light,
@@ -75,14 +76,15 @@ const ActivityHistory = () => {
     const [filters, setFilter] = useState({
         offset: 0,
         limit: 10,
-        type: 'admin_loginig',
+        type: 'login',
         from: 0,
         to: 1789789789,
         user: '',
         platform: '',
 
     });
-
+    const [isAllItems, setIsAllItems] = useState(false);
+    const [phone,setPhone]=useState("");
 
 
     const [fetchedData, setFetchedData] = useState([]);
@@ -117,7 +119,7 @@ const ActivityHistory = () => {
                 // remove params with empty value
                 for (const key of Object.keys(filters)) {
                     if (filters[key] === "") {
-                      delete filters[key];
+                        delete filters[key];
                     }
                 }
 
@@ -125,6 +127,7 @@ const ActivityHistory = () => {
                 console.log(responseData);
                 setFetchedData(responseData['logs']);
                 setCount(responseData['count']);
+                console.log(responseData['count']);
             } catch (error) {
                 console.log('Fail to fetch: ', error);
             }
@@ -140,6 +143,10 @@ const ActivityHistory = () => {
             ...filters,
             type: value,
         });
+        if (value === '') {
+            setIsAllItems(true);
+        }
+        else { setIsAllItems(false); }
     }
     const onClickPlatformChange = (value) => {
         setFilter({
@@ -157,14 +164,28 @@ const ActivityHistory = () => {
     const onChangeDateFrom = (value) => {
         setFilter({
             ...filters,
-            from: value,
+            from: convertDateToTimeStamp(value),
         });
     }
     const onChangeDateTo = (value) => {
+        console.log(value);
         setFilter({
             ...filters,
-            to: value,
+            to: convertDateToTimeStamp(value),
         });
+    }
+    const renderAlert = (count) => {
+        if (count == 0) {
+            return (
+                <Alert variant='filled' severity="info">
+                    <AlertTitle>Info</AlertTitle>
+                        No records found — <strong>check it out!</strong>
+                </Alert>
+            )
+
+        } else {
+            return (<></>)
+        }
     }
     return (
         <Page className={classes.root} title="Users">
@@ -201,13 +222,23 @@ const ActivityHistory = () => {
                                                 id="input-user"
                                                 label="Phone"
                                                 className={classes.inputUser}
-                                                onChange={(phone) => { onChangeInputUser(phone.target.value) }}
+                                                onChange={(phone)=>{setPhone(phone.target.value)}}
                                             />
                                         </form>
                                     </Paper>
 
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={3} spacing={1}>
+                                    <Paper className={classes.paper}>
+                                        <Button variant="contained" 
+                                        color="primary" 
+                                        lassName={classes.button}
+                                        onClick ={() => { onChangeInputUser(phone) }}>
+                                            Apply
+                                    </Button>
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={6} spacing={2}>
                                     <Paper className={classes.paper}>
                                         <TextField
                                             id="date-time-from"
@@ -218,10 +249,9 @@ const ActivityHistory = () => {
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
-                                            onDateFromChange={(dateFrom) => { onChangeDateFrom(dateFrom) }}
+                                            onChange={(dateFrom) => { onChangeDateFrom(dateFrom.target.value) }}
                                         />
                                     </Paper>
-
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} spacing={2}>
                                     <Paper className={classes.paper}> <TextField
@@ -233,26 +263,21 @@ const ActivityHistory = () => {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
-                                        onDateToChange ={(dateTo)=>{onChangeDateTo(dateTo)}}
+                                        onChange={(dateTo) => { onChangeDateTo(dateTo.target.value) }}
                                     /></Paper>
-
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={6} spacing={2}>
-                                    <Paper className={classes.paper}>
-                                        <Button variant="contained" color="primary" className={classes.button}>
-                                            Apply
-                                    </Button>
-                                    </Paper>
 
                                 </Grid>
                             </Grid>
                         </TableRow>
                     </Table>
+                    {renderAlert(count)}
                     <Results
                         onLimitChange={(limit) => { clickChangeLimit(limit) }}
                         onPageChange={(page) => { clickChangePage(page) }}
                         count={count}
-                        data={fetchedData ? fetchedData : ""} >
+                        data={fetchedData ? fetchedData : ""}
+                        isAllItems={isAllItems}
+                    >
 
                     </Results>
                 </Box>
