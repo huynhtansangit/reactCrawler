@@ -118,7 +118,8 @@ class ProfileContent extends Component {
             const rawAvatar = (await axios.request(config))['data'];
 
             if(rawAvatar){
-                const b64Avatar = window.btoa(unescape(encodeURIComponent(rawAvatar)));
+                console.log(rawAvatar);
+                const b64Avatar = window.btoa((rawAvatar));
                 console.log(b64Avatar);
                 this.setState({avatarSrc: 'data:image/png,base64,'+b64Avatar});
             }
@@ -209,7 +210,7 @@ class ProfileContent extends Component {
                                     <Avatar src={this.state.avatar}/>
                                 </Tooltip>
                             </label>
-                            <img src={this.state.avatarSrc} alt="avatar"/>
+                            {/* <img src={this.state.avatarSrc} alt="avatar"/> */}
                         </div>
                         <div className="form-group">
                             <div className="mt-2 w-50 ">
@@ -240,7 +241,7 @@ class ProfileContent extends Component {
         }
 
         return (
-            <div className="col-xl-12 col-md-12 col-lg-12 overflow-auto" id="profile-storage-container">
+            <div className="col-xl-12 col-md-12 col-lg-12" id="profile-storage-container">
                 <div className="row">
                     <div id="left-side" className="col-lg-12 col-md-12">
                         {renderInfoUser()}

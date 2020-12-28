@@ -144,10 +144,6 @@ section{
     align-items: center !important;
 }
 
-#left-side{
-    border-right: solid 0.2rem #707070;
-}
-
 .swiper-slide{
     display: flex !important;
     flex-flow: column wrap !important;

@@ -31,6 +31,12 @@ const Toolbar = ({ className, onChangeSearchValue, onAdvanceSearch, ...rest }) =
     onChangeSearchValue(searchValue)
   },[searchValue]); //eslint-disable-line
 
+  const handleHitEnter = (e)=>{
+    if(e.key === 'Enter'){
+      onAdvanceSearch(searchValue);
+    }
+}
+
   return (
     <div
       className={clsx(classes.root, className)}
@@ -57,6 +63,7 @@ const Toolbar = ({ className, onChangeSearchValue, onAdvanceSearch, ...rest }) =
                 placeholder="Search user in this page by name or phone number"
                 variant="outlined"
                 onChange={(e)=>{setSearchValue(e.target.value);}}
+                onKeyDown={handleHitEnter}
               />
             <Button 
               id="btn-advance-search"

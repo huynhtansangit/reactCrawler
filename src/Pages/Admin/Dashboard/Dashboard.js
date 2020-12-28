@@ -78,7 +78,7 @@ const Dashboard = () => {
                         item
                         lg={6}
                         md={12}
-                        xl={9}
+                        xl={6}
                         xs={12}
                     >
                         <MostSearchingUrl onReceiveCountLink={(count)=>setCountDifferentLink(count)} />
@@ -87,7 +87,7 @@ const Dashboard = () => {
                         item
                         lg={6}
                         md={6}
-                        xl={3}
+                        xl={6}
                         xs={12}
                     >
                         <MostAddedItem />

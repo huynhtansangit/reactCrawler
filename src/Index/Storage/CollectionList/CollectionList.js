@@ -19,7 +19,6 @@ export default function SelectedListItem(props) {
 
     useEffect(() => {
         console.log(
-            "didmount"
         )
     }, []);
 
@@ -29,13 +28,14 @@ export default function SelectedListItem(props) {
         <div className={classes.root}>
             { props.statusGetCollection.loading? "" :
                 <List component="div" aria-label="main mailbox folders">
-                <Item MainPrimary="Profile" key="1" type="profile" />
-                {props.listCollectionId.map((element, idx) => {
-                    return (
-                        <Item MainPrimary={element.name} key={idx} id={element.id}/>
-                    )
-                })}
-            </List>}
+                    <Item MainPrimary="Profile" key="0" type="profile" />
+                    {props.listCollectionId.map((element, idx) => {
+                        return (
+                            <Item MainPrimary={element.name} key={idx+1} id={element.id}/>
+                        )
+                    })}
+                </List>
+            }
 
             <Divider />
         </div>

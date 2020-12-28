@@ -43,7 +43,7 @@ class Item extends Component {
     }
 
     async componentDidUpdate() {
-        if (this.state.willLoadContent && this.state.firstRender) {
+        if (this.state.willLoadContent && this.state.firstRender && this.props.MainPrimary !== "Profile") {
             this.setState({ willLoadContent: false });
 
             const accessToken = cookies.get("accessToken");
@@ -70,7 +70,7 @@ class Item extends Component {
                     console.log("Error occurred when trying to get your collection.");
                     if (error.response) {
                         this.setState({ statusGetDataOfCollection: { loading: false, error: error.response.data['message'] } });
-                        alert(error.response.data);
+                        alert(error.response.data.message);
                     }
                     else {
                         alert("Something went wrong. Please check your internet connection.");

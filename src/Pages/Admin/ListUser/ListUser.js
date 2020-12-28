@@ -76,7 +76,15 @@ const ListUser = () => {
 
     const clickChangePage = (page) => {
         setParams(prevParams=>{
-            prevParams['offset']= page;
+            prevParams['offset']= page*prevParams['limit'];
+            return {...prevParams};
+        })
+    };
+
+    const handleAdvanceSearch = async (searchValue) => {
+        setFilteredUsers("");
+        setParams(prevParams=>{
+            prevParams['q']= searchValue.split(" ")
             return {...prevParams};
         })
     };
@@ -84,7 +92,10 @@ const ListUser = () => {
     return (
         <Page className={classes.root} title="Users">
             <Container maxWidth={false}>
-                <Toolbar onChangeSearchValue={(searchValue)=>filterUser(searchValue)}/>
+                <Toolbar 
+                    onChangeSearchValue={(searchValue)=>filterUser(searchValue)}
+                    onAdvanceSearch={(searchValue)=>{handleAdvanceSearch(searchValue)}}
+                />
                 <Box mt={3}>
                     <Results 
                         onLimitChange={(limit)=>{clickChangeLimit(limit)}}

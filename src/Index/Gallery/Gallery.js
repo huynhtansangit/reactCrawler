@@ -116,15 +116,18 @@ class Gallery extends Component {
         else if(this.state.showCollectionItemBelong){
             if(this.state.itemType === "picture"){
                 await this.setState({
-                    selectedCollectionIds: this.state.isImageAddedHashedTable[this.state.mediaDTO.id].length ? this.state.isImageAddedHashedTable[this.state.mediaDTO.id] : [], 
+                    selectedCollectionIds: this.state.isImageAddedHashedTable[this.state.mediaDTO.id]?.length ? this.state.isImageAddedHashedTable[this.state.mediaDTO.id] : [], 
                     showCollectionItemBelong: false});
             }
             else{
                 await this.setState({
-                    selectedCollectionIds: this.state.isVideoAddedHashedTable[this.state.mediaDTO.id].length ? this.state.isVideoAddedHashedTable[this.state.mediaDTO.id] : [], 
+                    selectedCollectionIds: this.state.isVideoAddedHashedTable[this.state.mediaDTO.id]?.length ? this.state.isVideoAddedHashedTable[this.state.mediaDTO.id] : [], 
                     showCollectionItemBelong: false});
             }
             
+        }
+        else if(prevProps.additionalInfoTiktok !== this.props.additionalInfoTiktok){
+            await this.processIsAddedHashedTable(this.props.dataGallery, this.props.additionalInfoTiktok);
         }
         else if(!this.props.dataGallery?.loading){
             // This case will include componentDidMount.
