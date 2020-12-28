@@ -265,11 +265,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                     onChangeRowsPerPage={handleLimitChange}
                     page={page}
                     rowsPerPage={limit}
-<<<<<<< HEAD
                     rowsPerPageOptions={[5, 10, 25]}
-=======
-                    rowsPerPageOptions={[1, 5, 10, 25]}
->>>>>>> 0549846697a6ef9af23f2cddd70ddac28f96c7cc
                 />
             </Card>
 
