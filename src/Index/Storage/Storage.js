@@ -43,28 +43,28 @@ class Storage extends React.Component {
         };
 
         // get data for collection
-        axios.request(config)
-            .then(res => {
-                console.log(res.data);
-                return res.data
-            })
-            .then(data => {
-                if (data) {
-                    this.setState({ loading: false, error: "" })
-                    this.setState({ listCollectionId: data["collections"] })
-                    // console.log(data["collections"])
-                }
-            })
-            .catch(error => {
-                console.log("Error occurred when trying to get your collection.");
-                if (error.response) {
-                    this.setState({ loading: false, error: error.response.data['message'] })
-                    alert(error.response.data.message);
-                }
-                else {
-                    alert("Something went wrong. Please check your internet connection.");
-                }
-            })
+        // axios.request(config)
+        //     .then(res => {
+        //         console.log(res.data);
+        //         return res.data
+        //     })
+        //     .then(data => {
+        //         if (data) {
+        //             this.setState({ isLoading: false, error: "" })
+        //             this.setState({ listCollectionId: data["collections"] })
+        //             // console.log(data["collections"])
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log("Error occurred when trying to get your collection.");
+        //         if (error.response) {
+        //             this.setState({ isLoading: false, error: error.response.data['message'] })
+        //             alert(error.response.data.message);
+        //         }
+        //         else {
+        //             alert("Something went wrong. Please check your internet connection.");
+        //         }
+        //     })
     }
 
     render() {
