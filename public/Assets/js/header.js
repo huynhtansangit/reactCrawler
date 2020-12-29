@@ -1,7 +1,7 @@
 
-window.setTimeout(function () {
-    document.getElementById("gallery-section").scrollIntoView();
-}, 2000)
+// window.setTimeout(function () {
+//     document.getElementById("gallery-section").scrollIntoView();
+// }, 2000)
 
 $(".submit-btn").click(function (e) {
     e.preventDefault();
