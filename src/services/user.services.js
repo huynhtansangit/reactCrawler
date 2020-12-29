@@ -141,11 +141,13 @@ const handleAddToCollection = async (url, thumbnail, type, platform, id, source,
         data: JSON.stringify(data)
     };
 
+    let result;
     await axios.request(config)
         .then(response => response.data)
         .then(data => {
             if (data && data['message'] === 'Success') {
                 alert("Added to collection");
+                result = true;
             }
         })
         .catch(error => {
@@ -156,20 +158,23 @@ const handleAddToCollection = async (url, thumbnail, type, platform, id, source,
             else {
                 alert("Something went wrong. Please check your internet connection.");
             }
+            result = false;
         })
+        return result;
 }
 
 export async function addToCollection(url, thumbnail, type, platform, id, source, collectionId, callback) {
     // No need to verify here.
-    const verifyProcess = await auth.verifyAccessToken();
+    // const verifyProcess = await auth.verifyAccessToken();
 
-    if (verifyProcess) {
-        await handleAddToCollection(url, thumbnail, type, platform, id, source, collectionId);
-    }
-    else {
-        // Callback will never be used.
-        callback();
-    }
+    // if (verifyProcess) {
+        const isSuccess = await handleAddToCollection(url, thumbnail, type, platform, id, source, collectionId);
+        return isSuccess;
+    // }
+    // else {
+    //     // Callback will never be used.
+    //     callback();
+    // }
 };
 
 const handleItemRemoveFromCollection = async (collectionId, itemId) => {
@@ -184,11 +189,13 @@ const handleItemRemoveFromCollection = async (collectionId, itemId) => {
         },
     };
 
+    let result;
     await axios.request(config)
         .then(response => response.data)
         .then(data => {
             if (data && data['message'] === 'Success') {
                 alert("Removed item from collection");
+                result = true;
             }
         })
         .catch(error => {
@@ -199,20 +206,23 @@ const handleItemRemoveFromCollection = async (collectionId, itemId) => {
             else {
                 alert("Something went wrong. Please check your internet connection.");
             }
+            result = false;
         })
+        return result;
 }
 
 export async function removeItemFromCollection(collectionId, itemId, callback) {
     // No need to verify here.
-    const verifyProcess = await auth.verifyAccessToken();
+    // const verifyProcess = await auth.verifyAccessToken();
 
-    if (verifyProcess) {
-        await handleItemRemoveFromCollection(collectionId, itemId);
-    }
-    else {
-        // Callback will never be used.
-        callback();
-    }
+    // if (verifyProcess) {
+        const isSuccess = await handleItemRemoveFromCollection(collectionId, itemId);
+        return isSuccess;
+    // }
+    // else {
+    //     // Callback will never be used.
+    //     callback();
+    // }
 };
 
 const handleCreateCollection = (name) => {
