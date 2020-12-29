@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,7 +6,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import PropTypes from 'prop-types';
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -16,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function GroupedSelect({ isType, onTypeChange, onPlatformChange, ...rest }) {
   const classes = useStyles();
-  const [value, setValue] = useState("");
   useEffect(() => {
     console.log(isType);
 

@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Avatar,
-    Card,
-    Checkbox,
     Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TablePagination,
     TableRow,
-    Typography,
 } from 'ver-4-11';
 import {
     Box,
@@ -18,15 +10,13 @@ import {
 } from '@material-ui/core';
 import Page from '../../../components/Page';
 import Results from './Results';
-import { ClearAllTwoTone } from '@material-ui/icons';
 import HistoryApi from './api/historyApi';
 import GroupSelect from './GroupSelect';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { filter } from 'jszip';
-import convertTools, { convertDateToTimeStamp } from '../../../utils/convertTools';
+import { convertDateToTimeStamp } from '../../../utils/convertTools';
 import { Alert, AlertTitle } from '@material-ui/lab';
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ActivityHistory = () => {
     const classes = useStyles();
-    const [history, setHistory] = useState([]);
     const [count, setCount] = useState("");
     const [filters, setFilter] = useState({
         offset: 0,
@@ -175,7 +164,7 @@ const ActivityHistory = () => {
         });
     }
     const renderAlert = (count) => {
-        if (count == 0) {
+        if (count === 0) {
             return (
                 <Alert variant='filled' severity="info">
                     <AlertTitle>Info</AlertTitle>

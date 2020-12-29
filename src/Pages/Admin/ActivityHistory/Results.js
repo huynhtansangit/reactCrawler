@@ -4,24 +4,23 @@ import PropTypes from 'prop-types';
 import Skeleton from '@material-ui/lab/Skeleton';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-    Avatar,
     Box,
     Card,
-    Checkbox,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TablePagination,
     TableRow,
-    Typography,
 } from 'ver-4-11';
 import { withStyles,makeStyles } from '@material-ui/core'
 import { convertTimeStampToDate, convertFormatHeaderTable } from '../../../utils/convertTools';
-import { AssignmentReturnedOutlined } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
+
+
 // import getInitials from 'src/utils/getInitials';
+//eslint-disable-next-line
 const LightTooltip = withStyles((theme) => ({
     tooltip: {
       backgroundColor: theme.palette.common.white,
@@ -48,9 +47,8 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const [selectedUserIds, setSelectedUserIds] = useState([]); // eslint-disable-line
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
-    const [firstRender, setFirstRender] = useState(true);
-    const [timeUpdate, setTimeUpdate] = useState(0);
-    const timestamp = Date.now();
+    const [firstRender, setFirstRender] = useState(true); //eslint-disable-line
+    const [timeUpdate, setTimeUpdate] = useState(0); //eslint-disable-line
 
 
     // ComponentDidMount
@@ -67,43 +65,6 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         //     clearTimeout(time);
         // }
     }, [timeUpdate])
-
-    const returnDateNow = (timestamp) => {
-        return new Date(timestamp).toLocaleDateString("en-US");
-    }
-    // NOTE This checkbox can not work by now because every user need a unique ID.
-    // Maybe this won't be used in the near future.
-    const handleSelectAll = (event) => {
-        // let newSelectedUserIds;
-
-        // if (event.target.checked) {
-        //     newSelectedUserIds = data.map((User) => User.id);
-        // } else {
-        //     newSelectedUserIds = [];
-        // }
-
-        // setSelectedUserIds(newSelectedUserIds);
-    };
-
-    const handleSelectOne = (event, id) => {
-        // const selectedIndex = selectedUserIds.indexOf(id);
-        // let newSelectedUserIds = [];
-
-        // if (selectedIndex === -1) {
-        //     newSelectedUserIds = newSelectedUserIds.concat(selectedUserIds, id);
-        // } else if (selectedIndex === 0) {
-        //     newSelectedUserIds = newSelectedUserIds.concat(selectedUserIds.slice(1));
-        // } else if (selectedIndex === selectedUserIds.length - 1) {
-        //     newSelectedUserIds = newSelectedUserIds.concat(selectedUserIds.slice(0, -1));
-        // } else if (selectedIndex > 0) {
-        //     newSelectedUserIds = newSelectedUserIds.concat(
-        //         selectedUserIds.slice(0, selectedIndex),
-        //         selectedUserIds.slice(selectedIndex + 1)
-        //     );
-        // }
-
-        // setSelectedUserIds(newSelectedUserIds);
-    };
 
     const handleLimitChange = (event) => {
         const limit = event.target.value;
