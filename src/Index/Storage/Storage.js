@@ -22,8 +22,10 @@ class Storage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            statusGetCollection: { loading: true, error: "false" },
+            // statusGetCollection: { loading: true, error: "false" },
             listCollectionId: [],
+            isLoading: true,
+            error: "",
 
         }
     }
@@ -42,10 +44,13 @@ class Storage extends React.Component {
 
         // get data for collection
         axios.request(config)
-            .then(res => res.data)
+            .then(res => {
+                console.log(res.data);
+                return res.data
+            })
             .then(data => {
                 if (data) {
-                    this.setState({ statusGetCollection: { loading: false, error: "" } })
+                    this.setState({ loading: false, error: "" })
                     this.setState({ listCollectionId: data["collections"] })
                     // console.log(data["collections"])
                 }
@@ -53,7 +58,7 @@ class Storage extends React.Component {
             .catch(error => {
                 console.log("Error occurred when trying to get your collection.");
                 if (error.response) {
-                    this.setState({ statusGetCollection: { loading: false, error: error.response.data['message'] } })
+                    this.setState({ loading: false, error: error.response.data['message'] })
                     alert(error.response.data.message);
                 }
                 else {
@@ -72,7 +77,7 @@ class Storage extends React.Component {
                         <Grid item xs={12} sm={12}>
                             <Paper className={classes.paper}>
                                 <CollectionList
-                                    statusGetCollection={this.state.statusGetCollection}
+                                    isLoading={this.state.isLoading}
                                     listCollectionId={this.state.listCollectionId} />
                             </Paper>
                         </Grid>

@@ -26,7 +26,7 @@ export default function SelectedListItem(props) {
 
     return (
         <div className={classes.root}>
-            { props.statusGetCollection.loading? "" :
+            { props.loading? "" :
                 <List component="div" aria-label="main mailbox folders">
                     <Item MainPrimary="Profile" key="0" type="profile" />
                     {props.listCollectionId.map((element, idx) => {
