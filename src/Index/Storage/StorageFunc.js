@@ -25,42 +25,65 @@ export default function Storage(props) {
     const [error, setError] = useState("");//eslint-disable-line
 
     useEffect(()=> {
-        const accessToken = cookies.get("accessToken");
+        (async ()=>{
+            const accessToken = cookies.get("accessToken");
 
-        let config = {
-            url: COLLECTIONS_URL,
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `bearer ${accessToken}`
-            },
-        };
+            let config = {
+                url: COLLECTIONS_URL,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${accessToken}`
+                },
+            };
 
-        // get data for collection
-        axios.request(config)
-            .then(res => {
-                console.log(res.data);
-                return res.data
-            })
-            // .then(data => {
-            //     if (data) {
-            //         setIsLoading(false);
-            //         setError("");
-            //         setListCollectionId(data["collections"])
-            //     }
-            // })
-            // .catch(error => {
-            //     console.log("Error occurred when trying to get your collection.");
-            //     if (error.response) {
-            //         setIsLoading(false);
-            //         setError(error.response.data['message'])
-            //         alert(error.response.data.message);
-            //     }
-            //     else {
-            //         alert("Something went wrong. Please check your internet connection.");
-            //     }
-            // })
-    });
+            // get data for collection
+            try {
+                const res = await axios.request(config);
+
+                if (res.data) {
+                    setIsLoading(false);
+                    setError("");
+                    setListCollectionId(res.data["collections"])
+                }
+            } catch (error) {
+                console.log("Error occurred when trying to get your collection.");
+                if (error.response) {
+                    setIsLoading(false);
+                    setError(error.response.data['message'])
+                    alert(error.response.data.message);
+                }
+                else {
+                    alert("Something went wrong. Please check your internet connection.");
+                }
+            }
+
+
+            // axios.request(config)
+            //     .then(res => {
+            //         console.log(res.data);
+            //         return res.data
+            //     })
+            //     // .then(data => {
+                //     if (data) {
+                //         setIsLoading(false);
+                //         setError("");
+                //         setListCollectionId(data["collections"])
+                //     }
+                // })
+                // .catch(error => {
+                //     console.log("Error occurred when trying to get your collection.");
+                //     if (error.response) {
+                //         setIsLoading(false);
+                //         setError(error.response.data['message'])
+                //         alert(error.response.data.message);
+                //     }
+                //     else {
+                //         alert("Something went wrong. Please check your internet connection.");
+                //     }
+                // })
+        })();
+    }, []);
 
 
     return (

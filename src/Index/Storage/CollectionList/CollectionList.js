@@ -18,8 +18,6 @@ const useStyles = makeStyles((theme) => ({
 export default function SelectedListItem(props) {
 
     useEffect(() => {
-        console.log(
-        )
     }, []);
 
     const classes = useStyles();
