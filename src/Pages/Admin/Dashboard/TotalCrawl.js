@@ -9,7 +9,7 @@ import {
     Typography,
     colors
 } from 'ver-4-11';
-import {makeStyles} from '@material-ui/core';
+import {makeStyles} from 'ver-4-11';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import DashboardAPI from './DashboardAPI';
 import {axiosRequestErrorHandler} from '../../../utils/axiosRequestErrorHandler';

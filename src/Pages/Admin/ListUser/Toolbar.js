@@ -10,7 +10,7 @@ import {
   SvgIcon,
   Button
 } from 'ver-4-11';
-import {makeStyles} from '@material-ui/core'
+import {makeStyles} from 'ver-4-11'
 import { Search as SearchIcon } from 'react-feather';
 
 

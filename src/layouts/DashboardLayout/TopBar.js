@@ -9,7 +9,7 @@ import {
   IconButton,
   Toolbar
 } from 'ver-4-11';
-import {makeStyles} from '@material-ui/core'
+import {makeStyles} from 'ver-4-11'
 import MenuIcon from '@material-ui/icons/Menu';
 import InputIcon from '@material-ui/icons/Input';
 import auth from '../../auth/auth'

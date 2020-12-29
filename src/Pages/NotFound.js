@@ -4,7 +4,7 @@ import {
     Container,
     Typography,
 } from 'ver-4-11';
-import {makeStyles} from '@material-ui/core';
+import {makeStyles} from 'ver-4-11';
 import Page from '../components/Page';
 import logo from './PageNotFound.svg'
 

@@ -13,7 +13,7 @@ import {
     TablePagination,
     TableRow,
 } from 'ver-4-11';
-import { withStyles,makeStyles } from '@material-ui/core'
+import { withStyles,makeStyles } from 'ver-4-11'
 import { convertTimeStampToDate, convertFormatHeaderTable } from '../../../utils/convertTools';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
