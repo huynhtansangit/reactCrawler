@@ -74,6 +74,7 @@ const ActivityHistory = () => {
     });
     const [isAllItems, setIsAllItems] = useState(false);
     const [phone,setPhone]=useState("");
+    const [timeUpdate, setTimeUpdate] = useState(0); //eslint-disable-line
 
 
     const [fetchedData, setFetchedData] = useState([]);
@@ -104,6 +105,8 @@ const ActivityHistory = () => {
     // didMount
     useEffect(() => {
         const fetchHistoryList = async () => {
+            setTimeout(() => { setTimeUpdate(timeUpdate + 1) }, 5000);
+        
             try {
                 // remove params with empty value
                 for (const key of Object.keys(filters)) {
@@ -113,16 +116,16 @@ const ActivityHistory = () => {
                 }
 
                 const responseData = await HistoryApi.getLogs(filters);
-                console.log(responseData);
+                // console.log(responseData);
                 setFetchedData(responseData['logs']);
                 setCount(responseData['count']);
-                console.log(responseData['count']);
+                // console.log(responseData['count']);
             } catch (error) {
                 console.log('Fail to fetch: ', error);
             }
         }
         fetchHistoryList();
-    }, [filters]);
+    }, [filters, timeUpdate]);
 
     useEffect(() => {
 

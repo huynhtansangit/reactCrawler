@@ -9,15 +9,18 @@ class Auth {
     constructor() {
         this.authenticated = false;
         this.isAdmin = false;
+        this.authorization = ""
     }
 
     async verifyAccessToken(isAdmin){
         if(isAdmin){
             this.isAdmin = true;
+            this.authorization = "admin_"
         }
-        const refreshToken = cookies.get('refreshToken');
+        
+        const refreshToken = cookies.get(this.authorization+'refreshToken');
 
-        if(cookies.get('accessToken') && Math.floor(Date.now() / 1000) <= cookies.get('expireAt')){
+        if(cookies.get(this.authorization+'accessToken') && Math.floor(Date.now() / 1000) <= cookies.get(this.authorization+'expireAt')){
             return true
         }
         // If refreshToken are available => Do refresh
@@ -54,8 +57,8 @@ class Auth {
             const res = await axios.request(config);
             
             if(res.data){
-                cookies.set('accessToken', res.data['accessToken'], { path: '/'});
-                cookies.set('expireAt', res.data['expireAt'], { path: '/'});
+                cookies.set(this.authorization+'accessToken', res.data['accessToken'], { path: '/'});
+                cookies.set(this.authorization+'expireAt', res.data['expireAt'], { path: '/'});
                 return true;
             }
         } catch(error){
@@ -71,6 +74,10 @@ class Auth {
         localStorage.removeItem('firstname');
         localStorage.removeItem('lastname');
 
+        //admin
+        cookies.set('admin_accessToken', '', { path: '/'});
+        cookies.set('admin_refreshToken', '', { path: '/'});
+        // user
         cookies.set('accessToken', '', { path: '/'});
         cookies.set('refreshToken', '', { path: '/'});
         cookies.set('expireAt', '', { path: '/'});

@@ -8,7 +8,7 @@ import auth from '../auth/auth'
 const axiosClient = axios.create({
     // baseURL: BASE_URL,
     headers: {
-        'Authorization': `Bearer ${Cookies.get('accessToken')}`,
+        'Authorization': `Bearer ${Cookies.get('admin_accessToken')}`,
         'Accept': 'application/json',
         'content-type': 'application/x-www-form-urlencoded',
 
@@ -20,7 +20,7 @@ axiosClient.interceptors.request.use(async (config) => {
     //Handle token here ...
     await auth.verifyAccessToken()
     config.headers = {
-        'Authorization': `Bearer ${Cookies.get('accessToken')}`,
+        'Authorization': `Bearer ${Cookies.get('admin_accessToken')}`,
         'Accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
     }

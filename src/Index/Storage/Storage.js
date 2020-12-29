@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Storage.css';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -18,7 +18,7 @@ const useStyles = theme => ({
         color: theme.palette.text.secondary,
     },
 });
-class Storage extends Component {
+class Storage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
