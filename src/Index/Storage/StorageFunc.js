@@ -20,9 +20,9 @@ const useStyles =  makeStyles(theme => ({
 }));
 export default function Storage(props) {
     const classes = useStyles();
-    const [listCollectionId, setListCollectionId] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [listCollectionId, setListCollectionId] = useState([]); //eslint-disable-line
+    const [isLoading, setIsLoading] = useState(true);//eslint-disable-line
+    const [error, setError] = useState("");//eslint-disable-line
 
     useEffect(()=> {
         const accessToken = cookies.get("accessToken");
@@ -42,24 +42,24 @@ export default function Storage(props) {
                 console.log(res.data);
                 return res.data
             })
-            .then(data => {
-                if (data) {
-                    setIsLoading(false);
-                    setError("");
-                    setListCollectionId(data["collections"])
-                }
-            })
-            .catch(error => {
-                console.log("Error occurred when trying to get your collection.");
-                if (error.response) {
-                    setIsLoading(false);
-                    setError(error.response.data['message'])
-                    alert(error.response.data.message);
-                }
-                else {
-                    alert("Something went wrong. Please check your internet connection.");
-                }
-            })
+            // .then(data => {
+            //     if (data) {
+            //         setIsLoading(false);
+            //         setError("");
+            //         setListCollectionId(data["collections"])
+            //     }
+            // })
+            // .catch(error => {
+            //     console.log("Error occurred when trying to get your collection.");
+            //     if (error.response) {
+            //         setIsLoading(false);
+            //         setError(error.response.data['message'])
+            //         alert(error.response.data.message);
+            //     }
+            //     else {
+            //         alert("Something went wrong. Please check your internet connection.");
+            //     }
+            // })
     });
 
 
