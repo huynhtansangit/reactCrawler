@@ -4,9 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from "@material-ui/core/styles";
 import CollectionList from './CollectionList/CollectionList';
-import axios from 'axios';
-import cookies from '../../utils/cookie';
-import { COLLECTIONS_URL } from '../../utils/config.url';
+import axios from 'axios'; //eslint-disable-line
+import cookies from '../../utils/cookie';//eslint-disable-line
+import { COLLECTIONS_URL } from '../../utils/config.url';//eslint-disable-line
 
 const useStyles = theme => ({
     root: {
@@ -31,48 +31,49 @@ class Storage extends React.Component {
     }
 
     async componentDidMount() {
-        const accessToken = cookies.get("accessToken");
+        // const accessToken = cookies.get("accessToken");
 
-        let config = {
-            url: COLLECTIONS_URL,
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `bearer ${accessToken}`
-            },
-        };
+        // let config = {
+        //     url: COLLECTIONS_URL,
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `bearer ${accessToken}`
+        //     },
+        // };
 
         // get data for collection
-        axios.request(config)
-            .then(res => {
-                console.log(res.data);
-                return res.data
-            })
-            .then(data => {
-                if (data) {
-                    this.setState({ isLoading: false, error: "" })
-                    this.setState({ listCollectionId: data["collections"] })
-                    // console.log(data["collections"])
-                }
-            })
-            .catch(error => {
-                console.log("Error occurred when trying to get your collection.");
-                if (error.response) {
-                    this.setState({ isLoading: false, error: error.response.data['message'] })
-                    alert(error.response.data.message);
-                }
-                else {
-                    alert("Something went wrong. Please check your internet connection.");
-                }
-            })
+        // axios.request(config)
+        //     .then(res => {
+        //         console.log(res.data);
+        //         return res.data
+        //     })
+        //     .then(data => {
+        //         if (data) {
+        //             this.setState({ isLoading: false, error: "" })
+        //             this.setState({ listCollectionId: data["collections"] })
+        //             // console.log(data["collections"])
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log("Error occurred when trying to get your collection.");
+        //         if (error.response) {
+        //             this.setState({ isLoading: false, error: error.response.data['message'] })
+        //             alert(error.response.data.message);
+        //         }
+        //         else {
+        //             alert("Something went wrong. Please check your internet connection.");
+        //         }
+        //     })
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes } = this.props;//eslint-disable-line
         return (
             <section id="storage-section">
                 <div className="storage-container">
-                    <img id="you-can-find-downloaded-stuff-here" src="Assets/Images/Store/Mask-Group-2-Copy.png" alt="All downloaded here" />
+                    <p>hello</p>
+                    {/* <img id="you-can-find-downloaded-stuff-here" src="Assets/Images/Store/Mask-Group-2-Copy.png" alt="All downloaded here" />
                     <Grid container spacing={0}>
                         <Grid item xs={12} sm={12}>
                             <Paper className={classes.paper}>
@@ -81,10 +82,7 @@ class Storage extends React.Component {
                                     listCollectionId={this.state.listCollectionId} />
                             </Paper>
                         </Grid>
-                        {/* <Grid item xs={12} sm={9}>
-                            <Paper className={classes.paper}><TabMenu /></Paper>
-                        </Grid> */}
-                    </Grid>
+                    </Grid> */}
 
                 </div>
             </section>
