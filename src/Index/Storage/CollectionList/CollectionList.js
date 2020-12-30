@@ -46,14 +46,13 @@ export default function SelectedListItem(props) {
             })
             .then(data => {
                 if (data) {
-                    setIsLoading(false);
                     setListCollectionId(data["collections"])
                 }
             })
             .catch(error => {
                 console.log("Error occurred when trying to get your collection.");
                 if (error.response) {
-                    this.setState({ isLoading: false, error: error.response.data['message'] })
+                    setIsLoading(false);
                     alert(error.response.data.message);
                 }
                 else {
