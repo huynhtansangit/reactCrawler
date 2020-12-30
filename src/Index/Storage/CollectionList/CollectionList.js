@@ -27,7 +27,7 @@ export default function SelectedListItem(props) {
         getCollectionList();
     }, []);
 
-    const getCollectionList = () =>{
+    const getCollectionList = async () =>{
         const accessToken = cookies.get("accessToken");
 
         let config = {
@@ -39,7 +39,7 @@ export default function SelectedListItem(props) {
             },
         };
 
-        axios.request(config)
+        await axios.request(config)
             .then(res => {
                 console.log(res.data);
                 return res.data
