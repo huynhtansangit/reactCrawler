@@ -1,9 +1,9 @@
 import React from 'react';
 import './Storage.css';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';//eslint-disable-line
+import Paper from '@material-ui/core/Paper';//eslint-disable-line
 import { withStyles } from "@material-ui/core/styles";
-import CollectionList from './CollectionList/CollectionList';
+import CollectionList from './CollectionList/CollectionList';//eslint-disable-line
 import axios from 'axios'; //eslint-disable-line
 import cookies from '../../utils/cookie';//eslint-disable-line
 import { COLLECTIONS_URL } from '../../utils/config.url';//eslint-disable-line
