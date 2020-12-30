@@ -46,6 +46,7 @@ export default function SelectedListItem(props) {
             })
             .then(data => {
                 if (data) {
+                    setIsLoading(false);
                     setListCollectionId(data["collections"])
                 }
             })
