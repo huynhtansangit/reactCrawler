@@ -5,8 +5,8 @@ import List from '@material-ui/core/List';
 import Item from './Item';
 import { useEffect } from 'react';
 import axios from 'axios'; //eslint-disable-line
-import cookies from '../../utils/cookie';//eslint-disable-line
-import { COLLECTIONS_URL } from '../../utils/config.url';//eslint-disable-line
+import cookies from '../../../utils/cookie';//eslint-disable-line
+import { COLLECTIONS_URL } from '../../../utils/config.url' ;//eslint-disable-line
 
 
 const useStyles = makeStyles((theme) => ({
