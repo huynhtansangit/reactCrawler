@@ -17,6 +17,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import auth from '../../auth/auth'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import IconButton from '@material-ui/core/IconButton';
 
 
 class Gallery extends Component {
@@ -257,8 +259,9 @@ class Gallery extends Component {
                 for (const idCollection of this.state.selectedCollectionIds){
                     // only able to remove from collection if item is in it.
                     if(collectionIds.includes(idCollection)){
-                        await removeItemFromCollection(idCollection, itemId);
-                        await this.updateIsAddedHashedTable(this.state.mediaDTO.id, idCollection, this.state.itemType, "remove");
+                        const isSuccess = await removeItemFromCollection(idCollection, itemId);
+                        if(isSuccess)
+                            await this.updateIsAddedHashedTable(this.state.mediaDTO.id, idCollection, this.state.itemType, "remove");
                     }
                     else
                         alert ("This item does not belong to this collection");
@@ -278,11 +281,11 @@ class Gallery extends Component {
             await this.setState({ disableThreeBtnCollectionModal: true })
             if (this.state.selectedCollectionIds.length) {
                 for (const idCollection of this.state.selectedCollectionIds){
-                    await addToCollection(this.state.itemUrl, "", this.state.itemType, 
+                    const isSuccess = await addToCollection(this.state.itemUrl, "", this.state.itemType, 
                         this.props.nameNetwork, this.state.mediaDTO.id, this.state.mediaDTO.source, 
                         idCollection);
-
-                    await this.updateIsAddedHashedTable(this.state.mediaDTO.id, idCollection, this.state.itemType, "add");
+                    if(isSuccess)
+                        await this.updateIsAddedHashedTable(this.state.mediaDTO.id, idCollection, this.state.itemType, "add");
                 }
                 
                 // whatever opening, after add to collection, all modals will be close immediately.
@@ -311,19 +314,14 @@ class Gallery extends Component {
         })()
     }
 
-    clickDeleteCollection = () => {
+    clickDeleteCollection = (collectionId) => {
         (async () => {
             await this.setState({ disableThreeBtnCollectionModal: true })
-            if (this.state.selectedCollectionIds.length) {
-                if (window.confirm("Are you sure want to delete selected collection(s)?")) {
-                    for (const idCollection of this.state.selectedCollectionIds)
-                        await deleteCollection(idCollection);
+            if (window.confirm("Are you sure want to delete selected collection(s)?")) {
+                await deleteCollection(collectionId);
 
-                    await this.setState({ willUpdateModalCollections: true});
-                }
+                await this.setState({ willUpdateModalCollections: true});
             }
-            else
-                alert("No collection selected.")
             this.setState({disableThreeBtnCollectionModal: false });
         })()
     }
@@ -362,8 +360,14 @@ class Gallery extends Component {
                 }
                 else {
                     // else: error occurred => Show pic 500
-                    res = (<img className="justify-item-center"
-                        src="https://www.wpexplorer.com/wp-content/uploads/wordpress-500-internal-server-error-fixes.jpg" alt="500 error" />);
+                    if(this.props.dataGallery.error === "404"){
+                        res = (<img className="justify-item-center"
+                        src="https://www.intellezy.com/img/error-404.png" alt="404 error" />);
+                    }
+                    else{
+                        res = (<img className="justify-item-center"
+                            src="https://www.tropicalserver.com/wp-content/uploads/2018/01/error-500-1.jpg" alt="500 error" />);
+                    }
                 }
             }
             return (res);
@@ -393,10 +397,16 @@ class Gallery extends Component {
                             countPost={handleCountPost()}
                             countFollowedBy={this.props.dataGallery.ownerMedia?.countFollowedBy}
                             nameNetwork={this.props.nameNetwork} />) : (
-                        <OwnerMedia
-                            avatar="https://www.wpexplorer.com/wp-content/uploads/wordpress-500-internal-server-error-fixes.jpg"
-                            username="Error" fullname="Error" countPost="Error" countFollowedBy="Error"
-                            nameNetwork={this.props.nameNetwork} />
+                                this.props.dataGallery.error === "404" ?
+                                    <OwnerMedia
+                                        avatar="https://www.intellezy.com/img/error-404.png"
+                                        username="Error" fullname="Error" countPost="Error" countFollowedBy="Error"
+                                        nameNetwork={this.props.nameNetwork} /> :
+                                
+                                    <OwnerMedia
+                                        avatar="https://www.tropicalserver.com/wp-content/uploads/2018/01/error-500-1.jpg"
+                                        username="Error" fullname="Error" countPost="Error" countFollowedBy="Error"
+                                        nameNetwork={this.props.nameNetwork} />
                     ))
             }
         }
@@ -444,8 +454,14 @@ class Gallery extends Component {
                 }
                 else {
                     // else: error occurred => Show pic 500
-                    return ((<img className="justify-item-center"
-                        src="https://www.wpexplorer.com/wp-content/uploads/wordpress-500-internal-server-error-fixes.jpg" alt="server error" />))
+                    if(this.props.dataGallery.error === "404"){
+                        return (<img className="justify-item-center"
+                        src="https://www.intellezy.com/img/error-404.png" alt="404 error" />);
+                    }
+                    else{
+                        return (<img className="justify-item-center"
+                            src="https://www.tropicalserver.com/wp-content/uploads/2018/01/error-500-1.jpg" alt="500 error" />);
+                    }
                 }
             }
         }
@@ -507,18 +523,7 @@ class Gallery extends Component {
         }
         const renderCollections = () => {
             if (!this.state.isLoadingCollections && this.state.dataCollections) {
-                if (this.state.dataCollections.error)
-                    return (<>
-                        <Button variant="secondary" onClick={() => this.setState({ willUpdateModalCollections: true })}>
-                                Try again
-                        </Button>
-                        <br/>
-                        <Alert severity="error">
-                            <AlertTitle>Error</AlertTitle>
-                            <p>{this.state.dataCollections.error}</p>
-                        </Alert>
-                        </>)
-                else
+                if(this.state.dataCollections?.collections)
                     return (<div style={{ overflowY: 'scroll' }}>
                         {this.state.dataCollections.collections.map(
                             (collection, idx) =>
@@ -533,9 +538,27 @@ class Gallery extends Component {
                                             />}
                                         label={collection.name}
                                     />
+                                    {/* onClick={()=>this.clickDeleteCollection(collection.id)} */}
+                                    <IconButton aria-label="delete" 
+                                        onClick={()=>this.clickDeleteCollection(collection.id)}
+                                        style={{paddingTop:'0',paddingLeft:'0'}}
+                                        disabled={this.state.disableThreeBtnCollectionModal}>
+                                        <DeleteForeverIcon />
+                                    </IconButton>
                                 </FormGroup>
                         )}
                     </div>)
+                else
+                    return (<>
+                        <Button variant="secondary" onClick={() => this.setState({ willUpdateModalCollections: true })}>
+                                Try again
+                        </Button>
+                        <br/>
+                        <Alert severity="error">
+                            <AlertTitle>Error</AlertTitle>
+                            <p>{this.state.dataCollections?.error}</p>
+                        </Alert>
+                        </>)
             }
             else {
                 return (<div>
@@ -679,9 +702,9 @@ class Gallery extends Component {
                             <Button variant="secondary" onClick={() => this.clickCreateCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Create a new collection
                             </Button>
-                            <Button variant="secondary" onClick={() => this.clickDeleteCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
+                            {/* <Button variant="secondary" onClick={() => this.clickDeleteCollection()} disabled={this.state.disableThreeBtnCollectionModal}>
                                 Remove this collection
-                            </Button>
+                            </Button> */}
                         </Modal.Footer>
                     </Modal>
                 </div>

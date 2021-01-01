@@ -1,4 +1,4 @@
-import { createMuiTheme, colors } from '@material-ui/core';
+import { createMuiTheme, colors } from 'ver-4-11';
 import shadows from './shadows';
 import typography from './typography';
 

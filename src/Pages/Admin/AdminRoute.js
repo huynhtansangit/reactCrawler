@@ -3,7 +3,7 @@ import {Route} from 'react-router-dom';
 import ListUser from '../Admin/ListUser/ListUser'
 import Chart from '../Admin/Chart/Chart'
 import SearchHistory from '../Admin/SearchHistory/SearchHistory'
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider } from 'ver-4-11';
 import theme from '../../theme/index';
 import GlobalStyles from '../../components/GlobalStyles'
 

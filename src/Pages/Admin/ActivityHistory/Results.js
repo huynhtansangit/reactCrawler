@@ -13,7 +13,7 @@ import {
     TablePagination,
     TableRow,
 } from 'ver-4-11';
-import { withStyles,makeStyles } from '@material-ui/core'
+import { withStyles,makeStyles } from 'ver-4-11'
 import { convertTimeStampToDate, convertFormatHeaderTable } from '../../../utils/convertTools';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
@@ -48,23 +48,13 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
     const [firstRender, setFirstRender] = useState(true); //eslint-disable-line
-    const [timeUpdate, setTimeUpdate] = useState(0); //eslint-disable-line
 
 
     // ComponentDidMount
     useEffect(() => {
-        console.log(data);
         setFirstRender(false);
     }, [data])
 
-    //DidUpdate
-    useEffect(() => {
-        // console.log(`Update ${timeUpdate}`);
-        // setTimeout(() => { setTimeUpdate(timeUpdate + 1) }, 2000);
-        // return ()=>{
-        //     clearTimeout(time);
-        // }
-    }, [timeUpdate])
 
     const handleLimitChange = (event) => {
         const limit = event.target.value;

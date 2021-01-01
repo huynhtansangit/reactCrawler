@@ -152,9 +152,11 @@ export default function SignInSide(props) {
       },
       data: formData
     };
-    
-    if(isLoginAsAdmin)
+    let authorization = "";
+    if(isLoginAsAdmin){
         configRequest['url']= ADMIN_TOKEN_URL;
+        authorization = "admin_";
+      }
     else
         configRequest['url']= TOKEN_URL;
 
@@ -169,9 +171,9 @@ export default function SignInSide(props) {
         .then(response => response.data)
         .then(async data => {
           if (data) {
-            await cookies.set('accessToken', data['accessToken'], { path: '/'});
-            await cookies.set('refreshToken', data['refreshToken'], { path: '/'});
-            await cookies.set('expireAt', data['expireAt'], { path: '/'});
+            await cookies.set(authorization+'accessToken', data['accessToken'], { path: '/'});
+            await cookies.set(authorization+'refreshToken', data['refreshToken'], { path: '/'});
+            await cookies.set(authorization+'expireAt', data['expireAt'], { path: '/'});
 
             if (isRememberChecked) {
               localStorage.setItem('phone', phone);

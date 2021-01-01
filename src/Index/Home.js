@@ -64,7 +64,7 @@ class Index extends Component {
             const data = await response.json();
 
             if(!data['data']?.length && !data['owner'])
-                throw new Error("User or post not found!")
+                throw new Error("404")
 
             let imagesData = [];
             let videosData = [];
@@ -103,7 +103,7 @@ class Index extends Component {
         } catch (error) {
             console.log(error);
             await this.setState({
-                dataGallery: {loading: false, error: error},
+                dataGallery: {loading: false, error: error.message},
                 nameNetwork: nameNetwork
             })
         }

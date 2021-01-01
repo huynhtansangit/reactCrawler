@@ -70,6 +70,12 @@
 
 }
 /* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .contact-text{
+        display: none;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     #footer-logo{
         width: 8rem; 
@@ -78,6 +84,14 @@
 
     p, label, a {
         font-size: small !important;
+    }
+    
+    .contact-text{
+        display: flex-inline !important;
+    }
+
+    .child-menu{
+        line-height: 0;
     }
 }
  /* Extra small devices (phones, 600px and down) */
@@ -90,4 +104,40 @@
         width: 1rem;
         height: 1rem;
     }
+}
+
+@media only screen and (max-width: 992px) {
+    .row-contain-icon-and-info{
+        height: auto!important;
+    }
+
+    .row-contain-icon-and-info p{
+        text-align: center !important;
+    }
+
+    .row-contain-icon-and-info #address-footer{
+        width: 15rem !important;
+    }
+
+    .column-footer-2{
+        display: flex !important;
+        flex-flow: column wrap !important;
+        align-items: center !important;
+    }
+
+    #email-footer{
+        margin-bottom: 0!important;
+    }
+
+    .child-menu{
+        margin: 0!important;
+    }
+
+    .row-contain-icon-and-info p{
+        margin-bottom: 0!important;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    
 }
