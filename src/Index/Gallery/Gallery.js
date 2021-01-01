@@ -16,6 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import auth from '../../auth/auth'
 
 
 class Gallery extends Component {
@@ -99,6 +100,7 @@ class Gallery extends Component {
     async componentDidUpdate(prevProps) {
         if (this.state.willUpdateModalCollections) {
             await this.setState({ willUpdateModalCollections: false, isLoadingCollections: true, selectedCollectionIds: [] });
+            await auth.verifyAccessToken();
             const dataCollections = await getCollections(() => {
                 // If not login -> redirect to login.
                 this.props.history.push("/login", {
