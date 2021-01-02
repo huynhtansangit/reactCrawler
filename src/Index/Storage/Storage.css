@@ -379,8 +379,5 @@ p, label, a {
     }
 }
 .MuiList-root{
-    width: 100% !important;
-}
-.makeStyles-root-3{
-    max-width: 100% !important;
+    /* width: 100% !important; */
 }

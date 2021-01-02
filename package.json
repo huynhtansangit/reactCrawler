@@ -51,6 +51,7 @@
     "scss": "^0.2.4",
     "serve": "^11.3.2",
     "swiper": "^6.3.5",
+    "tui-image-editor": "^3.11.0",
     "universal-cookie": "^4.0.4",
     "ver-4-11": "npm:@material-ui/core@^4.11.2"
   },

@@ -16,7 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { convertDateToTimeStamp } from '../../../utils/convertTools';
+import { convertDateToTimeStamp,removeEmptyValueParams } from '../../../utils/convertTools';
 import { Alert, AlertTitle } from '@material-ui/lab';
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -109,13 +109,13 @@ const ActivityHistory = () => {
         
             try {
                 // remove params with empty value
-                for (const key of Object.keys(filters)) {
-                    if (filters[key] === "") {
-                        delete filters[key];
-                    }
-                }
-
-                const responseData = await HistoryApi.getLogs(filters);
+                // for (const key of Object.keys(filters)) {
+                //     if (filters[key] === "") {
+                //         delete filters[key];
+                //     }
+                // }
+                const cleanFilter= removeEmptyValueParams(filters);
+                const responseData = await HistoryApi.getLogs(cleanFilter);
                 // console.log(responseData);
                 setFetchedData(responseData['logs']);
                 setCount(responseData['count']);

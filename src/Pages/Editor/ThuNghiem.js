@@ -3,6 +3,7 @@ import 'tui-image-editor/dist/tui-image-editor.css';
 import ImageEditor from '@toast-ui/react-image-editor';
 // import FileSaver from 'file-saver'
 import '../../App.css';
+
 import logo from './logo_transparent.png';
 var whiteTheme = {
     'common.bi.image': logo,
