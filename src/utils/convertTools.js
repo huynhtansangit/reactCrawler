@@ -25,3 +25,13 @@ export function convertFormatHeaderTable (string){
     let template = string.charAt(0).toUpperCase() + string.slice(1);
     return template.replace("_"," ");
 }
+// Remove the params with empty value
+export function removeEmptyValueParams (params){
+    const temp =params;
+    for (const key of Object.keys(temp)) {
+        if (temp[key] === "") {
+            delete temp[key];
+        }
+    }
+    return temp;
+}

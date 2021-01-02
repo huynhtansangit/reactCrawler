@@ -2,7 +2,7 @@ import React, { useState } from 'react'; //eslint-disable-line
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import Item from './ItemCopy';
+import ItemHook from './ItemHook';
 import { useEffect } from 'react';
 import axios from 'axios'; //eslint-disable-line
 import cookies from '../../../utils/cookie';//eslint-disable-line
@@ -12,7 +12,6 @@ import { COLLECTIONS_URL } from '../../../utils/config.url' ;//eslint-disable-li
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
         overflow: 'hidden',
     },
@@ -65,10 +64,10 @@ export default function SelectedListItem(props) {
         <div className={classes.root}>
             { isLoading? "" :
                 <List component="div" aria-label="main mailbox folders">
-                    <Item MainPrimary="Profile" key="0" type="profile" />
+                    <ItemHook MainPrimary="Profile" key="0" type="profile" />
                     {listCollectionId.map((element, idx) => {
                         return (
-                            <Item MainPrimary={element.name} key={idx+1} id={element.id} type='item'/>
+                            <ItemHook MainPrimary={element.name} key={idx+1} id={element.id}/>
                         )
                     })}
                 </List>

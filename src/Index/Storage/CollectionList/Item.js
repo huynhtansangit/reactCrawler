@@ -18,7 +18,6 @@ import { COLLECTIONS_URL } from '../../../utils/config.url';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { deleteCollection } from '../../../services/user.services'
 
-
 const useStyles = theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
@@ -86,6 +85,7 @@ class Item extends Component {
             this.setState({ isShowItem: false });
         }
     }
+    
     renderTabMenu = (classes) => {
         if (this.state.statusGetDataOfCollection['loading'] === true) {
             return (
