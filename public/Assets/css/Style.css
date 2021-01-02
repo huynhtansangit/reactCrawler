@@ -66,7 +66,75 @@ section{
 /* End  font  setting*/
 /* Responsive */
 @media only screen and (max-width: 1920px) {
-    
+    /* Banner */
+   /* .dropdown-header-customize{
+       top: 75px !important;
+   } */
+   .banner {
+    width: 1222px !important; 
+    height: 811px !important; 
+ }
+ .img-decor-banner {
+  width: 919px;
+  height: 923px;
+  top: -79px !important;
+  left: 153px !important;
+ }
+ .girl-circle-decor {
+  width: 120px !important;
+  height: 120px !important;
+ }
+ #girl-1{
+  top: 620.38px !important;
+  left: 656px !important;
+ }
+ #girl-3{
+  left: 849px !important;
+ }
+ #girl-2{
+  top: 353px !important;
+  left: 949px !important;
+ }
+ #girl-4{
+  top: 473px !important;
+  left: 889px !important;
+ }
+ #girl-5{
+  top: 373px !important;
+  left: 779px !important;
+ }
+ #girl-6{
+  top: 520.38px !important;
+  left: 156px !important;
+ }
+ .btn-outline-dark{
+     left: 74% !important;
+ }
+ #circle-1{
+  width: 333px !important;
+  height: 300px !important;
+  left: -200px !important ;
+ }
+ #circle-5{
+  width: 202px !important;
+  height: 206px !important;
+  left: 841px !important;
+ }
+ 
+ #circle-6{
+  left: 881px !important;
+ }
+ .big-slogan{
+     font-size: 38px !important;
+     line-height: 46px !important;
+     top: 280px !important;
+ }
+ .big-slogan,.small-slogan, #form-banner,.dropdown-banner
+ {
+     left: 300px !important;
+ }
+ /* ----- */
+ /* ---- */
 }
 @media only screen and (max-width: 1642px) {
    /* Banner */
