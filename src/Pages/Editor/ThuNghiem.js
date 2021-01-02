@@ -4,7 +4,7 @@ import ImageEditor from '@toast-ui/react-image-editor';
 // import FileSaver from 'file-saver'
 import '../../App.css';
 import './Editor.css';
-import logo from './logo_transparent.png';
+// import logo from './logo_transparent.png';
 var customTheme = {
     'common.bi.image': 'https://uicdn.toast.com/toastui/img/tui-image-editor-bi.png',
     'common.bisize.width': '251px',

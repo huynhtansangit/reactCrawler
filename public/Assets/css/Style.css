@@ -63,6 +63,10 @@ section{
     font-family: semiBold !important;
 }
 
+.btn-outline-secondary .MuiSvgIcon-root{
+    color: white ;
+}
+
 /* End  font  setting*/
 /* Responsive */
 @media only screen and (max-width: 1920px) {
