@@ -1,8 +1,8 @@
 import React, { useState } from 'react'; //eslint-disable-line
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-// import Divider from '@material-ui/core/Divider';
-import Item from './Item';
+import Divider from '@material-ui/core/Divider';
+import Item from './ItemCopy';
 import { useEffect } from 'react';
 import axios from 'axios'; //eslint-disable-line
 import cookies from '../../../utils/cookie';//eslint-disable-line
@@ -41,13 +41,10 @@ export default function SelectedListItem(props) {
 
         await axios.request(config)
             .then(res => {
-                console.log(res.data);
-                return res.data
-            })
-            .then(data => {
-                if (data) {
+                console.log(res.data.collections);
+                if (res.data) {
                     setIsLoading(false);
-                    setListCollectionId(data["collections"])
+                    setListCollectionId(res.data["collections"])
                 }
             })
             .catch(error => {
@@ -71,13 +68,13 @@ export default function SelectedListItem(props) {
                     <Item MainPrimary="Profile" key="0" type="profile" />
                     {listCollectionId.map((element, idx) => {
                         return (
-                            <Item MainPrimary={element.name} key={idx+1} id={element.id}/>
+                            <Item MainPrimary={element.name} key={idx+1} id={element.id} type='item'/>
                         )
                     })}
                 </List>
             }
 
-            {/* <Divider /> */}
+            <Divider />
         </div>
     );
 }
