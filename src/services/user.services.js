@@ -66,7 +66,7 @@ export const downloadMultiImagesByUrlsVers2 = async (listImage, callback) => {
                 // NOTE Need to figure out if count can be less then length or not?
                 if (count === listImage.length) {
                     zip.generateAsync({ type: 'blob' }).then(function (content) {
-                        saveAs(content, "FromInstaDownWithLove.zip");
+                        saveAs(content, `FromInstaDownWithLove-${(Math.floor((Date.now()/1000)))}.zip`);
                     });
                 }
             });

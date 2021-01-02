@@ -2,6 +2,12 @@ export function convertTimeStampToDate(timestamp){
     return new Date(timestamp * 1000).toISOString().substr(0, 10);
 }
 
+export function convertTimeStampToDateWithSecond(timestamp){
+    // timestamp + 25200 = 7hours = GMT+7
+    let dateWithSecond = new Date((timestamp+25200) * 1000).toISOString().replace("T"," ("); 
+    return(dateWithSecond.substr(0,20)+")");
+}
+
 export function roundPercentNumber(value, decimals) {
     return Number((value*100).toFixed(decimals));
 }

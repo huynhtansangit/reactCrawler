@@ -14,7 +14,7 @@ import {
     TableRow,
 } from 'ver-4-11';
 import { withStyles,makeStyles } from 'ver-4-11'
-import { convertTimeStampToDate, convertFormatHeaderTable } from '../../../utils/convertTools';
+import { convertTimeStampToDateWithSecond, convertFormatHeaderTable } from '../../../utils/convertTools';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
 
@@ -116,7 +116,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const returnTimeFormat = (key, value) => {
         if (key === 'time') {
             return (<Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
-                <TableCell>{convertTimeStampToDate(value)}</TableCell>
+                <TableCell>{convertTimeStampToDateWithSecond(value)}</TableCell>
             </Tooltip>)
 
         }

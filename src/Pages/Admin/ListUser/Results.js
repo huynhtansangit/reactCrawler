@@ -48,7 +48,6 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
     const [page, setPage] = useState(0);
     const [isUserActiveHashmap, setIsUserActiveHashmap] = useState({});
     const [currentUserInfo, setCurrentUserInfo] = useState("");
-    // mới vào là nó khởi tạo mảng rỗng rồi
     const [currentUserActivities, setCurrentUserActivities] = useState([]);
 
 
