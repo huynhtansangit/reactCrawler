@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; //eslint-disable-line
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-// import Divider from '@material-ui/core/Divider';
+import Divider from '@material-ui/core/Divider';
 import ItemHook from './ItemHook';
 import { useEffect } from 'react';
 import axios from 'axios'; //eslint-disable-line
@@ -40,13 +40,10 @@ export default function SelectedListItem(props) {
 
         await axios.request(config)
             .then(res => {
-                console.log(res.data);
-                return res.data
-            })
-            .then(data => {
-                if (data) {
+                console.log(res.data.collections);
+                if (res.data) {
                     setIsLoading(false);
-                    setListCollectionId(data["collections"])
+                    setListCollectionId(res.data["collections"])
                 }
             })
             .catch(error => {
@@ -76,7 +73,7 @@ export default function SelectedListItem(props) {
                 </List>
             }
 
-            {/* <Divider /> */}
+            <Divider />
         </div>
     );
 }

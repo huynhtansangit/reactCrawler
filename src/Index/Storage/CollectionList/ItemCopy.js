@@ -1,8 +1,8 @@
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
-import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import { withStyles } from "@material-ui/core/styles";//eslint-disable-line
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -12,69 +12,60 @@ import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 import TabMenu from '../TabMenu';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import ProfileContent from '../ProfileTab/ProfileContent';
-import Skeleton from '@material-ui/lab/Skeleton';
-import { deleteCollection } from '../../../services/user.services';
-import PropTypes from 'prop-types';
 import axios from 'axios';
-import { COLLECTIONS_URL } from "../../../utils/config.url";
-import cookies from "../../../utils/cookie";
-// import { TranslateRounded } from '@material-ui/icons';
-const useStyle = makeStyles((theme) => ({
+import cookies from '../../../utils/cookie';
+import { COLLECTIONS_URL } from '../../../utils/config.url';
+import Skeleton from '@material-ui/lab/Skeleton';
+import { deleteCollection } from '../../../services/user.services'
+import { makeStyles } from '@material-ui/core/styles';
+
+//eslint-disable-next-line
+const useStyles =  makeStyles(theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
     },
 }));
 
-export default function ItemHook({ MainPrimary, id, key, ...rest }) {
-    const classes = useStyle();
+export default function Item(props)  {
+    const classes = useStyles();
+    
+    const [willLoadContent, setWillLoadContent] = useState(false);
+    const [firstRender, setFirstRender] = useState(true);
+    const [statusGetDataOfCollection, setStatusGetDataOfCollection]= useState({ loading: true, error: "false" });
+    const [isOpen, setIsOpen]= useState(false);
+    const [dataOfCollection, setDataOfCollection]= useState([]);
+    const [selectedIndex, setSelectedIndex]= useState(0); //eslint-disable-line
+    const [isShowItem, setIsShowItem]= useState(true);
 
-    const [open, setOpen] = React.useState(false);
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
-    const [willLoadContent, setWillLoadContent] = React.useState(false);
-    const [firstRender, setFirstRender] = React.useState(true);
-    const [statusGetDataOfCollection, setStatusGetDataOfCollection] = React.useState({
-        loading: true,
-        error: "false",
-    });
-    const [dataOfCollection, setDataOfCollection] = React.useState([]);
-    const [showItem, setShowItem] = React.useState(true);
-
-    // Component Did Update convert
-    useEffect(() => {
-        // console.log("this is id: " + id);
-        const fetchedApi = async ()=>{
-            if (willLoadContent && firstRender && MainPrimary !== "Profile") {
+    useEffect(()=>{
+        (async () => {
+            if (willLoadContent && firstRender && props.MainPrimary !== "Profile") {
                 setWillLoadContent(false);
-    
+
                 const accessToken = cookies.get("accessToken");
-    
+
                 const config = {
-                    url: `${COLLECTIONS_URL}/${id}`,
+                    url: `${COLLECTIONS_URL}/${props.id}`,
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `bearer ${accessToken}`
                     },
                 };
-    
+
                 // get data for collection
                 await axios.request(config)
                     .then(res => res.data)
                     .then(data => {
                         if (data) {
-                            setStatusGetDataOfCollection({
-                                loading: false, error: ""
-                            });
+                            setStatusGetDataOfCollection({ loading: false, error: "" });
                             setDataOfCollection(data["items"]);
                         }
                     })
                     .catch(error => {
                         console.log("Error occurred when trying to get your collection.");
                         if (error.response) {
-                            setStatusGetDataOfCollection({
-                                loading: false,
-                                error: error.response.data['message'],
-                            });
+                            setStatusGetDataOfCollection({ loading: false, error: error.response.data['message'] });
                             alert(error.response.data.message);
                         }
                         else {
@@ -83,13 +74,11 @@ export default function ItemHook({ MainPrimary, id, key, ...rest }) {
                     })
                 await setFirstRender(false);
             }
-        } 
-        fetchedApi();
-    });
-    // ------ end convert -----
+        })()
+    })
 
     const onClickItem = (event, index) => {
-        setOpen(!open);
+        setIsOpen(!isOpen);
         setSelectedIndex(index);
         setWillLoadContent(true);
     }
@@ -97,7 +86,7 @@ export default function ItemHook({ MainPrimary, id, key, ...rest }) {
     const clickDeleteCollection = (idCollection) => {
         if (window.confirm("Are you sure want to delete this collection?")) {
             deleteCollection(idCollection);
-            setShowItem(false);
+            setIsShowItem(false);
         }
     }
 
@@ -117,23 +106,24 @@ export default function ItemHook({ MainPrimary, id, key, ...rest }) {
             )
         }
     }
+
     const renderCollapse = (classes) => (
         <>
             <ListItem
                 button
                 selected='true'
-                onClick={(event) => onClickItem(event, selectedIndex)}
+                onClick={(event) => onClickItem(event, 1)}
             >
                 <ListItemIcon>
                     <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary={MainPrimary} />
-                {open ? <ExpandLess /> : <ExpandMore />}
+                <ListItemText primary={props.MainPrimary} />
+                {isOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={open} timeout="auto" unmountOnExit>
+            <Collapse in={isOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding >
                     <ListItem button className={classes.nested}
-                        onClick={(e) => clickDeleteCollection(id)}>
+                        onClick={(e) => clickDeleteCollection(props.id)}>
                         <ListItemIcon>
                             <RemoveOutlinedIcon style={{ color: '#F91A2C', fontSize: 40 }} />
                         </ListItemIcon>
@@ -144,8 +134,9 @@ export default function ItemHook({ MainPrimary, id, key, ...rest }) {
             </Collapse>
         </>
     )
-    const renderProfile = (classes) => {
-        if (MainPrimary === "Profile") {
+
+    const renderProfile = (type, classes) => {
+        if (type === "profile") {
             return (
                 <div>
                     <ListItem
@@ -156,10 +147,10 @@ export default function ItemHook({ MainPrimary, id, key, ...rest }) {
                         <ListItemIcon>
                             <AccountCircleOutlinedIcon />
                         </ListItemIcon>
-                        <ListItemText primary={MainPrimary} />
-                        {open ? <ExpandLess /> : <ExpandMore />}
+                        <ListItemText primary={props.MainPrimary} />
+                        {isOpen ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
+                    <Collapse in={isOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding >
                             <ListItem className={classes.nested}>
                                 <ProfileContent />
@@ -169,20 +160,18 @@ export default function ItemHook({ MainPrimary, id, key, ...rest }) {
                 </div>
             )
         }
-
-        else
+        else{
             return (
                 <div>
-                    {showItem && renderCollapse(classes)}
+                    { isShowItem && renderCollapse(classes)}
                 </div>
             )
+        }
     }
     return (
         <div>
-            {renderProfile(classes)}
+            {renderProfile(props.type, classes)}
         </div>
     );
 }
-ItemHook.propTypes = {
-    id: PropTypes.string.isRequired,
-};
+
