@@ -269,7 +269,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
             </Card>
 
             <Modal
-                size="xl"
+                size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={false}
                 centered
@@ -281,7 +281,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                   <CustomCard data={currentUserInfo}/>
+                    <CustomCard data={currentUserInfo}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success"
@@ -298,7 +298,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
             </Modal>
 
             <Modal
-                size="xl"
+                size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={true}
                 centered

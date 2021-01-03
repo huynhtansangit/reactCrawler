@@ -40,7 +40,7 @@ const Dashboard = () => {
                 >
                     <Grid
                         item
-                        lg={3}
+                        lg={6}
                         sm={6}
                         xl={3}
                         xs={12}
@@ -49,7 +49,7 @@ const Dashboard = () => {
                     </Grid>
                     <Grid
                         item
-                        lg={3}
+                        lg={6}
                         sm={6}
                         xl={3}
                         xs={12}
@@ -58,7 +58,7 @@ const Dashboard = () => {
                     </Grid>
                     <Grid
                         item
-                        lg={3}
+                        lg={6}
                         sm={6}
                         xl={3}
                         xs={12}
@@ -67,7 +67,7 @@ const Dashboard = () => {
                     </Grid>
                     <Grid
                         item
-                        lg={3}
+                        lg={6}
                         sm={6}
                         xl={3}
                         xs={12}
