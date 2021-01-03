@@ -21,10 +21,11 @@ export default function SelectedListItem(props) {
 
     const [isLoading, setIsLoading] = useState(true);//eslint-disable-line
     const [listCollectionId, setListCollectionId] = useState([]);
+    const [listCollectionHashmap, setListCollectionHashmap] = useState({});
 
     useEffect(() => {
         getCollectionList();
-    }, []);
+    }, []); //eslint-disable-line
 
     const getCollectionList = async () =>{
         const accessToken = cookies.get("accessToken");
@@ -43,7 +44,8 @@ export default function SelectedListItem(props) {
                 console.log(res.data.collections);
                 if (res.data) {
                     setIsLoading(false);
-                    setListCollectionId(res.data["collections"])
+                    setListCollectionId(res.data["collections"]);
+                    createListCollectionHashmap(res.data["collections"]);
                 }
             })
             .catch(error => {
@@ -58,6 +60,22 @@ export default function SelectedListItem(props) {
             })
     }
 
+    const createListCollectionHashmap = (listCollection) =>{
+        let hashmap = {};
+        listCollection.forEach(el => {
+            hashmap[el.id]=el.name;
+        });
+        
+        setListCollectionHashmap(hashmap);
+    }
+
+    const updateListCollectionHashmap = (id, newName) =>{
+        setListCollectionHashmap(prevHashmap=>{
+            prevHashmap[id]= newName;
+            return {...prevHashmap};
+        });
+    }
+
     const classes = useStyles();
 
     return (
@@ -67,7 +85,9 @@ export default function SelectedListItem(props) {
                     <ItemHook MainPrimary="Profile" key="0" type="profile" />
                     {listCollectionId.map((element, idx) => {
                         return (
-                            <ItemHook MainPrimary={element.name} key={idx+1} id={element.id}/>
+                            <ItemHook MainPrimary={listCollectionHashmap[element.id]} key={idx+1} id={element.id}
+                                updateListCollection={(id, newName)=>{updateListCollectionHashmap(id, newName)}}
+                            />
                         )
                     })}
                 </List>

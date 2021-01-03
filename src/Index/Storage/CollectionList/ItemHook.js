@@ -13,19 +13,21 @@ import TabMenu from '../TabMenu';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import ProfileContent from '../ProfileTab/ProfileContent';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { deleteCollection } from '../../../services/user.services';
+import { deleteCollection, renameCollection } from '../../../services/user.services';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { COLLECTIONS_URL } from "../../../utils/config.url";
 import cookies from "../../../utils/cookie";
-// import { TranslateRounded } from '@material-ui/icons';
+import EditRoundedIcon from '@material-ui/icons/EditRounded';
+
+
 const useStyle = makeStyles((theme) => ({
     nested: {
         paddingLeft: theme.spacing(4),
     },
 }));
 
-export default function ItemHook({ MainPrimary, id, key, ...rest }) {
+export default function ItemHook({ MainPrimary, id, key, updateListCollection, ...rest }) {
     const classes = useStyle();
 
     const [open, setOpen] = React.useState(false);
@@ -101,6 +103,19 @@ export default function ItemHook({ MainPrimary, id, key, ...rest }) {
         }
     }
 
+    const clickRenameCollection = async (idCollection) => {
+        // Chưa cập nhật lại realtime sau khi update
+        let name = prompt("Enter collection's new name:", "New name");    
+        
+        if (name) {
+            const isSuccess = await renameCollection(idCollection, name);
+            if(isSuccess)
+                updateListCollection(idCollection, name);
+        }
+        else if(name !== null) //Not hit cancel 
+            alert("Please enter collection's name.")
+    }
+
     const renderTabMenu = (classes) => {
         if (statusGetDataOfCollection['loading'] === true) {
             return (
@@ -138,6 +153,13 @@ export default function ItemHook({ MainPrimary, id, key, ...rest }) {
                             <RemoveOutlinedIcon style={{ color: '#F91A2C', fontSize: 40 }} />
                         </ListItemIcon>
                         <ListItemText primary="Delete" />
+                    </ListItem>
+                    <ListItem button className={classes.nested}
+                        onClick={(e) => clickRenameCollection(id)}>
+                        <ListItemIcon>
+                            <EditRoundedIcon style={{ color: '#3d3d3d', marginLeft: "0.4rem" }} />
+                        </ListItemIcon>
+                        <ListItemText primary="Rename Collection" />
                     </ListItem>
                     {renderTabMenu(classes)}
                 </List>

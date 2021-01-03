@@ -315,3 +315,46 @@ export async function deleteCollection(idCollection, callback) {
         callback();
     }
 };
+
+const handleRenameCollection = async (id, newName) => {
+    const accessToken = cookies.get("accessToken");
+
+    const config = {
+        method: 'PUT',
+        url: `${COLLECTIONS_URL}/${id}`,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${accessToken}`
+        },
+        data: {
+            "name":newName 
+        }
+    };
+
+    let result;
+    await await axios.request(config)
+        .then(response => response.data)
+        .then(data => {
+            if (data && data['message'] === 'Success') {
+                // alert("Renamed collection");
+                result = true;
+            }
+        })
+        .catch(error => {
+            console.log("Error occurred when trying to delete collection.");
+            if (error.response) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong. Please check your internet connection.");
+            }
+            result = false;
+        })
+    return result;
+};
+
+export async function renameCollection(idCollection, newName) {
+    // No need to verify here because user is doing action in /me.
+    const isSuccess = await handleRenameCollection(idCollection, newName);
+    return isSuccess;
+};
