@@ -3,8 +3,6 @@ import '../Storage/Storage.css';
 import Grid from '@material-ui/core/Grid';//eslint-disable-line
 import Paper from '@material-ui/core/Paper';//eslint-disable-line
 import { withStyles } from "@material-ui/core/styles";
-import axios from 'axios'; //eslint-disable-line
-import cookies from '../../utils/cookie';//eslint-disable-line
 import Button from '@material-ui/core/Button';
 import HomeSharpIcon from '@material-ui/icons/HomeSharp';
 import {
@@ -61,7 +59,8 @@ class History extends React.Component {
         super(props);
         this.state = {
             isLoading: true,
-            fetchedData: [],
+            fetchedDataCrawl: [],
+            fetchedDataAddItem: [],
             countData: 0,
             error: "",
             filters: {
@@ -69,26 +68,52 @@ class History extends React.Component {
                 limit: 10,
                 from: Math.floor((Date.now() + 25200000 - 604800000) / 1000), //From 7 days ago, gmt+7, in second so /1000
                 to: Math.floor((Date.now() + 25200000) / 1000),
-            }
+            },
+            isSelectCrawlTab: true,
         }
     }
 
     componentDidMount() {
-        this.fetchingData();
+        this.fetchingDataCrawl();
     }
 
     async componentDidUpdate(prevProps, prevState) {
+        let willFetchData = false;
         if (prevState.filters !== this.state.filters) {
-            this.fetchingData();
+            willFetchData = true;
+        }
+        else if(prevState.isSelectCrawlTab !== this.state.isSelectCrawlTab){
+            willFetchData = true; 
+        }
+
+        if(willFetchData){
+            if(this.state.isSelectCrawlTab)
+                    this.fetchingDataCrawl();
+                else
+                    this.fetchingDataAddItem();
         }
     }
 
-    fetchingData = async () => {
+    fetchingDataCrawl = async () => {
+        await this.setState({isLoading: true});
+
         const cleanFilter = removeEmptyValueParams(this.state.filters);
         const responseData = await UserHistoryApi.getCrawlHistory(cleanFilter);
         await this.setState({
             countData: responseData['data']['count'],
-            fetchedData: responseData['data']['logs'],
+            fetchedDataCrawl: responseData['data']['logs'],
+            isLoading: false,
+        });
+    }
+
+    fetchingDataAddItem = async () => {
+        await this.setState({isLoading: true});
+        
+        const cleanFilter = removeEmptyValueParams(this.state.filters);
+        const responseData = await UserHistoryApi.getAddItemHistory(cleanFilter);
+        await this.setState({
+            countData: responseData['data']['count'],
+            fetchedDataCrawl: responseData['data']['logs'],
             isLoading: false,
         });
     }
@@ -187,7 +212,8 @@ class History extends React.Component {
                                     </Grid>
                                     <Grid item xs={6} sm={6} md={5} spacing={1}>
                                         <Paper className={classes.paper}>
-                                            <Button variant="outlined" color="primary" href="/" className={classes.button}>
+                                            <Button variant="outlined" color="primary" className={classes.button}
+                                            onClick={()=>this.setState({isSelectCrawlTab: true})}>
                                                 <CloudDownloadSharpIcon className={classes.homeIcon} />
                                                 Crawl history
                                             </Button>
@@ -195,7 +221,8 @@ class History extends React.Component {
                                     </Grid>
                                     <Grid item xs={6} sm={6} md={5} spacing={1}>
                                         <Paper className={classes.paper}>
-                                            <Button variant="outlined" color="primary" href="/" className={classes.button}>
+                                            <Button variant="outlined" color="primary" className={classes.button}
+                                            onClick={()=>this.setState({isSelectCrawlTab: false})}>
                                                 <CollectionsSharpIcon className={classes.homeIcon} />
                                                 Add to collection history
                                             </Button>
@@ -262,7 +289,8 @@ class History extends React.Component {
                                                 this.clickChangePage(page)
                                             }}
                                             count={this.state.countData}
-                                            data={this.state.fetchedData.length ? this.state.fetchedData : ""}
+                                            data={this.state.fetchedDataCrawl.length ? this.state.fetchedDataCrawl : ""}
+                                            isSelectCrawlTab={this.state.isSelectCrawlTab}
                                         // isAllItems={isA0llItems}
                                         >
                                         </Results>

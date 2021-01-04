@@ -8,6 +8,9 @@ class DashboardApi{
         return axiosRequestErrorHandler(()=>axiosClient.get(HISTORY_URL,{params}));
     }
 
-
+    getAddItemHistory = (params)=>{
+        params['type']='add_item';
+        return axiosRequestErrorHandler(()=>axiosClient.get(HISTORY_URL,{params}));
+    }
 }
 export default new DashboardApi();

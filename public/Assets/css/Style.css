@@ -513,6 +513,10 @@ section{
     top: 2.5rem;
 }
 
+.modal-in-storage > .modal-dialog {
+    left: 0;
+}
+
 @media only screen and (min-width: 1280px) {
     .modal-dialog {
         left: 7rem;
