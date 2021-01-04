@@ -66,8 +66,8 @@ const ActivityHistory = () => {
         offset: 0,
         limit: 10,
         type: 'login',
-        from: 0,
-        to: 1789789789,
+        from: Math.floor((Date.now()+25200000-604800000)/1000), //From 7 days ago, gmt+7, in second so /1000
+        to:  Math.floor((Date.now()+25200000)/1000),
         user: '',
         platform: '',
 
@@ -143,7 +143,7 @@ const ActivityHistory = () => {
     const onClickPlatformChange = (value) => {
         setFilter({
             ...filters,
-            platform: value,
+            platform: value.toLowerCase(),
         });
     }
     const onChangeInputUser = (value) => {
@@ -180,7 +180,7 @@ const ActivityHistory = () => {
         }
     }
     return (
-        <Page className={classes.root} title="Users">
+        <Page className={classes.root} title="Activities History">
             <Container maxWidth={false}>
                 {/* <Toolbar/> */}
                 <Box mt={3} minWidth={1050}>
@@ -234,7 +234,7 @@ const ActivityHistory = () => {
                                             id="date-time-from"
                                             label="From"
                                             type="datetime-local"
-                                            defaultValue="1999-04-26T10:30"
+                                            defaultValue={new Date(Date.now()+25200000-604800000).toISOString().substring(0,16)}
                                             className={classes.textField}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -248,7 +248,7 @@ const ActivityHistory = () => {
                                         id="date-time-to"
                                         label="To"
                                         type="datetime-local"
-                                        defaultValue="2020-12-24T10:30"
+                                        defaultValue={new Date(Date.now()+25200000).toISOString().substring(0,16)}
                                         className={classes.textField}
                                         InputLabelProps={{
                                             shrink: true,

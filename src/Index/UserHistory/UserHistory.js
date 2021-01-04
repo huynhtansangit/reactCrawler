@@ -17,7 +17,7 @@ import TextField from '@material-ui/core/TextField';
 import GroupSelect from './UserGroupSelect';
 import Results from './Result';
 import UserHistoryApi from './UserHistoryApi';
-import { removeEmptyValueParams } from '../../utils/convertTools';
+import { convertDateToTimeStamp, removeEmptyValueParams } from '../../utils/convertTools';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 const useStyles = theme => ({
@@ -50,7 +50,12 @@ class History extends React.Component {
             fetchedData: [],
             countData: 0,
             error: "",
-            filters: {}
+            filters: {
+                offset: 0,
+                limit: 10,
+                from: Math.floor((Date.now()+25200000-604800000)/1000), //From 7 days ago, gmt+7, in second so /1000
+                to:  Math.floor((Date.now()+25200000)/1000),
+            }
         }
     }
 
@@ -81,11 +86,36 @@ class History extends React.Component {
             limit: limit,
         }})
     }
+
     clickChangePage = (page) => {
         const tempThis = this;
         this.setState({filters: {
             ...tempThis.state.filters,
             offset: tempThis.state.filters['limit'] * page,
+        }})
+    }
+
+    onClickPlatformChange = (value) => {
+        const tempThis = this;
+        this.setState({filters: {
+            ...tempThis.state.filters,
+            platform: value.toLowerCase()
+        }})
+    }
+
+    onChangeDateFrom = (value) => {
+        const tempThis = this;
+        this.setState({filters: {
+            ...tempThis.state.filters,
+            from: convertDateToTimeStamp(value)
+        }})
+    }
+
+    onChangeDateTo = (value) => {
+        const tempThis = this;
+        this.setState({filters: {
+            ...tempThis.state.filters,
+            to: convertDateToTimeStamp(value)
         }})
     }
 
@@ -137,8 +167,7 @@ class History extends React.Component {
                                                                 className={classes.groupSelect}
                                                                 isType={false}
                                                                 onPlatformChange={(platform) => { 
-                                                                    // onClickPlatformChange(platform) 
-                                                                    console.log("");
+                                                                    this.onClickPlatformChange(platform) 
                                                                 }}
                                                             />
                                                         </Paper>
@@ -149,14 +178,13 @@ class History extends React.Component {
                                                                 id="date-time-from"
                                                                 label="From"
                                                                 type="datetime-local"
-                                                                defaultValue="1999-04-26T10:30"
+                                                                defaultValue={new Date(Date.now()+25200000-604800000).toISOString().substring(0,16)}
                                                                 className={classes.textField}
                                                                 InputLabelProps={{
                                                                     shrink: true,
                                                                 }}
                                                                 onChange={(dateFrom) => { 
-                                                                    //onChangeDateFrom(dateFrom.target.value) 
-                                                                    console.log("");
+                                                                    this.onChangeDateFrom(dateFrom.target.value) 
                                                                 }}
                                                             />
                                                         </Paper>
@@ -166,14 +194,13 @@ class History extends React.Component {
                                                             id="date-time-to"
                                                             label="To"
                                                             type="datetime-local"
-                                                            defaultValue="2020-12-24T10:30"
+                                                            defaultValue={new Date(Date.now()+25200000).toISOString().substring(0,16)}
                                                             className={classes.textField}
                                                             InputLabelProps={{
                                                                 shrink: true,
                                                             }}
                                                             onChange={(dateTo) => { 
-                                                                // onChangeDateTo(dateTo.target.value)
-                                                                console.log("");
+                                                                this.onChangeDateTo(dateTo.target.value)
                                                             }}
                                                         /></Paper>
                                                     </Grid>
