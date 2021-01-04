@@ -15,21 +15,37 @@ import {
 } from 'ver-4-11';
 import { makeStyles } from 'ver-4-11'
 import { convertTimeStampToDateWithSecond, convertFormatHeaderTable } from '../../utils/convertTools';
-import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
-
+import Button from '@material-ui/core/Button';
+import FindInPageSharpIcon from '@material-ui/icons/FindInPageSharp';
 
 const useStyles = makeStyles((theme) => ({
     root: {},
     avatar: {
         marginRight: theme.spacing(2)
     },
-    tooltip: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
+    button: {
+        width: '100%',
+        height: 30,
+        '&:hover $icon': {
+            color: 'red important',
+        },
+        textTransform: 'none',
     },
+    icon: {
+        marginRight: 10,
+    },
+    tablecell: {
+
+    },
+    tablerow: {
+        '&:hover ': {
+            backgroundColor: '#FDE7EF !important',
+            tooltip: {
+                backgroundColor: '#FDE7EF !important',
+            }
+        }
+    }
 }));
 
 const Results = ({ className, data, count, onLimitChange, onPageChange, isAllItems, ...rest }) => {
@@ -57,22 +73,22 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         if (!data.length) {
             return (
                 <TableRow>
-                    <TableCell>
+                    <TableCell className={classes.tablecell}>
                         <Skeleton animation="wave" />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className={classes.tablecell}>
                         <Skeleton animation="wave" />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className={classes.tablecell}>
                         <Skeleton animation="wave" />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className={classes.tablecell}>
                         <Skeleton animation="wave" />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className={classes.tablecell}>
                         <Skeleton animation="wave" />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className={classes.tablecell}>
                         <Skeleton animation="wave" />
                     </TableCell>
                 </TableRow>
@@ -83,6 +99,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 <TableRow
                     hover
                     key={log.id}
+                    className={classes.tablerow}
                 >
                     {ShowContentTable(log)}
                 </TableRow>
@@ -93,58 +110,68 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const ShowHeaderTable = () => {
         if (data.length && !isAllItems)
             return (
-                Object.entries(data[0]).map(([key, value]) => (
-                    <TableCell>{convertFormatHeaderTable(key)}</TableCell>
-                )
-                    // <div>{key} : {value.toString()}</div>
-                ))
+                <>
+                    {Object.entries(data[0]).map(([key, value]) => (
+                        <>
+                            {convertFormatHeaderTable(key) === 'User' ? <></> : <TableCell className={classes.tablecell}>{convertFormatHeaderTable(key)}</TableCell>}
+                        </>
+                    ))}
+                    <TableCell className={classes.tablecell}>Detail</TableCell>
+                </>
+            )
     }
     const returnTimeFormat = (key, value) => {
         if (key === 'time') {
-            return (<Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
-                <TableCell>{convertTimeStampToDateWithSecond(value)}</TableCell>
-            </Tooltip>)
+            return (
+                <TableCell className={classes.tablecell}>{convertTimeStampToDateWithSecond(value)}</TableCell>
+            )
 
         }
         else if (key === 'user') {
             if (value != null) {
                 return (
-                    <Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
-                        <TableCell>
-                            {value['phone'].toString()}
-                        </TableCell>
-                    </Tooltip>
+                    <>
+                    </>
 
                 )
             }
             else {
                 return (
-                    <Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
-                        <TableCell>null</TableCell>
-                    </Tooltip>
+                    <TableCell className={classes.tablecell}>null</TableCell>
                 )
             }
         }
         else {
             return (
-                <Tooltip title={key} placement="left" TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} arrow className={classes.tooltip}>
-                    <TableCell>{value.toString()}</TableCell>
-                </Tooltip>
+                <TableCell className={classes.tablecell}>{value.toString()}</TableCell>
             )
         }
 
     }
     const ShowContentTable = (object) => {
         return (
-            Object.entries(object).map(([key, value]) => (
+            <>
+                {Object.entries(object).map(([key, value]) => (
 
-                <>
-                    {returnTimeFormat(key, value)}
-                </>
-            )
-                // <div>{key} : {value.toString()}</div>
-            )
-        )
+                    <>
+                        {returnTimeFormat(key, value)}
+
+                    </>
+                )
+                    // <div>{key} : {value.toString()}</div>
+                )}
+                <TableCell className={classes.tablecell}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                    >
+                        <FindInPageSharpIcon className={classes.icon} />
+                        View
+                    </Button>
+                </TableCell>
+            </>)
+
     }
     return (
         <Card className={clsx(classes.root, className)} {...rest}>

@@ -19,7 +19,8 @@ import Results from './Result';
 import UserHistoryApi from './UserHistoryApi';
 import { convertDateToTimeStamp, removeEmptyValueParams } from '../../utils/convertTools';
 import { Alert, AlertTitle } from '@material-ui/lab';
-
+import CollectionsSharpIcon from '@material-ui/icons/CollectionsSharp';
+import CloudDownloadSharpIcon from '@material-ui/icons/CloudDownloadSharp';
 const useStyles = theme => ({
     root: {
         flexGrow: 1,
@@ -32,14 +33,27 @@ const useStyles = theme => ({
     button: {
         width: '100% !important',
         height: 60,
-        '&hover': {
-            background: '#F6518F !important',
-        }
+        '&:hover ': {
+            '& .MuiSvgIcon-root':{
+                color:'#005BB8 !important',
+            }
+        },
+        color:'#F6518F',
     },
     homeIcon: {
         fontSize: 36,
         color: '#F6518F',
-
+        transition: '0.5s',
+        marginRight:10,
+    },
+    textField: {
+        height: '64px !important',
+        '& #date-time-from': {
+            height: '20px !important',
+        },
+        '& #date-time-to': {
+            height: '20px !important',
+        }
     }
 });
 class History extends React.Component {
@@ -53,8 +67,8 @@ class History extends React.Component {
             filters: {
                 offset: 0,
                 limit: 10,
-                from: Math.floor((Date.now()+25200000-604800000)/1000), //From 7 days ago, gmt+7, in second so /1000
-                to:  Math.floor((Date.now()+25200000)/1000),
+                from: Math.floor((Date.now() + 25200000 - 604800000) / 1000), //From 7 days ago, gmt+7, in second so /1000
+                to: Math.floor((Date.now() + 25200000) / 1000),
             }
         }
     }
@@ -64,13 +78,13 @@ class History extends React.Component {
     }
 
     async componentDidUpdate(prevProps, prevState) {
-        if(prevState.filters !== this.state.filters){
+        if (prevState.filters !== this.state.filters) {
             this.fetchingData();
         }
     }
 
     fetchingData = async () => {
-        const cleanFilter= removeEmptyValueParams(this.state.filters);
+        const cleanFilter = removeEmptyValueParams(this.state.filters);
         const responseData = await UserHistoryApi.getCrawlHistory(cleanFilter);
         await this.setState({
             countData: responseData['data']['count'],
@@ -81,46 +95,56 @@ class History extends React.Component {
 
     clickChangeLimit = (limit) => {
         const tempThis = this;
-        this.setState({filters: {
-            ...tempThis.state.filters,
-            limit: limit,
-        }})
+        this.setState({
+            filters: {
+                ...tempThis.state.filters,
+                limit: limit,
+            }
+        })
     }
 
     clickChangePage = (page) => {
         const tempThis = this;
-        this.setState({filters: {
-            ...tempThis.state.filters,
-            offset: tempThis.state.filters['limit'] * page,
-        }})
+        this.setState({
+            filters: {
+                ...tempThis.state.filters,
+                offset: tempThis.state.filters['limit'] * page,
+            }
+        })
     }
 
     onClickPlatformChange = (value) => {
         const tempThis = this;
-        this.setState({filters: {
-            ...tempThis.state.filters,
-            platform: value.toLowerCase()
-        }})
+        this.setState({
+            filters: {
+                ...tempThis.state.filters,
+                platform: value.toLowerCase()
+            }
+        })
     }
 
     onChangeDateFrom = (value) => {
         const tempThis = this;
-        this.setState({filters: {
-            ...tempThis.state.filters,
-            from: convertDateToTimeStamp(value)
-        }})
+        this.setState({
+            filters: {
+                ...tempThis.state.filters,
+                from: convertDateToTimeStamp(value)
+            }
+        })
     }
 
     onChangeDateTo = (value) => {
         const tempThis = this;
-        this.setState({filters: {
-            ...tempThis.state.filters,
-            to: convertDateToTimeStamp(value)
-        }})
+        this.setState({
+            filters: {
+                ...tempThis.state.filters,
+                to: convertDateToTimeStamp(value)
+            }
+        })
     }
 
     renderAlert = () => {
-        if(!this.state.isLoading){
+        if (!this.state.isLoading) {
             if (this.state.countData === 0) {
                 return (
                     <Alert variant='filled' severity="info">
@@ -128,9 +152,9 @@ class History extends React.Component {
                             No records found
                     </Alert>
                 )
-    
+
             }
-            else if(this.state.error) {
+            else if (this.state.error) {
                 return (
                     <Alert variant='filled' severity="info">
                         <AlertTitle>Error</AlertTitle>
@@ -153,9 +177,31 @@ class History extends React.Component {
                     <Grid container spacing={0}>
                         <Grid item xs={12} sm={12}>
                             <Paper className={classes.paper}>
-                                <Button variant="outlined" color="primary" href="/" className={classes.button}>
-                                    <HomeSharpIcon className={classes.homeIcon} />
-                                </Button>
+                                <Grid container spacing={0}>
+                                    <Grid item xs={12} sm={12} md={2} spacing={1}>
+                                        <Paper className={classes.paper}>
+                                            <Button variant="outlined" color="primary" href="/" className={classes.button}>
+                                                <HomeSharpIcon className={classes.homeIcon} />
+                                            </Button>
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={6} sm={6} md={5} spacing={1}>
+                                        <Paper className={classes.paper}>
+                                            <Button variant="outlined" color="primary" href="/" className={classes.button}>
+                                                <CloudDownloadSharpIcon className={classes.homeIcon} />
+                                                Crawl history
+                                            </Button>
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={6} sm={6} md={5} spacing={1}>
+                                        <Paper className={classes.paper}>
+                                            <Button variant="outlined" color="primary" href="/" className={classes.button}>
+                                                <CollectionsSharpIcon className={classes.homeIcon} />
+                                                Add to collection history
+                                            </Button>
+                                        </Paper>
+                                    </Grid>
+                                </Grid>
                                 <Container maxWidth={false}>
                                     <Box mt={3} minWidth={1050}>
                                         <Table>
@@ -166,8 +212,8 @@ class History extends React.Component {
                                                             <GroupSelect
                                                                 className={classes.groupSelect}
                                                                 isType={false}
-                                                                onPlatformChange={(platform) => { 
-                                                                    this.onClickPlatformChange(platform) 
+                                                                onPlatformChange={(platform) => {
+                                                                    this.onClickPlatformChange(platform)
                                                                 }}
                                                             />
                                                         </Paper>
@@ -178,13 +224,13 @@ class History extends React.Component {
                                                                 id="date-time-from"
                                                                 label="From"
                                                                 type="datetime-local"
-                                                                defaultValue={new Date(Date.now()+25200000-604800000).toISOString().substring(0,16)}
+                                                                defaultValue={new Date(Date.now() + 25200000 - 604800000).toISOString().substring(0, 16)}
                                                                 className={classes.textField}
                                                                 InputLabelProps={{
                                                                     shrink: true,
                                                                 }}
-                                                                onChange={(dateFrom) => { 
-                                                                    this.onChangeDateFrom(dateFrom.target.value) 
+                                                                onChange={(dateFrom) => {
+                                                                    this.onChangeDateFrom(dateFrom.target.value)
                                                                 }}
                                                             />
                                                         </Paper>
@@ -194,12 +240,12 @@ class History extends React.Component {
                                                             id="date-time-to"
                                                             label="To"
                                                             type="datetime-local"
-                                                            defaultValue={new Date(Date.now()+25200000).toISOString().substring(0,16)}
+                                                            defaultValue={new Date(Date.now() + 25200000).toISOString().substring(0, 16)}
                                                             className={classes.textField}
                                                             InputLabelProps={{
                                                                 shrink: true,
                                                             }}
-                                                            onChange={(dateTo) => { 
+                                                            onChange={(dateTo) => {
                                                                 this.onChangeDateTo(dateTo.target.value)
                                                             }}
                                                         /></Paper>
@@ -207,17 +253,17 @@ class History extends React.Component {
                                                 </Grid>
                                             </TableRow>
                                         </Table>
-                                            {this.renderAlert()}
+                                        {this.renderAlert()}
                                         <Results
-                                            onLimitChange={(limit) => { 
-                                                this.clickChangeLimit(limit) 
+                                            onLimitChange={(limit) => {
+                                                this.clickChangeLimit(limit)
                                             }}
-                                            onPageChange={(page) => { 
-                                                this.clickChangePage(page) 
+                                            onPageChange={(page) => {
+                                                this.clickChangePage(page)
                                             }}
                                             count={this.state.countData}
                                             data={this.state.fetchedData.length ? this.state.fetchedData : ""}
-                                            // isAllItems={isA0llItems}
+                                        // isAllItems={isA0llItems}
                                         >
                                         </Results>
                                     </Box>
