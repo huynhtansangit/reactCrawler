@@ -12,8 +12,8 @@ export async function axiosRequestErrorHandler(callback){
     } catch (error) {
         if(error.response){
             if(error.response.status === 401){
-                res['error'] = "Can not authenticate admin, try to refresh page or re-login if necessary.";
-                alert("Can not authenticate admin, try to refresh page or re-login if necessary.");
+                res['error'] = "Can not authenticate, try to refresh page or re-login if necessary.";
+                alert("Can not authenticate, try to refresh page or re-login if necessary.");
             }
             else{
                 res['error'] = error.response.data['message'];

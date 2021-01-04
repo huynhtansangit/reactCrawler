@@ -200,11 +200,7 @@ export default function SignInSide(props) {
             data: formData
           };
           
-          if(isLoginAsAdmin){
-            localStorage.setItem('firstname', 'admin')
-            localStorage.setItem('lastname', '')
-          }
-          else{
+          if(!isLoginAsAdmin){
             axios.request(config)
               .then(res=> res.data)
               .then(data =>{

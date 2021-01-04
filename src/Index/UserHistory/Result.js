@@ -13,22 +13,11 @@ import {
     TablePagination,
     TableRow,
 } from 'ver-4-11';
-import { withStyles,makeStyles } from 'ver-4-11'
-import { convertTimeStampToDateWithSecond, convertFormatHeaderTable } from '../../../utils/convertTools';
+import { makeStyles } from 'ver-4-11'
+import { convertTimeStampToDateWithSecond, convertFormatHeaderTable } from '../../utils/convertTools';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
 
-
-// import getInitials from 'src/utils/getInitials';
-//eslint-disable-next-line
-const LightTooltip = withStyles((theme) => ({
-    tooltip: {
-    backgroundColor: theme.palette.common.white,
-    color: 'rgba(0, 0, 0, 0.87)',
-    boxShadow: theme.shadows[1],
-    fontSize: 11,
-    },
-}))(Tooltip);
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -45,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Results = ({ className, data, count, onLimitChange, onPageChange, isAllItems, ...rest }) => {
     const classes = useStyles();
-    const [selectedUserIds, setSelectedUserIds] = useState([]); // eslint-disable-line
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
 
@@ -95,8 +83,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 <TableRow
                     hover
                     key={log.id}
-                    selected={selectedUserIds.indexOf(log.id) !== -1}>
-
+                >
                     {ShowContentTable(log)}
                 </TableRow>
             )

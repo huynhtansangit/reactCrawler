@@ -21,6 +21,7 @@ const MY_ACCOUNT_INFO_URL = BASE_URL + "/me";
 const UPDATE_MY_ACCOUNT_INFO_URL = MY_ACCOUNT_INFO_URL + "/update";
 const MY_AVATAR_URL = MY_ACCOUNT_INFO_URL + "/avatar";
 const COLLECTIONS_URL = MY_ACCOUNT_INFO_URL + "/collections";
+const HISTORY_URL = MY_ACCOUNT_INFO_URL + "/logs";
 
 export { 
     BASE_URL,
@@ -37,5 +38,6 @@ export {
     ADMIN_USER_URL,
     ADMIN_LOG_URL,
     ADMIN_STATISTIC_URL,
-    COLLECTIONS_URL
+    COLLECTIONS_URL,
+    HISTORY_URL,
 };

@@ -105,7 +105,7 @@ const MostSearchingUser = ({ className, ...rest }) => {
                 </Box>
             </Card>
             <Modal
-                size="xl"
+                size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={true}
                 centered

@@ -77,6 +77,12 @@ export default function CustomizedMenus(props) {
           </ListItemIcon>
           <Link to="/me"><ListItemText primary={`Hello,  ${props.fullname}!`} /></Link>
         </StyledMenuItem>
+        <StyledMenuItem>
+          <ListItemIcon>
+            <Icon className="fas fa-history" />
+          </ListItemIcon>
+          <Link to="/history"><ListItemText primary="History"/></Link>
+        </StyledMenuItem>
         <StyledMenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Icon className="fas fa-sign-out-alt" />

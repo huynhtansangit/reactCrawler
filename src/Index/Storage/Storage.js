@@ -93,7 +93,7 @@ class Storage extends React.Component {
                         <Grid item xs={12} sm={12}>
                             <Paper className={classes.paper}>
                                 <Button variant="outlined" color="primary" href="/" className={classes.button}>
-                                <HomeSharpIcon className={classes.homeIcon}/>
+                                    <HomeSharpIcon className={classes.homeIcon}/>
                                 </Button>
                                 <CollectionList
                                     isLoading={this.state.isLoading}

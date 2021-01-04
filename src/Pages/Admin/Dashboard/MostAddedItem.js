@@ -75,7 +75,7 @@ const MostAddedItem = ({ className, ...rest }) => {
                                 key={i}
                             >
                                 <ListItemText
-                                    primary={el['link']}
+                                    primary={<a href={el['link']} target="_blank" rel="noopener noreferrer">{el['link']}</a>}
                                     secondary={`Added to collection ${el['count']} times`}
                                 />
                                 <IconButton
@@ -105,7 +105,7 @@ const MostAddedItem = ({ className, ...rest }) => {
                 </Box>
             </Card>
             <Modal
-                size="xl"
+                size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={true}
                 centered
@@ -133,7 +133,7 @@ const MostAddedItem = ({ className, ...rest }) => {
                                                 hover
                                                 key={idx}>
                                                 <TableCell>
-                                                    {el.link}
+                                                    {<a href={el['link']} target="_blank" rel="noopener noreferrer">{el['link']}</a>}
                                                 </TableCell>
                                                 <TableCell>
                                                     {el.count}

@@ -67,7 +67,7 @@ const MostSearchingUrl = ({ className, onReceiveCountLink, ...rest }) => {
                     key={idx}
                 >
                     <ListItemText
-                        primary={el['link']}
+                        primary={<a href={el['link']} target="_blank" rel="noopener noreferrer">{el['link']}</a>}
                         secondary={`Searched ${el['count']} times`}
                     />
                     <IconButton
@@ -114,7 +114,7 @@ const MostSearchingUrl = ({ className, onReceiveCountLink, ...rest }) => {
                 </Box>
             </Card>
             <Modal
-                size="xl"
+                size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={true}
                 centered
@@ -142,7 +142,7 @@ const MostSearchingUrl = ({ className, onReceiveCountLink, ...rest }) => {
                                                 hover
                                                 key={idx}>
                                                 <TableCell>
-                                                    {el.link}
+                                                    {<a href={el['link']} target="_blank" rel="noopener noreferrer">{el['link']}</a>}
                                                 </TableCell>
                                                 <TableCell>
                                                     {el.count}
