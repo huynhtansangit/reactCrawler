@@ -4,7 +4,7 @@ import { MY_ACCOUNT_INFO_URL, UPDATE_MY_ACCOUNT_INFO_URL } from '../../../utils/
 import cookies from '../../../utils/cookie'
 import qs from 'querystring'
 import Avatar from '@material-ui/core/Avatar';
-import { withStyles } from '@material-ui/styles';
+// import { withStyles } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import './style.css';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -21,7 +21,7 @@ let config = {
     },
 };
 
-
+// eslint-disable-next-line
 const useStyles = makeStyles((theme) => ({
     input: {
         display: "none",

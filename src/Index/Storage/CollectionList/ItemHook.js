@@ -11,7 +11,7 @@ import InboxIcon from '@material-ui/icons/Inbox';
 import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 import TabMenu from '../TabMenu';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import ProfileContent from '../ProfileTab/ProfileHook';
+import ProfileContent from '../ProfileTab/ProfileHook'; //eslint-disable-line
 import Skeleton from '@material-ui/lab/Skeleton';
 import { deleteCollection, renameCollection } from '../../../services/user.services';
 import PropTypes from 'prop-types';
