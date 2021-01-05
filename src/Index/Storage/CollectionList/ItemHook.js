@@ -41,12 +41,12 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, n
     const [dataOfCollection, setDataOfCollection] = React.useState([]);
     const [showItem, setShowItem] = React.useState(true);
 
-    useEffect(()=>{
-        if(MainPrimary === nameCollectionWillBeOpen){
+    useEffect(() => {
+        if (MainPrimary === nameCollectionWillBeOpen) {
             setOpen(true);
             setWillLoadContent(true);
         }
-    },[MainPrimary, nameCollectionWillBeOpen]);
+    }, [MainPrimary, nameCollectionWillBeOpen]);
 
     // Component Did Update convert
     //eslint-disable-next-line
@@ -59,7 +59,7 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, n
     });
     // ------ end convert -----
 
-    const fetchedApi = async ()=>{
+    const fetchedApi = async () => {
         const accessToken = cookies.get("accessToken");
 
         const config = {
@@ -95,7 +95,7 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, n
                     alert("Something went wrong. Please check your internet connection.");
                 }
             })
-    } 
+    }
 
     const onClickItem = (event, index) => {
         setOpen(!open);
@@ -111,14 +111,14 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, n
     }
 
     const clickRenameCollection = async (idCollection) => {
-        let name = prompt("Enter collection's new name:", "New name");    
-        
+        let name = prompt("Enter collection's new name:", "New name");
+
         if (name) {
             const isSuccess = await renameCollection(idCollection, name);
-            if(isSuccess)
+            if (isSuccess)
                 updateListCollection(idCollection, name);
         }
-        else if(name !== null) //Not hit cancel 
+        else if (name !== null) //Not hit cancel 
             alert("Please enter collection's name.")
     }
 
@@ -190,7 +190,10 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, n
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding >
                             <ListItem className={classes.nested}>
-                                <ProfileContent />
+                                <ListItemIcon>
+                                    <EditRoundedIcon style={{ color: '#3d3d3d', marginLeft: "0.4rem" }} />
+                                </ListItemIcon>
+                                {/* <ProfileContent /> */}
                             </ListItem>
                         </List>
                     </Collapse>

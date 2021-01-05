@@ -188,4 +188,4 @@ const Profile = (props) => {
         </div>
     );
 }
-export default withStyles(useStyles, { withTheme: true })(Profile);
+export default Profile;
