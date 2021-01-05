@@ -105,6 +105,7 @@ const MostAddedItem = ({ className, ...rest }) => {
                 </Box>
             </Card>
             <Modal
+                className="modal-in-admin"
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={true}

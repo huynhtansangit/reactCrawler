@@ -269,6 +269,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
             </Card>
 
             <Modal
+                className="modal-in-admin"
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={false}
@@ -298,6 +299,7 @@ const Results = ({ className, isLoading, data, count, onLimitChange, onPageChang
             </Modal>
 
             <Modal
+                className="modal-in-admin"
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 scrollable={true}

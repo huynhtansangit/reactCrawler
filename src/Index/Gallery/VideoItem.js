@@ -9,7 +9,6 @@ import PauseOutlinedIcon from '@material-ui/icons/PauseOutlined';
 import {addToCollection} from '../../services/user.services'
 
 
-// FIXME New format data returned is not adapted with this model by now
 class VideoItem extends Component {
     constructor(props) {
         super(props);
@@ -76,7 +75,8 @@ class VideoItem extends Component {
                     {this.renderPlayOrPause()}
                     </button>
                     </div>
-                    <div className="card__title">
+                    {   this.props.isInHistoryPage ? "" :
+                        <div className="card__title">
                         <button onClick={ ()=>{
                                 // Click here will trigger show modal in Gallery.
                                 this.props.handleModal(this.props.url, {id: this.props.id, source: this.props.source, platform: this.props.platform, isAdding: !this.props.isAdded, collectionId: this.props.collectionId})
@@ -84,8 +84,9 @@ class VideoItem extends Component {
                             type="button" className="btn btn-outline-secondary">
                             <VisibilityOutlinedIcon />
                         </button>
-                    </div>
-                    <div className="card__title">
+                    </div>}
+                    {   this.props.isInHistoryPage ? "" :
+                        <div className="card__title">
                         <button onClick={async ()=>{
                                 await this.prepareData();
                                 this.props.isClickAddToCollection(this.state.itemDTO);
@@ -93,7 +94,7 @@ class VideoItem extends Component {
                             type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}>
                             <FavoriteTwoToneIcon />
                         </button>
-                    </div>
+                    </div>}
                 </div>
             </div>
         );

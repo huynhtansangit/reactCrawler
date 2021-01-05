@@ -70,7 +70,9 @@ class ImageItem extends Component {
             <div className="img-card" variant="primary">
                 <img src={this.props.itemSrc} alt="Img-error" />
                 <div className="card__text">
-                    <p className="card__title">
+                    {/* Few buttons will not be show in history page*/}
+                    {   this.props.isInHistoryPage ? "" :
+                        <p className="card__title">
                         <button 
                             onClick={ ()=>{
                                 // Click here will trigger show modal in Gallery.
@@ -79,25 +81,28 @@ class ImageItem extends Component {
                             type="button" className="btn btn-outline-secondary">
                             <VisibilityOutlinedIcon/>
                         </button>
-                    </p>
-                    <p className="card__title"><button onClick={this.clickDownload} type="button" className="btn btn-outline-secondary">
-                    <GetAppOutlinedIcon/>
-                    </button>
-                    </p>
+                    </p>}
                     <p className="card__title">
+                        <button onClick={this.clickDownload} type="button" className="btn btn-outline-secondary">
+                            <GetAppOutlinedIcon/>
+                        </button>
+                    </p>
+                    {   this.props.isInHistoryPage ? "" :
+                        <p className="card__title">
                         <Link to={{ pathname: '/editor', state: { imgSrc: this.props.itemSrc } }}>
                             <button type="button" className="btn btn-outline-secondary"><EditOutlinedIcon/></button>
                         </Link>
-                    </p>
-                    <p className="card__title">
-                            <button type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}
-                            onClick={async ()=>{
-                                await this.prepareData();
-                                this.props.isClickAddToCollection(this.state.itemDTO);
-                            }}>
-                                <FavoriteTwoToneIcon/>
-                            </button>
-                    </p>
+                    </p>}
+                    {   this.props.isInHistoryPage ? "" :
+                        <p className="card__title">
+                        <button type="button" className={`btn btn-outline-secondary ${this.props.isAdded ? 'selectedBtn' : ""}`}
+                        onClick={async ()=>{
+                            await this.prepareData();
+                            this.props.isClickAddToCollection(this.state.itemDTO);
+                        }}>
+                            <FavoriteTwoToneIcon/>
+                        </button>
+                    </p>}
                 </div>
             </div>
         );

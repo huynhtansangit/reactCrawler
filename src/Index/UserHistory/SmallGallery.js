@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import VideoItem from '../Gallery/VideoItem';
 import ImageItem from '../Gallery/ImageItem';
 import { DOWNLOAD_URL } from '../../utils/config.url'
+import OwnerMedia from '../Gallery/OwnerMedia';
 
 const SmallGallery = (props) =>  {
     const [isSelectImageTab, setSelectImageTab] = useState(true); 
 
+    useEffect(()=>{
+        if(props.nameNetwork !== 'instagram')
+            setSelectImageTab(false);
+    }, []) //eslint-disable-line
 
     const activeTab = (type) => {
         if(type === 'image')
@@ -16,12 +21,12 @@ const SmallGallery = (props) =>  {
 
     const renderImageGallery = () => {
         let res;
-        if (Object.keys(props.dataGallery).length === 0) {
+        if (props.isLoading) {
             // Check if data is null => Show loading
             res = <img className="justify-item-center" src="https://img.idesign.vn/2018/10/23/id-loading-1.gif" alt="loading" />
         }
         else {
-            if (!props.dataGallery.error) {
+            if (!props.error) {
                 // If not error => Show images
                 res = props.dataGallery.imagesData.map((img, idx) =>
                     <ImageItem
@@ -35,11 +40,12 @@ const SmallGallery = (props) =>  {
                         }} 
                         key={idx} history={props.history}
                         id={img.id} source={img.source} platform={props.nameNetwork}
+                        isInHistoryPage={true}
                     />)
             }
             else {
                 // else: error occurred => Show pic 500
-                if(props.dataGallery.error === "404"){
+                if(props.error === "404"){
                     res = (<img className="justify-item-center"
                     src="https://www.intellezy.com/img/error-404.png" alt="404 error" />);
                 }
@@ -53,13 +59,13 @@ const SmallGallery = (props) =>  {
     }
 
     const renderVideoGallery = () => {
-        if (Object.keys(props.dataGallery).length === 0) {
+        if (props.isLoading) {
             // Check if data is null => Show loading
             return (<img className="justify-item-center" src="https://img.idesign.vn/2018/10/23/id-loading-1.gif" alt="loading" />)
         }
         else {
             // Else: loaded
-            if (!props.dataGallery.error) {
+            if (!props.error) {
                 // If not error => Show images
                 if (props.nameNetwork === 'tiktok') {
                     return (
@@ -72,8 +78,9 @@ const SmallGallery = (props) =>  {
                             // clickFavoriteBtnFromItem(itemDTO);
                         }} 
                         isAuth={props.isAuth}
-                        id={props.additionalInfoTiktok.id} source={props.additionalInfoTiktok.source}
-                        platform="tiktok"> 
+                        // id={props.additionalInfoTiktok.id} source={props.additionalInfoTiktok.source}
+                        platform="tiktok"
+                        isInHistoryPage={true}> 
                     </VideoItem>)
                 }
                 else {
@@ -89,13 +96,14 @@ const SmallGallery = (props) =>  {
                                     }} 
                                     isAuth={props.isAuth}
                                     id={video.id} source={video.source} platform={props.nameNetwork} 
+                                    isInHistoryPage={true}
                                 />
                             )))
                 }
             }
             else {
                 // else: error occurred => Show pic 500
-                if(props.dataGallery.error === "404"){
+                if(props.error === "404"){
                     return (<img className="justify-item-center"
                     src="https://www.intellezy.com/img/error-404.png" alt="404 error" />);
                 }
@@ -107,6 +115,45 @@ const SmallGallery = (props) =>  {
         }
     }
 
+    const handleCountPost = () => {
+        if (props.dataGallery.ownerMedia?.countPost)
+            return props.dataGallery.ownerMedia.countPost;
+        else if (props.dataGallery.ownerMedia?.count_video)
+            return props.dataGallery.ownerMedia.count_video;
+        else if (props.dataGallery.error)
+            return 0;
+        else
+            return 1;
+    }
+
+    const renderOwnerMedia = () => {
+        if (props.isLoading) {
+            return (<OwnerMedia avatar="https://img.idesign.vn/2018/10/23/id-loading-1.gif" username="Loading"
+                fullname="Loading" countPost="Loading" countFollowedBy="Loading" />)
+        }
+        else {
+            return (!props.dataGallery.error ?
+                (
+                    <OwnerMedia avatar={props.dataGallery.ownerMedia?.avatar}
+                        username={props.dataGallery.ownerMedia?.username}
+                        fullname={props.dataGallery.ownerMedia?.fullname}
+                        countPost={handleCountPost()}
+                        countFollowedBy={props.dataGallery.ownerMedia?.countFollowedBy}
+                        nameNetwork={props.nameNetwork} 
+                        isInHistoryPage={true}/>) : (
+                            props.dataGallery.error === "404" ?
+                                <OwnerMedia
+                                    avatar="https://www.intellezy.com/img/error-404.png"
+                                    username="Error" fullname="Error" countPost="Error" countFollowedBy="Error"
+                                    nameNetwork={props.nameNetwork} /> 
+                                    :
+                                <OwnerMedia
+                                    avatar="https://www.tropicalserver.com/wp-content/uploads/2018/01/error-500-1.jpg"
+                                    username="Error" fullname="Error" countPost="Error" countFollowedBy="Error"
+                                    nameNetwork={props.nameNetwork}/>
+                ))
+        }
+    }
     return(
         <>
             <div className="row">
@@ -126,7 +173,7 @@ const SmallGallery = (props) =>  {
                 </div>
                 <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1"
                     style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
-                    {/* {renderOwnerMedia()} */}
+                    {renderOwnerMedia()}
                 </div>
             </div>
 
@@ -138,7 +185,7 @@ const SmallGallery = (props) =>  {
                 </div>
                 <div className="col-lg-3 col-md-3 col-sm-12 info-container offset-1"
                     style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
-                    {/* {renderOwnerMedia()} */}
+                    {renderOwnerMedia()}
                 </div>
             </div>
         </>

@@ -59,7 +59,10 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const [isShowModalAddItem, setShowModalAddItem] = useState(false);
     const [dataSmallGallery, setDataSmallGallery] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-
+    const [error, setError] = useState("");
+    const [platform, setPlatform] = useState("instagram");
+    // const [additionalInfoTiktok, setAdditionalInfoTiktok] = useState({})
+    const [inputUrl, setInputUrl] = useState("");
 
     // ComponentDidMount
     useEffect(() => {
@@ -78,13 +81,14 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     };
 
     const getMedia = async (inputUrl, nameNetwork, cursor) => {
+        setIsLoading(true);
+
         let headers = {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${cookies.get('accessToken')}`
         }
 
-        if(this.state.isAuth)
-            headers['Authorization']=`bearer ${cookies.get('accessToken')}`;
         let option = {
             method: 'POST',
             headers: headers
@@ -132,42 +136,37 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 });
             }
             else{
-                if(nameNetwork==='tiktok'){
-                    this.setState({additionalInfoTiktok: {
-                        isAdded: data['isAdded'],
-                        id: data['id'], 
-                        source: data['source'],
-                        collectionId: data['collectionId'],
-                    }});
-                    this.setState({isAddedTiktok: data['isAdded']});
-                }
+                // if(nameNetwork==='tiktok'){
+                //     setAdditionalInfoTiktok({})
+                //     // this.setState({additionalInfoTiktok: {
+                //     //     isAdded: data['isAdded'],
+                //     //     id: data['id'], 
+                //     //     source: data['source'],
+                //     //     collectionId: data['collectionId'],
+                //     // }});
+                //     // this.setState({isAddedTiktok: data['isAdded']});
+                // }
                 videosData = data['data'];
             }
             
-            await this.setState({
-                dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null},
-                nameNetwork: nameNetwork,
-                inputUrl: inputUrl,
-                cursor: data['cursor'] ? data['cursor'] : "",
-                hasNextPage: data['hasNextPage'],
-            });
+            setDataSmallGallery({imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia})
+            // await this.setState({
+            //     dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null},
+            //     nameNetwork: nameNetwork,
+            //     inputUrl: inputUrl,
+            //     cursor: data['cursor'] ? data['cursor'] : "",
+            //     hasNextPage: data['hasNextPage'],
+            // });
         } catch (error) {
             console.log(error);
-            await this.setState({
-                dataGallery: {loading: false, error: error.message},
-                nameNetwork: nameNetwork
-            })
+            setError(error.message);
+            setDataSmallGallery({imagesData: null, videosData: null, ownerMedia: null})
+        } 
+        finally {
+            setIsLoading(false);
         }
 
-        // No more image to load -> disable btn
-        if(!this.state.hasNextPage){
-            this.setState({disableLoadMoreBtn: true});
-        }
-        else{
-            this.setState({disableLoadMoreBtn: false});
-        }
-
-        return this.state.dataGallery;
+        return dataSmallGallery;
     }
 
     const RenderListLogs = () => {
@@ -280,15 +279,6 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     }
 
     const handleShowModal = async (type, dto) =>{
-        setIsLoading(true);
-        if(dto['platform'] !== 'tiktok'){
-            
-        }
-        else{
-
-        }
-        setIsLoading(false);
-
         // show correspond modal
         if(type === 'crawl'){
             setShowModalCrawl(true);
@@ -299,6 +289,18 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         else{
             setShowModalCrawl(false);
             setShowModalAddItem(false);
+        }
+
+        if(dto){
+            // console.log(dto)
+            setPlatform(dto['platform']);
+            setInputUrl(dto['searchUrl']);
+            // if(dto['platform'] === 'tiktok'){
+                
+            // }
+            // else{
+            await getMedia(dto['searchUrl'], dto['platform']);
+            // }
         }
     }
 
@@ -331,7 +333,6 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         </Card>
 
         <Modal
-            className="modal-in-storage"
             size="xl"
             scrollable={true}
             aria-labelledby="contained-modal-title-vcenter"
@@ -344,17 +345,20 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <SmallGallery dataGallery={dataSmallGallery}/>
+                <SmallGallery isLoading={isLoading} 
+                    dataGallery={dataSmallGallery}
+                    error={error} nameNetwork={platform}
+                    inputUrl={inputUrl}
+                />
             </Modal.Body>
             <Modal.Footer>
                 <BtnBootstrap variant="secondary">
-                    View In Gallery
+                    View Full In Gallery
                 </BtnBootstrap>
             </Modal.Footer>
         </Modal>
 
         <Modal
-            className="modal-in-storage"
             size="xl"
             scrollable={true}
             aria-labelledby="contained-modal-title-vcenter"
