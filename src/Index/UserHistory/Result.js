@@ -156,13 +156,6 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             }
             
             setDataSmallGallery({imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia})
-            // await this.setState({
-            //     dataGallery: {loading: false, imagesData: imagesData, videosData: videosData, ownerMedia: ownerMedia, error: null},
-            //     nameNetwork: nameNetwork,
-            //     inputUrl: inputUrl,
-            //     cursor: data['cursor'] ? data['cursor'] : "",
-            //     hasNextPage: data['hasNextPage'],
-            // });
         } catch (error) {
             console.log(error);
             setError(error.message);

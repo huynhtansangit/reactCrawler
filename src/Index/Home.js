@@ -26,7 +26,7 @@ class Index extends Component {
         }
     }
 
-    async getMedia(inputUrl, nameNetwork, cursor){
+    async getMedia(inputUrl, nameNetwork, cursor, noLogs){
         let headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -46,19 +46,18 @@ class Index extends Component {
                 fetchUrl = `${DOWNLOAD_URL}/${nameNetwork}/info?url=${inputUrl}`
             }
             else{
-                if(cursor){
-                    option['body'] = JSON.stringify({
-                        "url": inputUrl,
-                        "cursor": cursor
-                    })
-                }
-                else{
-                    option['body'] = JSON.stringify({
-                        "url": inputUrl,
-                    })
-                }
+                let body = {};
+                if(cursor)
+                    body['cursor'] = cursor;
+
+                if(noLogs)
+                    body['requestType'] = "highlight" ;
+
+                body['url'] = inputUrl;
+
+                option['body'] = JSON.stringify(body);
+                
                 fetchUrl = `${DOWNLOAD_URL}/${nameNetwork}`;
-                // response = await fetch(`${DOWNLOAD_URL}/${nameNetwork}`, option);
             }
             const response = await fetch(fetchUrl, option);
             const data = await response.json();
@@ -170,7 +169,7 @@ class Index extends Component {
             })
         }
 
-        await this.getMedia(this.state.inputUrl, this.state.nameNetwork);
+        await this.getMedia(this.state.inputUrl, this.state.nameNetwork, "", true);
     }
 
     async componentDidUpdate(){

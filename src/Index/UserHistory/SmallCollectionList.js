@@ -13,7 +13,6 @@ const SmallCollectionList = (props) => {
     useEffect(()=>{
         (async ()=> {
             const response = await UserHistoryApi.getCollectionById(props.collectionId);
-            console.log(response);
 
             if(!response['error'] && response['data']){
                 setDataOfCollection(response.data['items']);

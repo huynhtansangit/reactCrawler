@@ -81,7 +81,6 @@ class Storage extends React.Component {
 
     async componentDidMount() {
         if(this.props.location?.state){
-            console.log(this.props.location.state);
             await this.setState({
                 nameCollectionWillBeOpen: this.props.location.state.collectionName,
             })
