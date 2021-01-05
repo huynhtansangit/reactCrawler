@@ -31,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
         height: '200px',
     },
 }));
-const Profile = (props) => {
+// nô
+const Profile = () => {
     const [input, setInput] = useState({
         firstname: "",
         lastname: "",
@@ -47,7 +48,7 @@ const Profile = (props) => {
     const [error, setError] = useState("");//eslint-disable-line
 
     useEffect(()=>{
-        (async ()=>{
+        const handle = async ()=>{
             config['url'] = MY_ACCOUNT_INFO_URL;
             config['method'] = 'GET';
 
@@ -71,9 +72,9 @@ const Profile = (props) => {
                     console.log("Something went wrong. Please check your internet connection.");
                 }
             }
-        })()
+        }
+        handle();
     },[]) //eslint-disable-line
-
     const updateInputProfile = async (e) => {
         const target = e.target;
         const value = target.value;

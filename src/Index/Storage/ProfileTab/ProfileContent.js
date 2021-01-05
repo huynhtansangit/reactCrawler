@@ -5,7 +5,7 @@ import cookies from '../../../utils/cookie'
 import qs from 'querystring'
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/styles';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import './style.css';
 import Tooltip from '@material-ui/core/Tooltip';
 import { convertTimeStampToDate } from '../../../utils/convertTools';
@@ -22,7 +22,7 @@ let config = {
 };
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = theme => ({
     input: {
         display: "none",
     },
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         width: '200px',
         height: '200px',
     },
-}));
+});
 class ProfileContent extends Component {
     constructor(props) {
         super(props);
@@ -45,7 +45,6 @@ class ProfileContent extends Component {
             avatarSrc: ""
         };
     }
-
     async componentDidMount() {
         config['url'] = MY_ACCOUNT_INFO_URL;
         config['method'] = 'GET';
@@ -66,7 +65,6 @@ class ProfileContent extends Component {
         } catch (error) {
             if (error.response) {
                 console.error('Error:', error.response.data);
-
                 // setError(error.response.data['message']);
             }
             else {
