@@ -179,7 +179,7 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, n
                     <ListItem
                         button
                         selected='true'
-                        onClick={(event) => onClickItem(event, 1)}
+                        onClick={(event) => onClickItem(event, selectedIndex)}
                     >
                         <ListItemIcon>
                             <AccountCircleOutlinedIcon />

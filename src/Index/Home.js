@@ -161,7 +161,7 @@ class Index extends Component {
             if(firstName || lastName)
                 this.setState({fullname: `${firstName} ${lastName}`}); 
         }
-        if(this.props.location?.state){
+        if(this.props.location?.state?.inputUrl && this.props.location?.state?.nameNetwork){
             // console.log(this.props.location?.state)
             await this.setState({
                 inputUrl: this.props.location.state.inputUrl,
