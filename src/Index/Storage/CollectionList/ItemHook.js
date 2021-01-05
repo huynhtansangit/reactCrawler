@@ -59,7 +59,7 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, n
     });
     // ------ end convert -----
 
-    const fetchedApi = async () => {
+    const fetchedApi = async ()=> {
         const accessToken = cookies.get("accessToken");
 
         const config = {
