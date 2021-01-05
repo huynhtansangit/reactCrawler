@@ -13,7 +13,7 @@ import {
     TablePagination,
     TableRow,
 } from 'ver-4-11';
-import { Modal, Button as BtnBootstrap } from 'react-bootstrap';
+import { Modal, Button as BtnBootstrap } from 'react-bootstrap'; //eslint-disable-line
 import { makeStyles } from 'ver-4-11';
 import { convertTimeStampToDateWithSecond, convertFormatHeaderTable } from '../../utils/convertTools';
 import Button from '@material-ui/core/Button';
@@ -245,7 +245,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         else if (key === 'url'){
             return (
                 <TableCell style={{width: rest.isSelectCrawlTab ? "" : "50%"}} className={classes.tablecell}>
-                    <a href={value.toString()} target="_blank" rel="noopener noreferrer">{(value.toString()).substring(0,75)}...</a>
+                    <a href={value.toString()} target="_blank" rel="noopener noreferrer">{(value.toString()).substring(0,75)}{value.toString().length>75 ? "..." : ""}</a>
                 </TableCell>
             )
         }
@@ -356,11 +356,11 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                     isAuth={true}
                 />
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
                 <BtnBootstrap variant="secondary">
                     View Full In Gallery
                 </BtnBootstrap>
-            </Modal.Footer>
+            </Modal.Footer> */}
         </Modal>
 
         <Modal
@@ -378,11 +378,11 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             <Modal.Body>
                 <SmallCollectionList collectionId={collectionId}/>
             </Modal.Body>
-            <Modal.Footer>
+            {/* <Modal.Footer>
                 <BtnBootstrap variant="secondary">
                     View Full In Collection
                 </BtnBootstrap>
-            </Modal.Footer>
+            </Modal.Footer> */}
         </Modal>
         </>
     );
