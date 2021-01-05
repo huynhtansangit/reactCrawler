@@ -85,7 +85,7 @@ class VideoItem extends Component {
                             <VisibilityOutlinedIcon />
                         </button>
                     </div>}
-                    {   this.props.isInHistoryPage ? "" :
+                    {   this.props.isInHistoryPage && !this.props.showFavoriteBtn ? "" :
                         <div className="card__title">
                         <button onClick={async ()=>{
                                 await this.prepareData();

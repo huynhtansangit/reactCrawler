@@ -12,7 +12,6 @@ import { Button, Modal } from 'react-bootstrap';
 import { Link, } from "react-router-dom";
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import { removeItemFromCollection } from '../../../services/user.services'
-// import Skeleton from '@material-ui/lab/Skeleton';
 
 
 const useStyles = makeStyles({
@@ -64,13 +63,14 @@ export default function MasonryImageList(props) {
               alt={item.title}
             />
             <div className="card__text">
-              <p className="card__title"><button onClick={() => handleShow(item.url, { id: item.id, collectionId: item.collection_id })} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon /></button></p>
+              {props.isInHistoryPage ? "" : <p className="card__title"><button onClick={() => handleShow(item.url, { id: item.id, collectionId: item.collection_id })} type="button" className="btn btn-outline-secondary"><VisibilityOutlinedIcon /></button></p>}
               <p className="card__title"><button onClick={() => { downloadImageByUrl(item.url) }} type="button" className="btn btn-outline-secondary"><GetAppOutlinedIcon /></button></p>
+              {props.isInHistoryPage ? "" :
               <p className="card__title">
                 <Link to={{ pathname: '/editor', state: { imgSrc: item.url } }}>
                   <button type="button" className="btn btn-outline-secondary"><EditOutlinedIcon /></button>
                 </Link>
-              </p>
+              </p>}
               <p className="card__title">
                 <button onClick={() => {
                   clickUnFavorite(item.collection_id, item.id);

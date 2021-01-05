@@ -21,6 +21,7 @@ import FindInPageSharpIcon from '@material-ui/icons/FindInPageSharp';
 import SmallGallery from './SmallGallery';
 import cookies from '../../utils/cookie';
 import { DOWNLOAD_URL } from '../../utils/config.url';
+import SmallCollectionList from './SmallCollectionList';
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -61,8 +62,9 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
     const [platform, setPlatform] = useState("instagram");
-    // const [additionalInfoTiktok, setAdditionalInfoTiktok] = useState({})
     const [inputUrl, setInputUrl] = useState("");
+
+    const [collectionId, setCollectionId] = useState("");
 
     // ComponentDidMount
     useEffect(() => {
@@ -243,7 +245,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         else if (key === 'url'){
             return (
                 <TableCell style={{width: rest.isSelectCrawlTab ? "" : "50%"}} className={classes.tablecell}>
-                    <a href={value.toString()} target="_blank" rel="noopener noreferrer">{value.toString()}</a>
+                    <a href={value.toString()} target="_blank" rel="noopener noreferrer">{(value.toString()).substring(0,75)}...</a>
                 </TableCell>
             )
         }
@@ -270,7 +272,9 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                         className={classes.button}
                     >
                         <FindInPageSharpIcon className={classes.icon} 
-                            onClick={()=>handleShowModal(rest.isSelectCrawlTab ? 'crawl':'addItem', {searchUrl: object['url'], platform: object['platform']})}
+                            onClick={()=>handleShowModal(rest.isSelectCrawlTab ? 'crawl':'addItem', 
+                                                {url: object['url'], platform: object['platform']},
+                                                {collectionId: object['collection_id']} )}
                         />
                         View
                     </Button>
@@ -278,7 +282,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             </>)
     }
 
-    const handleShowModal = async (type, dto) =>{
+    const handleShowModal = async (type, dtoCrawlTab, dtoAddItemTab) =>{
         // show correspond modal
         if(type === 'crawl'){
             setShowModalCrawl(true);
@@ -291,16 +295,16 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             setShowModalAddItem(false);
         }
 
-        if(dto){
-            // console.log(dto)
-            setPlatform(dto['platform']);
-            setInputUrl(dto['searchUrl']);
-            // if(dto['platform'] === 'tiktok'){
-                
-            // }
-            // else{
-            await getMedia(dto['searchUrl'], dto['platform']);
-            // }
+        if(dtoCrawlTab && rest.isSelectCrawlTab){
+            // console.log(dtoCrawlTab)
+            setPlatform(dtoCrawlTab['platform']);
+            setInputUrl(dtoCrawlTab['url']);
+            
+            await getMedia(dtoCrawlTab['url'], dtoCrawlTab['platform']);
+        }
+        else if(dtoAddItemTab && !rest.isSelectCrawlTab){
+            console.log(dtoAddItemTab);
+            setCollectionId(dtoAddItemTab['collectionId']);
         }
     }
 
@@ -349,6 +353,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                     dataGallery={dataSmallGallery}
                     error={error} nameNetwork={platform}
                     inputUrl={inputUrl}
+                    isAuth={true}
                 />
             </Modal.Body>
             <Modal.Footer>
@@ -371,15 +376,11 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p> AddItem
-                </p>
+                <SmallCollectionList collectionId={collectionId}/>
             </Modal.Body>
             <Modal.Footer>
                 <BtnBootstrap variant="secondary">
-                    Download
-                </BtnBootstrap>
-                <BtnBootstrap variant="secondary" >
-                    Add to my collection
+                    View Full In Collection
                 </BtnBootstrap>
             </Modal.Footer>
         </Modal>

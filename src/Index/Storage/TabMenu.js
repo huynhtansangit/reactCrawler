@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import ImageStorage from './ImageTab/ImageStorage';
 import VideoStorage from './VideoTab/VideoStorage';
-// import ProfileRemake from './Profile/ProfileRemake';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -85,28 +85,37 @@ export default function ScrollableTabsButtonForce(props) {
 
 
   return (
+    <>
+    { props.error ? 
+      <>
+        <Alert variant='filled' severity="danger">
+          <AlertTitle>Error</AlertTitle>
+              {props.error}
+        </Alert>
+      </> 
+      :
+      <div className={classes.root}>
+        <AppBar position="static" color="default">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            aria-label="scrollable force tabs example"
+            centered>
+            <Tab label="Your Images" icon={<FavoriteIcon />} {...a11yProps(0)} />
+            <Tab label="Your Videos" icon={<VideoLibraryOutlinedIcon />} {...a11yProps(1)} />
+          </Tabs>
+        </AppBar>
 
-    <div className={classes.root}>
-      <AppBar position="static" color="default">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          aria-label="scrollable force tabs example"
-          centered>
-          <Tab label="Your Images" icon={<FavoriteIcon />} {...a11yProps(0)} />
-          <Tab label="Your Videos" icon={<VideoLibraryOutlinedIcon />} {...a11yProps(1)} />
-        </Tabs>
-      </AppBar>
-
-      <TabPanel value={value} index={0}>
-        <ImageStorage data={imagesData}/>
-      </TabPanel>
-      
-      <TabPanel value={value} index={1}>
-        <VideoStorage  data={videosData}/>
-      </TabPanel>
-    </div>
+        <TabPanel value={value} index={0}>
+          <ImageStorage isInHistoryPage={props.isInHistoryPage} data={imagesData}/>
+        </TabPanel>
+        
+        <TabPanel value={value} index={1}>
+          <VideoStorage isInHistoryPage={props.isInHistoryPage} showFavoriteBtn={true} data={videosData}/>
+        </TabPanel>
+    </div>}
+    </>
   );
 }

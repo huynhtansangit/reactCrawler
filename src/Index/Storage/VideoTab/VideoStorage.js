@@ -51,7 +51,9 @@ function VideoStorage(props) {
                                 clickUnFavorite(itemDTO.collectionId, itemDTO.id);
                             }}
                             url={item.url} collectionId={item.collection_id}
-                            id={item.id} isAdded={true}></VideoItem>
+                            id={item.id} isAdded={true}
+                            isInHistoryPage={props.isInHistoryPage}
+                            showFavoriteBtn={props.showFavoriteBtn}></VideoItem>
                         </ImageListItem>
                     )
                 }
