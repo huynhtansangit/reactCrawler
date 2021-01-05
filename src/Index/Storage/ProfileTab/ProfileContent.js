@@ -113,19 +113,19 @@ class ProfileContent extends Component {
         // CÁCH DƯỚI ĐÃ THỬ, RA URL NHƯNG KHÔNG SHOW.
 
         // CÁCH 2: https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
-        config['url'] = MY_AVATAR_URL;
-        try {
-            const rawAvatar = (await axios.request(config))['data'];
+        // config['url'] = MY_AVATAR_URL;
+        // try {
+        //     const rawAvatar = (await axios.request(config))['data'];
 
-            if(rawAvatar){
-                console.log(rawAvatar);
-                const b64Avatar = window.btoa((rawAvatar));
-                console.log(b64Avatar);
-                this.setState({avatarSrc: 'data:image/png,base64,'+b64Avatar});
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        //     if(rawAvatar){
+        //         console.log(rawAvatar);
+        //         const b64Avatar = window.btoa((rawAvatar));
+        //         console.log(b64Avatar);
+        //         this.setState({avatarSrc: 'data:image/png,base64,'+b64Avatar});
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     componentDidUpdate() {
