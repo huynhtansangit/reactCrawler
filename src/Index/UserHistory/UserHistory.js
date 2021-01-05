@@ -193,6 +193,96 @@ class History extends React.Component {
         }
     }
 
+    renderFilterButton = (classes) => {
+        if(this.state.isSelectCrawlTab){
+            return(
+                <Grid container spacing={0}>
+                    <Grid item xs={12} sm={2} md={4} spacing={1}>
+                        <Paper className={classes.paper}>
+                            <GroupSelect
+                                className={classes.groupSelect}
+                                isType={false}
+                                onPlatformChange={(platform) => {
+                                    this.onClickPlatformChange(platform)
+                                }}
+                            />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={5} md={4} spacing={2}>
+                        <Paper className={classes.paper}>
+                            <TextField
+                                id="date-time-from"
+                                label="From"
+                                type="datetime-local"
+                                defaultValue={new Date(Date.now() + 25200000 - 604800000).toISOString().substring(0, 16)}
+                                className={classes.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                onChange={(dateFrom) => {
+                                    this.onChangeDateFrom(dateFrom.target.value)
+                                }}
+                            />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={5} md={4} spacing={2}>
+                        <Paper className={classes.paper}> <TextField
+                            id="date-time-to"
+                            label="To"
+                            type="datetime-local"
+                            defaultValue={new Date(Date.now() + 25200000).toISOString().substring(0, 16)}
+                            className={classes.textField}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            onChange={(dateTo) => {
+                                this.onChangeDateTo(dateTo.target.value)
+                            }}
+                        /></Paper>
+                    </Grid>
+                </Grid>
+            )
+        }
+        else{
+            return (
+                <Grid container spacing={0}>
+                    <Grid item xs={12} sm={6} md={6} spacing={2}>
+                        <Paper className={classes.paper}>
+                            <TextField
+                                id="date-time-from"
+                                label="From"
+                                type="datetime-local"
+                                defaultValue={new Date(Date.now() + 25200000 - 604800000).toISOString().substring(0, 16)}
+                                className={classes.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                onChange={(dateFrom) => {
+                                    this.onChangeDateFrom(dateFrom.target.value)
+                                }}
+                            />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6} spacing={2}>
+                        <Paper className={classes.paper}> <TextField
+                            id="date-time-to"
+                            label="To"
+                            type="datetime-local"
+                            defaultValue={new Date(Date.now() + 25200000).toISOString().substring(0, 16)}
+                            className={classes.textField}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            onChange={(dateTo) => {
+                                this.onChangeDateTo(dateTo.target.value)
+                            }}
+                        /></Paper>
+                    </Grid>
+                </Grid>
+            )
+        }
+    }
+
     render() {
         const { classes } = this.props;//eslint-disable-line
         return (
@@ -233,51 +323,7 @@ class History extends React.Component {
                                     <Box mt={3} minWidth={1050}>
                                         <Table>
                                             <TableRow className={classes.tableRow}>
-                                                <Grid container spacing={0}>
-                                                    <Grid item xs={12} sm={2} md={4} spacing={1}>
-                                                        <Paper className={classes.paper}>
-                                                            <GroupSelect
-                                                                className={classes.groupSelect}
-                                                                isType={false}
-                                                                onPlatformChange={(platform) => {
-                                                                    this.onClickPlatformChange(platform)
-                                                                }}
-                                                            />
-                                                        </Paper>
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={5} md={4} spacing={2}>
-                                                        <Paper className={classes.paper}>
-                                                            <TextField
-                                                                id="date-time-from"
-                                                                label="From"
-                                                                type="datetime-local"
-                                                                defaultValue={new Date(Date.now() + 25200000 - 604800000).toISOString().substring(0, 16)}
-                                                                className={classes.textField}
-                                                                InputLabelProps={{
-                                                                    shrink: true,
-                                                                }}
-                                                                onChange={(dateFrom) => {
-                                                                    this.onChangeDateFrom(dateFrom.target.value)
-                                                                }}
-                                                            />
-                                                        </Paper>
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={5} md={4} spacing={2}>
-                                                        <Paper className={classes.paper}> <TextField
-                                                            id="date-time-to"
-                                                            label="To"
-                                                            type="datetime-local"
-                                                            defaultValue={new Date(Date.now() + 25200000).toISOString().substring(0, 16)}
-                                                            className={classes.textField}
-                                                            InputLabelProps={{
-                                                                shrink: true,
-                                                            }}
-                                                            onChange={(dateTo) => {
-                                                                this.onChangeDateTo(dateTo.target.value)
-                                                            }}
-                                                        /></Paper>
-                                                    </Grid>
-                                                </Grid>
+                                                {this.renderFilterButton(classes)}
                                             </TableRow>
                                         </Table>
                                         {this.renderAlert()}

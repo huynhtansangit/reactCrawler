@@ -89,14 +89,14 @@ class ProfileContent extends Component {
                 this.setState({ birthdayIsoStandard: convertTimeStampToDate(this.state.birthday) });
             }
 
-            // Get avatar
-            config['url'] = MY_AVATAR_URL;
-            const dataAvatar = (await axios.request(config))['data'];
+            // // Get avatar
+            // config['url'] = MY_AVATAR_URL;
+            // const dataAvatar = (await axios.request(config))['data'];
 
-            if (dataAvatar) {
-                // const binary =  new Buffer(dataAvatar.data.toString(), 'binary')
-                // await this.setState({avatar: `data:image/jpeg;base64,${binary}`});
-            }
+            // if (dataAvatar) {
+            //     // const binary =  new Buffer(dataAvatar.data.toString(), 'binary')
+            //     // await this.setState({avatar: `data:image/jpeg;base64,${binary}`});
+            // }
         } catch (error) {
             if (error.response) {
                 console.error('Error:', error.response.data);
