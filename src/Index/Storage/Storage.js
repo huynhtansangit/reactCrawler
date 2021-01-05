@@ -39,7 +39,7 @@ class Storage extends React.Component {
             listCollectionId: [],
             isLoading: true,
             error: "",
-
+            nameCollectionWillBeOpen: "",
         }
     }
 
@@ -79,8 +79,13 @@ class Storage extends React.Component {
             })
     }
 
-    componentDidMount() {
-
+    async componentDidMount() {
+        if(this.props.location?.state){
+            console.log(this.props.location.state);
+            await this.setState({
+                nameCollectionWillBeOpen: this.props.location.state.collectionName,
+            })
+        }
     }
 
     render() {
@@ -97,7 +102,8 @@ class Storage extends React.Component {
                                 </Button>
                                 <CollectionList
                                     isLoading={this.state.isLoading}
-                                    listCollectionId={this.state.listCollectionId} />
+                                    listCollectionId={this.state.listCollectionId} 
+                                    nameCollectionWillBeOpen={this.state.nameCollectionWillBeOpen}/>
                             </Paper>
                         </Grid>
                     </Grid>

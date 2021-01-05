@@ -27,7 +27,7 @@ const useStyle = makeStyles((theme) => ({
     },
 }));
 
-export default function ItemHook({ MainPrimary, id, key, updateListCollection, ...rest }) {
+export default function ItemHook({ MainPrimary, id, key, updateListCollection, nameCollectionWillBeOpen, ...restProps }) {
     const classes = useStyle();
 
     const [open, setOpen] = React.useState(false);
@@ -41,54 +41,61 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, .
     const [dataOfCollection, setDataOfCollection] = React.useState([]);
     const [showItem, setShowItem] = React.useState(true);
 
+    useEffect(()=>{
+        if(MainPrimary === nameCollectionWillBeOpen){
+            setOpen(true);
+            setWillLoadContent(true);
+        }
+    },[MainPrimary, nameCollectionWillBeOpen]);
+
     // Component Did Update convert
+    //eslint-disable-next-line
     useEffect(() => {
-        // console.log("this is id: " + id);
-        const fetchedApi = async ()=>{
-            if (willLoadContent && firstRender && MainPrimary !== "Profile") {
-                setWillLoadContent(false);
-    
-                const accessToken = cookies.get("accessToken");
-    
-                const config = {
-                    url: `${COLLECTIONS_URL}/${id}`,
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `bearer ${accessToken}`
-                    },
-                };
-    
-                // get data for collection
-                await axios.request(config)
-                    .then(res => res.data)
-                    .then(data => {
-                        if (data) {
-                            setStatusGetDataOfCollection({
-                                loading: false, error: ""
-                            });
-                            setDataOfCollection(data["items"]);
-                        }
-                    })
-                    .catch(error => {
-                        console.log("Error occurred when trying to get your collection.");
-                        if (error.response) {
-                            setStatusGetDataOfCollection({
-                                loading: false,
-                                error: error.response.data['message'],
-                            });
-                            alert(error.response.data.message);
-                        }
-                        else {
-                            alert("Something went wrong. Please check your internet connection.");
-                        }
-                    })
-                await setFirstRender(false);
-            }
-        } 
-        fetchedApi();
+        if (willLoadContent && firstRender && MainPrimary !== "Profile") {
+            setWillLoadContent(false);
+            setFirstRender(false);
+            fetchedApi();
+        }
     });
     // ------ end convert -----
+
+    const fetchedApi = async ()=>{
+        const accessToken = cookies.get("accessToken");
+
+        const config = {
+            url: `${COLLECTIONS_URL}/${id}`,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${accessToken}`
+            },
+        };
+
+        // get data for collection
+        await axios.request(config)
+            .then(res => res.data)
+            .then(data => {
+                if (data) {
+                    setStatusGetDataOfCollection({
+                        loading: false, error: ""
+                    });
+                    setDataOfCollection(data["items"]);
+                }
+            })
+            .catch(error => {
+                console.log("Error occurred when trying to get your collection.");
+                if (error.response) {
+                    setStatusGetDataOfCollection({
+                        loading: false,
+                        error: error.response.data['message'],
+                    });
+                    alert(error.response.data.message);
+                }
+                else {
+                    alert("Something went wrong. Please check your internet connection.");
+                }
+            })
+    } 
 
     const onClickItem = (event, index) => {
         setOpen(!open);
@@ -104,7 +111,6 @@ export default function ItemHook({ MainPrimary, id, key, updateListCollection, .
     }
 
     const clickRenameCollection = async (idCollection) => {
-        // Chưa cập nhật lại realtime sau khi update
         let name = prompt("Enter collection's new name:", "New name");    
         
         if (name) {

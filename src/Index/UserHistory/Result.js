@@ -13,7 +13,7 @@ import {
     TablePagination,
     TableRow,
 } from 'ver-4-11';
-import { Modal, Button as BtnBootstrap } from 'react-bootstrap'; //eslint-disable-line
+import { Modal, Button as BtnBootstrap } from 'react-bootstrap';
 import { makeStyles } from 'ver-4-11';
 import { convertTimeStampToDateWithSecond, convertFormatHeaderTable } from '../../utils/convertTools';
 import Button from '@material-ui/core/Button';
@@ -22,6 +22,8 @@ import SmallGallery from './SmallGallery';
 import cookies from '../../utils/cookie';
 import { DOWNLOAD_URL } from '../../utils/config.url';
 import SmallCollectionList from './SmallCollectionList';
+import {Link,} from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -30,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         width: '100%',
+        maxWidth: '150px',
         height: 30,
         '&:hover $icon': {
             color: 'red important',
@@ -52,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Results = ({ className, data, count, onLimitChange, onPageChange, isAllItems, ...rest }) => {
+const Results = ({ className, data, count, onLimitChange, onPageChange, isAllItems, ...restProps }) => {
     const classes = useStyles();
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
@@ -65,6 +68,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const [inputUrl, setInputUrl] = useState("");
 
     const [collectionId, setCollectionId] = useState("");
+    const [collectionName, setCollectionName] = useState("");
 
     // ComponentDidMount
     useEffect(() => {
@@ -215,7 +219,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 <>
                     {Object.entries(data[0]).map(([key, value]) => (
                         <>
-                            {['User', 'Owner phone', 'Type', 'Thumbnail', 'Source'].includes(convertFormatHeaderTable(key)) ? <></> : <TableCell className={classes.tablecell}>{convertFormatHeaderTable(key)}</TableCell>}
+                            {['User', 'Owner phone', 'Type', 'Thumbnail', 'Id', 'Collection id'].includes(convertFormatHeaderTable(key))|| (convertFormatHeaderTable(key) === 'Url' && !restProps.isSelectCrawlTab) ? <></> : <TableCell className={classes.tablecell}>{convertFormatHeaderTable(key)}</TableCell>}
                         </>
                     ))}
                     <TableCell className={classes.tablecell}>Detail</TableCell>
@@ -228,30 +232,23 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 <TableCell className={classes.tablecell}>{convertTimeStampToDateWithSecond(value)}</TableCell>
             )
         }
-        else if (['user', 'owner_phone', 'type', 'thumbnail', 'source'].includes(key)) {
-            // if (value != null) {
-                // Useless field => show nothing
-                return (
-                    <>
-                    </>
-                )
-            // }
-            // else {
-            //     return (
-            //         <TableCell className={classes.tablecell}>null</TableCell>
-            //     )
-            // }
-        }
-        else if (key === 'url'){
+        else if (['user', 'owner_phone', 'type', 'thumbnail', 'id', 'collection_id'].includes(key) || (key === 'url' && !restProps.isSelectCrawlTab)) {
+            // Useless field => show nothing
             return (
-                <TableCell style={{width: rest.isSelectCrawlTab ? "" : "50%"}} className={classes.tablecell}>
+                <>
+                </>
+            )
+        }
+        else if (key === 'url' || key === 'source'){
+            return (
+                <TableCell className={classes.tablecell}>
                     <a href={value.toString()} target="_blank" rel="noopener noreferrer">{(value.toString()).substring(0,75)}{value.toString().length>75 ? "..." : ""}</a>
                 </TableCell>
             )
         }
         else {
             return (
-                <TableCell style={{width: rest.isSelectCrawlTab ? "" : "10%"}} className={classes.tablecell}>{value.toString()}</TableCell>
+                <TableCell className={classes.tablecell}>{value.toString()}</TableCell>
             )
         }
 
@@ -272,9 +269,9 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                         className={classes.button}
                     >
                         <FindInPageSharpIcon className={classes.icon} 
-                            onClick={()=>handleShowModal(rest.isSelectCrawlTab ? 'crawl':'addItem', 
+                            onClick={()=>handleShowModal(restProps.isSelectCrawlTab ? 'crawl':'addItem', 
                                                 {url: object['url'], platform: object['platform']},
-                                                {collectionId: object['collection_id']} )}
+                                                {collectionId: object['collection_id'], collectionName: object['collection_name']} )}
                         />
                         View
                     </Button>
@@ -295,22 +292,22 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             setShowModalAddItem(false);
         }
 
-        if(dtoCrawlTab && rest.isSelectCrawlTab){
+        if(dtoCrawlTab && restProps.isSelectCrawlTab){
             // console.log(dtoCrawlTab)
             setPlatform(dtoCrawlTab['platform']);
             setInputUrl(dtoCrawlTab['url']);
             
             await getMedia(dtoCrawlTab['url'], dtoCrawlTab['platform']);
         }
-        else if(dtoAddItemTab && !rest.isSelectCrawlTab){
-            console.log(dtoAddItemTab);
+        else if(dtoAddItemTab && !restProps.isSelectCrawlTab){
             setCollectionId(dtoAddItemTab['collectionId']);
+            setCollectionName(dtoAddItemTab['collectionName']);
         }
     }
 
     return (
         <>
-        <Card className={clsx(classes.root, className)} {...rest}>
+        <Card className={clsx(classes.root, className)} {...restProps}>
             <PerfectScrollbar>
                 <Box minWidth={1050}>
                     <Table>
@@ -356,11 +353,13 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                     isAuth={true}
                 />
             </Modal.Body>
-            {/* <Modal.Footer>
-                <BtnBootstrap variant="secondary">
-                    View Full In Gallery
-                </BtnBootstrap>
-            </Modal.Footer> */}
+            <Modal.Footer>
+                <Link to={{ pathname: '/', state: { action: "search", inputUrl: inputUrl, nameNetwork: platform } }}>
+                    <BtnBootstrap variant="secondary">
+                        View Full In Homepage
+                    </BtnBootstrap>
+                </Link>
+            </Modal.Footer>
         </Modal>
 
         <Modal
@@ -378,11 +377,13 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             <Modal.Body>
                 <SmallCollectionList collectionId={collectionId}/>
             </Modal.Body>
-            {/* <Modal.Footer>
-                <BtnBootstrap variant="secondary">
-                    View Full In Collection
-                </BtnBootstrap>
-            </Modal.Footer> */}
+            <Modal.Footer>
+                <Link to={{ pathname: '/me', state: { action: "viewCollection", collectionId: collectionId, collectionName: collectionName } }}>
+                    <BtnBootstrap variant="secondary">
+                        View Full In Collection
+                    </BtnBootstrap>
+                </Link>
+            </Modal.Footer>
         </Modal>
         </>
     );

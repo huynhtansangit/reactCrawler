@@ -162,7 +162,14 @@ class Index extends Component {
             if(firstName || lastName)
                 this.setState({fullname: `${firstName} ${lastName}`}); 
         }
-        
+        if(this.props.location?.state){
+            // console.log(this.props.location?.state)
+            await this.setState({
+                inputUrl: this.props.location.state.inputUrl,
+                nameNetwork: this.props.location.state.nameNetwork
+            })
+        }
+
         await this.getMedia(this.state.inputUrl, this.state.nameNetwork);
     }
 

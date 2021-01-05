@@ -41,7 +41,7 @@ export default function SelectedListItem(props) {
 
         await axios.request(config)
             .then(res => {
-                console.log(res.data.collections);
+                // console.log(res.data.collections);
                 if (res.data) {
                     setIsLoading(false);
                     setListCollectionId(res.data["collections"]);
@@ -87,6 +87,7 @@ export default function SelectedListItem(props) {
                         return (
                             <ItemHook MainPrimary={listCollectionHashmap[element.id]} key={idx+1} id={element.id}
                                 updateListCollection={(id, newName)=>{updateListCollectionHashmap(id, newName)}}
+                                nameCollectionWillBeOpen={props.nameCollectionWillBeOpen}
                             />
                         )
                     })}
