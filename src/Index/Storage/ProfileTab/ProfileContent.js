@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { MY_ACCOUNT_INFO_URL, UPDATE_MY_ACCOUNT_INFO_URL, MY_AVATAR_URL } from '../../../utils/config.url'
+import { MY_ACCOUNT_INFO_URL, UPDATE_MY_ACCOUNT_INFO_URL } from '../../../utils/config.url'
 import cookies from '../../../utils/cookie'
 import qs from 'querystring'
 import Avatar from '@material-ui/core/Avatar';
