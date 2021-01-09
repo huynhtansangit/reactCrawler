@@ -19,7 +19,6 @@ import { convertTimeStampToDateWithSecond, convertFormatHeaderTable } from '../.
 import Button from '@material-ui/core/Button';
 import FindInPageSharpIcon from '@material-ui/icons/FindInPageSharp';
 import SmallGallery from './SmallGallery';
-import cookies from '../../utils/cookie';
 import { DOWNLOAD_URL } from '../../utils/config.url';
 import SmallCollectionList from './SmallCollectionList';
 import {Link,} from "react-router-dom";
@@ -70,9 +69,31 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const [collectionId, setCollectionId] = useState("");
     const [collectionName, setCollectionName] = useState("");
 
+
     // ComponentDidMount
     useEffect(() => {
-    }, [data])
+        // groupData(data);
+    }, [data]); //eslint-disable-line
+
+    // const groupData = () => {
+    //     if(data.length){
+    //         let groupedData = {};
+    //         for(const el of data){
+    //             const splittedUrl = el['url'].split('/');
+    //             if(splittedUrl[2] === "fb.watch"|| splittedUrl[2] === "p"){
+    //                 console.log(el.url+" is a post.")
+    //             }   
+    //             else{
+    //                 if(groupedData.hasOwnProperty(splittedUrl[3]))
+    //                     groupedData[splittedUrl[3]] = [...(groupedData[splittedUrl[3]]), el]; 
+    //                 else
+    //                 groupedData[splittedUrl[3]] = [el];
+    //             }
+    //         }
+    //         console.log(groupedData);
+    //         // setGroupCrawledData(groupedData);
+    //     }
+    // }
 
 
     const handleLimitChange = (event) => {
@@ -86,13 +107,12 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         onPageChange(newPage);
     };
 
-    const getMedia = async (inputUrl, nameNetwork, cursor) => {
+    const getMediaForPreview = async (inputUrl, nameNetwork, cursor) => {
         setIsLoading(true);
 
         let headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `bearer ${cookies.get('accessToken')}`
         }
 
         let option = {
@@ -110,12 +130,14 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 if(cursor){
                     option['body'] = JSON.stringify({
                         "url": inputUrl,
-                        "cursor": cursor
+                        "cursor": cursor,
+                        'requestType': "highlight"
                     })
                 }
                 else{
                     option['body'] = JSON.stringify({
                         "url": inputUrl,
+                        'requestType': "highlight"
                     })
                 }
                 fetchUrl = `${DOWNLOAD_URL}/${nameNetwork}`;
@@ -260,12 +282,11 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                         variant="contained"
                         color="primary"
                         className={classes.button}
-                    >
-                        <FindInPageSharpIcon className={classes.icon} 
-                            onClick={()=>handleShowModal(restProps.isSelectCrawlTab ? 'crawl':'addItem', 
+                        onClick={()=>handleShowModal(restProps.isSelectCrawlTab ? 'crawl':'addItem', 
                                                 {url: object['url'], platform: object['platform']},
                                                 {collectionId: object['collection_id'], collectionName: object['collection_name']} )}
-                        />
+                    >
+                        <FindInPageSharpIcon className={classes.icon} />
                         View
                     </Button>
                 </TableCell>
@@ -290,7 +311,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             setPlatform(dtoCrawlTab['platform']);
             setInputUrl(dtoCrawlTab['url']);
             
-            await getMedia(dtoCrawlTab['url'], dtoCrawlTab['platform']);
+            await getMediaForPreview(dtoCrawlTab['url'], dtoCrawlTab['platform']);
         }
         else if(dtoAddItemTab && !restProps.isSelectCrawlTab){
             setCollectionId(dtoAddItemTab['collectionId']);

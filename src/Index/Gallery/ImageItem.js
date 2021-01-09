@@ -40,7 +40,7 @@ class ImageItem extends Component {
 
     clickDownload = ()=>{
         const tempThis = this; 
-        downloadImageByUrl(this.props.imgSrc, ()=>this.props.history.push('/login', {
+        downloadImageByUrl(this.props.itemSrc, ()=>this.props.history.push('/login', {
             from: tempThis.props.location,
             action: "downloadSingleImage",
             imgSrc: tempThis.props.itemSrc

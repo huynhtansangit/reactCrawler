@@ -1,10 +1,10 @@
-import React, { useState } from 'react'; //eslint-disable-line
+import React, { useState } from 'react'; 
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ItemHook from './ItemHook';
 import { useEffect } from 'react';
-import axios from 'axios'; //eslint-disable-line
+import axios from 'axios';
 import cookies from '../../../utils/cookie';//eslint-disable-line
 import { COLLECTIONS_URL } from '../../../utils/config.url' ;//eslint-disable-line
 

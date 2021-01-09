@@ -143,7 +143,7 @@ const ActivityHistory = () => {
     const onClickPlatformChange = (value) => {
         setFilter({
             ...filters,
-            platform: value.toLowerCase(),
+            platform: value ? value.toLowerCase() : "",
         });
     }
     const onChangeInputUser = (value) => {

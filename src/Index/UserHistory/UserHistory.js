@@ -143,7 +143,7 @@ class History extends React.Component {
         this.setState({
             filters: {
                 ...tempThis.state.filters,
-                platform: value.toLowerCase()
+                platform: value ? value.toLowerCase() : ""
             }
         })
     }
@@ -312,7 +312,10 @@ class History extends React.Component {
                                     <Grid item xs={6} sm={6} md={5} spacing={1}>
                                         <Paper className={classes.paper}>
                                             <Button variant="outlined" color="primary" className={classes.button}
-                                            onClick={()=>this.setState({isSelectCrawlTab: false})}>
+                                            onClick={()=>{
+                                                this.setState({isSelectCrawlTab: false});
+                                                this.onClickPlatformChange(""); //Remove filter platform
+                                            }}>
                                                 <CollectionsSharpIcon className={classes.homeIcon} />
                                                 Add to collection history
                                             </Button>
@@ -327,6 +330,7 @@ class History extends React.Component {
                                             </TableRow>
                                         </Table>
                                         {this.renderAlert()}
+                                        {/* Ở đây truyền Data vào cho GroupResult thay cho Results */}
                                         <Results
                                             onLimitChange={(limit) => {
                                                 this.clickChangeLimit(limit)
