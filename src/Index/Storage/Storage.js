@@ -18,17 +18,17 @@ const useStyles = theme => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
-    button:{
-        width:'100% !important',
-        height:60,
-        '&hover':{
-            background:'#F6518F !important',
+    button: {
+        width: '100% !important',
+        height: 60,
+        '&hover': {
+            background: '#F6518F !important',
         }
     },
-    homeIcon:{
-        fontSize:36,
-        color:'#F6518F',
-        
+    homeIcon: {
+        fontSize: 36,
+        color: '#F6518F',
+
     }
 });
 class Storage extends React.Component {
@@ -80,7 +80,7 @@ class Storage extends React.Component {
     }
 
     async componentDidMount() {
-        if(this.props.location?.state){
+        if (this.props.location?.state) {
             await this.setState({
                 nameCollectionWillBeOpen: this.props.location.state.collectionName,
             })
@@ -90,25 +90,27 @@ class Storage extends React.Component {
     render() {
         const { classes } = this.props;//eslint-disable-line
         return (
-            <section id="storage-section">
-                <div className="storage-container">
-                    <img id="you-can-find-downloaded-stuff-here" src="Assets/Images/Store/Mask-Group-2-Copy.png" alt="All downloaded here" />
-                    <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12}>
-                            <Paper className={classes.paper}>
-                                <Button variant="outlined" color="primary" href="/" className={classes.button}>
-                                    <HomeSharpIcon className={classes.homeIcon}/>
-                                </Button>
-                                <CollectionList
-                                    isLoading={this.state.isLoading}
-                                    listCollectionId={this.state.listCollectionId} 
-                                    nameCollectionWillBeOpen={this.state.nameCollectionWillBeOpen}/>
-                            </Paper>
+                <section id="storage-section">
+                    <div className="storage-container ">
+                        <img id="you-can-find-downloaded-stuff-here" src="Assets/Images/Store/Mask-Group-2-Copy.png" alt="All downloaded here" />
+                        <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12}>
+                                <Paper className={classes.paper}>
+                                    <Button variant="outlined" color="primary" href="/" className={classes.button}>
+                                        <HomeSharpIcon className={classes.homeIcon} />
+                                    </Button>
+                                    <div className="container">
+                                    <CollectionList
+                                        isLoading={this.state.isLoading}
+                                        listCollectionId={this.state.listCollectionId}
+                                        nameCollectionWillBeOpen={this.state.nameCollectionWillBeOpen} />
+                                    </div>
+                                </Paper>
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                </div>
-            </section>
+                    </div>
+                </section>
         );
     }
 }

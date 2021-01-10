@@ -19,6 +19,7 @@ import { convertDateToTimeStamp, removeEmptyValueParams } from '../../utils/conv
 import { Alert, AlertTitle } from '@material-ui/lab';
 import CollectionsSharpIcon from '@material-ui/icons/CollectionsSharp';
 import CloudDownloadSharpIcon from '@material-ui/icons/CloudDownloadSharp';
+import GroupResult from './GroupResult';
 const useStyles = theme => ({
     root: {
         flexGrow: 1,
@@ -104,11 +105,10 @@ class History extends React.Component {
             fetchedDataCrawl: responseData['data']['logs'],
             isLoading: false,
         });
+        // console.log(responseData['data']['logs']);
     }
-
     fetchingDataAddItem = async () => {
         await this.setState({isLoading: true});
-        
         const cleanFilter = removeEmptyValueParams(this.state.filters);
         const responseData = await UserHistoryApi.getAddItemHistory(cleanFilter);
         await this.setState({
@@ -344,6 +344,9 @@ class History extends React.Component {
                                         // isAllItems={isA0llItems}
                                         >
                                         </Results>
+                                        <GroupResult
+                                            data={this.state.fetchedDataCrawl.length ? this.state.fetchedDataCrawl : ""}
+                                        />
                                     </Box>
                                 </Container>
                             </Paper>
