@@ -344,9 +344,6 @@ class History extends React.Component {
                                         // isAllItems={isA0llItems}
                                         >
                                         </Results>
-                                        <GroupResult
-                                            data={this.state.fetchedDataCrawl.length ? this.state.fetchedDataCrawl : ""}
-                                        />
                                     </Box>
                                 </Container>
                             </Paper>

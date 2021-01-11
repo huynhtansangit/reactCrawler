@@ -108,7 +108,7 @@ class Header extends Component {
             else {
                 return (
                     <>
-                        <SignInUp/>
+                        <SignInUp />
                     </>
                 )
             }
@@ -140,7 +140,7 @@ class Header extends Component {
                                         </ul>
                                     </div>
                                     <div title="Today is open" className="float-right pb-2" style={{ marginTop: '8px' }}>
-                                        <div className="dropdown dropdown-header-customize">
+                                        <div className="dropdown dropdown-header-customize d-block-web">
                                             <button className="btn dropdown-toggle btn-select-social-network" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Choose...
                                             </button>
@@ -156,6 +156,18 @@ class Header extends Component {
                                 </div>
                             </div>
                             <div className="float-right ">
+                                <div className="dropdown dropdown-header-customize d-block-mobile">
+                                    <button className="btn dropdown-toggle btn-select-social-network" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Choose...
+                                            </button>
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {/* eslint-disable */}
+                                        <a id="instagram" className="dropdown-item" onClick={this.selectSocialNetwork}>Instagram tool</a>
+                                        <a id="tiktok" className="dropdown-item" onClick={this.selectSocialNetwork}>Tiktok tool</a>
+                                        <a id="facebook" className="dropdown-item" onClick={this.selectSocialNetwork}>Facebook tool</a>
+                                        {/* eslint-disable-line */}
+                                    </div>
+                                </div>
                                 <div className=" pt-2">
                                     <div className="form-group input-header-container navbar-nav">
                                         <img className="icon-input-header" src="Assets/Images/Banner/urlIcon1x.png" alt="" />
@@ -163,6 +175,7 @@ class Header extends Component {
                                             onChange={this.updateInputUrlElement} onKeyDown={this.handleHitEnter} />
                                         <button type="button" className="btn btn-dark btn-input-header" onClick={this.updateBannerInput.bind(this)}><i className="fas fa-sign-in-alt" /></button>
                                     </div>
+
                                 </div>
                             </div>
                         </div>

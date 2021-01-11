@@ -336,7 +336,7 @@ section{
         border-radius: 0px !important;
         }
        .dropdown-header-customize button:after{
-           left: 50% !important;
+           left: 88% !important;
            top: 10% !important;
        }
        #input-url-banner{
@@ -431,13 +431,33 @@ section{
        .navbar-brand{
         display: none !important;
     }
+    .d-block-mobile{
+        display: block !important;
+    }
+    .d-block-web{
+        display: none !important;
+    }
+    #exampleInputEmail1 {
+        left: 6px !important;
+    }
+    .icon-input-header {
+        left: 93px !important;
+    }
+    .btn-input-header {
+        right: 37px !important;
+    }
 }
  /* Extra small devices (phones, 600px and down) */
  @media only screen and (max-width: 550px) {
+    .dropdown-header-customize {
+        left: 66px !important;
+    }
     #banner-section{
         display: none !important;
     }
-    
+    nav .container {
+        margin: 0px !important;
+    }
     .input-header-container{
         left: -20px !important;
     }
