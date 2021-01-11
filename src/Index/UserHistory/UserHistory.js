@@ -19,7 +19,6 @@ import { convertDateToTimeStamp, removeEmptyValueParams } from '../../utils/conv
 import { Alert, AlertTitle } from '@material-ui/lab';
 import CollectionsSharpIcon from '@material-ui/icons/CollectionsSharp';
 import CloudDownloadSharpIcon from '@material-ui/icons/CloudDownloadSharp';
-import GroupResult from './GroupResult';
 const useStyles = theme => ({
     root: {
         flexGrow: 1,

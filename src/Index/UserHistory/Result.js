@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
     },
     heading: {
+        textAlign: "left !important",
         fontSize: theme.typography.pxToRem(15),
         fontWeight: theme.typography.fontWeightRegular,
         width: '100%',
@@ -63,9 +64,9 @@ const useStyles = makeStyles((theme) => ({
             }
         }
     },
-    child:{
-        marginLeft:30,
-        
+    child: {
+        marginLeft: 30,
+
     }
 }));
 
@@ -210,8 +211,12 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             let groupedData = {};
             for (const el of param) {
                 const splittedUrl = el['url'].split('/');
-                if (splittedUrl[2] === "fb.watch" || splittedUrl[2] === "p") {
+                if (splittedUrl[2] === "fb.watch" || splittedUrl[3] === "p") {
                     console.log(el.url + " is a post.")
+                    if (groupData[el.url]?.length)
+                        groupedData[el.url] = [...(groupedData[el.url]), el];
+                    else
+                        groupedData[el.url] = [el];
                 }
                 else {
                     if (groupedData.hasOwnProperty(splittedUrl[3]))
@@ -266,20 +271,27 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                                 aria-controls="panel1a-content"
                                 id="panel1a-header">
                                 <Typography className={classes.heading}>
-                                    {/* {key} - On platform: {value[0].platform} */}
                                     <Box minWidth={1050}>
                                         <Table>
-                                        {/* Hover cua may row dau? */}
                                             {
-                                                index !== 0 ? "" : 
-                                                <TableHead>
-                                                    <TableRow className={classes.tablerow}>
-                                                        {ShowHeaderTable('crawl')}
-                                                    </TableRow>
-                                                </TableHead>
+                                                index !== 0 ? "" :
+                                                    <TableHead>
+                                                        <TableRow className={classes.tablerow}>
+                                                            <TableCell>Base</TableCell>
+                                                            <TableCell>Platform</TableCell>
+
+                                                        </TableRow>
+                                                    </TableHead>
                                             }
                                             <TableBody>
-                                                {ShowContentTable(value[0])}
+                                                <TableRow>
+                                                    <TableCell width="50%">
+                                                        {key}
+                                                    </TableCell>
+                                                    <TableCell width="50%">
+                                                        {value[0].platform}
+                                                    </TableCell>
+                                                </TableRow>
                                             </TableBody>
                                         </Table>
                                     </Box>
@@ -290,7 +302,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                                     <Box minWidth={1050}>
                                         <Table>
                                             <TableBody>
-                                                {value.map((object)=>ShowContentTable(object))}
+                                                {value.map((object) => ShowContentTable(object))}
                                             </TableBody>
                                         </Table>
                                     </Box>
@@ -338,8 +350,8 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 </TableCell>
             )
         }
-        else { 
-            return( <TableCell className={classes.tablecell}>{value.toString()}</TableCell>)
+        else {
+            return (<TableCell className={classes.tablecell}>{value.toString()}</TableCell>)
         }
     }
     const ShowContentTable = (object) => {
@@ -365,7 +377,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                             <FindInPageSharpIcon className={classes.icon} />
                             View
                         </Button>
-                    </TableCell> 
+                    </TableCell>
                 </>
             </TableRow>)
     }
@@ -402,6 +414,12 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 <PerfectScrollbar>
                     <Box minWidth={1050}>
                         <Table>
+                            <TableHead>
+                                {/* <TableRow className={classes.tablerow}>
+                                    <TableCell>Base</TableCell>
+                                    <TableCell>Platform</TableCell>
+                                </TableRow> */}
+                            </TableHead>
                             <TableBody>
                                 {/* Render each body result */}
                                 <RenderListLogs />
