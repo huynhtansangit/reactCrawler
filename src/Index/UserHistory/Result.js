@@ -16,7 +16,7 @@ import {
 import { Modal, Button as BtnBootstrap } from 'react-bootstrap';
 import { makeStyles } from 'ver-4-11';
 import { convertTimeStampToDateWithSecond } from '../../utils/convertTools';
-import Button from '@material-ui/core/Button';
+import Button from 'ver-4-11/Button';
 import FindInPageSharpIcon from '@material-ui/icons/FindInPageSharp';
 import SmallGallery from './SmallGallery';
 import { DOWNLOAD_URL } from '../../utils/config.url';
