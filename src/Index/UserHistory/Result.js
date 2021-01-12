@@ -27,6 +27,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
+import { convertFormatHeaderTable } from '../../utils/convertTools'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -208,18 +209,29 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
 
         return dataSmallGallery;
     }
-    // Hàm gom nhóm data trả về một mảng obj {1:{},2:{}}.
+
     const groupData = (param) => {
         if (param.length) {
             let groupedData = {};
             for (const el of param) {
                 const splittedUrl = el['url'].split('/');
-                if (splittedUrl[2] === "fb.watch" || splittedUrl[3] === "p") {
-                    console.log(el.url + " is a post.")
+                if (splittedUrl[2] === "fb.watch") {
                     if (groupData[el.url]?.length)
-                        groupedData[el.url] = [...(groupedData[el.url]), el];
+                        groupedData["Facebook Videos"] = [...(groupedData["Facebook Videos"]), el];
                     else
-                        groupedData[el.url] = [el];
+                        groupedData["Facebook Videos"] = [el];
+                }
+                else if (splittedUrl[3] === "p") {
+                    if (groupData[el.url]?.length)
+                        groupedData["Instagram Posts"] = [...(groupedData["Instagram Posts"]), el];
+                    else
+                        groupedData["Instagram Posts"] = [el];
+                }
+                else if(splittedUrl[3] === "v") {
+                    if (groupedData['Others']?.length)
+                        groupedData['Others'] = [...(groupedData['Others']), el];
+                    else
+                        groupedData['Others'] = [el];
                 }
                 else {
                     if (groupedData.hasOwnProperty(splittedUrl[3]))
@@ -228,7 +240,6 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                         groupedData[splittedUrl[3]] = [el];
                 }
             }
-            console.log(groupedData); //nay la hashmap
             return groupedData;
         }
     }
@@ -282,7 +293,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                                                         {key}
                                                     </TableCell>
                                                     <TableCell width="50%" >
-                                                        {value[0].platform}
+                                                        {convertFormatHeaderTable((value[0].platform))}
                                                     </TableCell>
                                                 </TableRow>
                                             </TableBody>
@@ -329,7 +340,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                 <TableCell className={classes.tablecell}>{convertTimeStampToDateWithSecond(value)}</TableCell>
             )
         }
-        else if (['user', 'owner_phone', 'type', 'thumbnail', 'id', 'collection_id'].includes(key) || (key === 'url' && !restProps.isSelectCrawlTab)) {
+        else if (['user', 'owner_phone', 'type', 'thumbnail', 'id', 'collection_id', 'platform'].includes(key) || (key === 'url' && !restProps.isSelectCrawlTab)) {
             // Useless field => show nothing
             return (
                 <>
@@ -357,7 +368,6 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                         </>
                     )
                     )}
-                    {/* Giờ chỗ title hiển thị thêm thông tin cho nó dài raaaa*/}
                     <TableCell className={classes.tablecell}>
                         <Button
                             variant="contained"

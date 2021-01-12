@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         overflow: 'hidden',
     },
+    setHeight:{
+        height:'95vh !important',
+    }
 }));
 
 export default function SelectedListItem(props) {
@@ -81,7 +84,7 @@ export default function SelectedListItem(props) {
     return (
         <div className={classes.root}>
             { isLoading? "" :
-                <List component="div" aria-label="main mailbox folders">
+                <List component="div" aria-label="main mailbox folders" className={classes.setHeight}>
                     <ItemHook MainPrimary="Profile" key="0" type="profile" />
                     {listCollectionId.map((element, idx) => {
                         return (
