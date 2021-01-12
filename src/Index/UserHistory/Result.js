@@ -89,32 +89,12 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const [collectionId, setCollectionId] = useState("");
     const [collectionName, setCollectionName] = useState("");
 
+    const [groupedData, setGroupedData] = useState({});
 
     // ComponentDidMount
     useEffect(() => {
-        // groupData(data);
+        groupData(data);
     }, [data]); //eslint-disable-line
-
-    // const groupData = () => {
-    //     if(data.length){
-    //         let groupedData = {};
-    //         for(const el of data){
-    //             const splittedUrl = el['url'].split('/');
-    //             if(splittedUrl[2] === "fb.watch"|| splittedUrl[2] === "p"){
-    //                 console.log(el.url+" is a post.")
-    //             }   
-    //             else{
-    //                 if(groupedData.hasOwnProperty(splittedUrl[3]))
-    //                     groupedData[splittedUrl[3]] = [...(groupedData[splittedUrl[3]]), el]; 
-    //                 else
-    //                 groupedData[splittedUrl[3]] = [el];
-    //             }
-    //         }
-    //         console.log(groupedData);
-    //         // setGroupCrawledData(groupedData);
-    //     }
-    // }
-
 
     const handleLimitChange = (event) => {
         const limit = event.target.value;
@@ -240,6 +220,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                         groupedData[splittedUrl[3]] = [el];
                 }
             }
+            setGroupedData(groupedData);
             return groupedData;
         }
     }
@@ -269,8 +250,8 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             )
         }
         else {
-            var groupedData = groupData(data);
-            console.log(groupedData);
+            // var groupedData = groupData(data);
+            // console.log(groupedData);
             return (
                 // Xử lý data chỗ này
                 Object.entries(groupedData).map(([key, value], index) => (
