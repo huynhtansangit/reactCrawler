@@ -23,9 +23,9 @@ import { DOWNLOAD_URL } from '../../utils/config.url';
 import SmallCollectionList from './SmallCollectionList';
 import { Link, } from "react-router-dom";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Accordion from 'ver-4-11/Accordion';
-import AccordionSummary from 'ver-4-11/AccordionSummary';
-import AccordionDetails from 'ver-4-11/AccordionDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from 'ver-4-11/Typography';
 import { convertFormatHeaderTable } from '../../utils/convertTools'
 
