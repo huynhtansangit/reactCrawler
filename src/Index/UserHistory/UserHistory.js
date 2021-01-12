@@ -313,7 +313,7 @@ class History extends React.Component {
                                         <Paper className={classes.paper}>
                                             <Button variant="outlined" color="primary" className={classes.button}
                                                 onClick={() => {
-                                                    this.setState({ isSelectCrawlTab: false });
+                                                    this.setState({ isSelectCrawlTab: false, fetchedDataCrawl: [] });
                                                     this.onClickPlatformChange(""); //Remove filter platform
                                                 }}>
                                                 <CollectionsSharpIcon className={classes.homeIcon} />
@@ -330,7 +330,6 @@ class History extends React.Component {
                                             </TableRow>
                                         </Table>
                                         {this.renderAlert()}
-                                        {/* Ở đây truyền Data vào cho GroupResult thay cho Results */}
                                         {this.state.isSelectCrawlTab ? (<Results
                                             onLimitChange={(limit) => {
                                                 this.clickChangeLimit(limit)

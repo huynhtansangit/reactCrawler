@@ -287,11 +287,14 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                                     <Box minWidth={1050}>
                                         <Table>
                                             <TableBody>
-                                                {value.map((object) => (ShowContentTable(object)))}
+                                                {value.map((object) => (
+                                                    <>
+                                                        {ShowContentTable(object)}
+                                                    </>
+                                                    ))}
                                             </TableBody>
                                         </Table>
                                     </Box>
-                                    {/* {ShowContentTable(value)} */}
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -300,20 +303,6 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
             )
         }
     }
-    // Display api dynamically
-    // const ShowHeaderTable = () => {
-    //     if (data.length && !isAllItems)
-    //         return (
-    //             <>
-    //                 {Object.entries(data[0]).map(([key, value]) => (
-    //                     <>
-    //                         {['User', 'Owner phone', 'Type', 'Thumbnail', 'Id', 'Collection id'].includes(convertFormatHeaderTable(key)) || (convertFormatHeaderTable(key) === 'Url' && !restProps.isSelectCrawlTab) ? <></> : <TableCell className={classes.tablecell}>{convertFormatHeaderTable(key)}</TableCell>}
-    //                     </>
-    //                 ))}
-    //                 <TableCell className={classes.tablecell}>Detail</TableCell>
-    //             </>
-    //         )
-    // }
 
     const returnTimeFormat = (key, value) => {
         if (key === 'time') {
