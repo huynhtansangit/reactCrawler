@@ -70,12 +70,12 @@ class History extends React.Component {
                 from: Math.floor((Date.now() + 25200000 - 604800000) / 1000), //From 7 days ago, gmt+7, in second so /1000
                 to: Math.floor((Date.now() + 25200000) / 1000),
             },
-            isSelectCrawlTab: false,
+            isSelectCrawlTab: true,
         }
     }
 
     componentDidMount() {
-        this.fetchingDataAddItem();
+        this.fetchingDataCrawl();
     }
 
     async componentDidUpdate(prevProps, prevState) {
@@ -303,21 +303,21 @@ class History extends React.Component {
                                     <Grid item xs={6} sm={6} md={5} spacing={1}>
                                         <Paper className={classes.paper}>
                                             <Button variant="outlined" color="primary" className={classes.button}
-                                                onClick={() => {
-                                                    this.setState({ isSelectCrawlTab: false, fetchedDataCrawl: [] });
-                                                    this.onClickPlatformChange("");
-                                                }}>
-                                                <CollectionsSharpIcon className={classes.homeIcon} />
-                                                Add to collection history
+                                                onClick={() => this.setState({ isSelectCrawlTab: true })}>
+                                                <CloudDownloadSharpIcon className={classes.homeIcon} />
+                                                Crawl history
                                             </Button>
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={6} sm={6} md={5} spacing={1}>
                                         <Paper className={classes.paper}>
                                             <Button variant="outlined" color="primary" className={classes.button}
-                                                onClick={() => this.setState({ isSelectCrawlTab: true })}>
-                                                <CloudDownloadSharpIcon className={classes.homeIcon} />
-                                                Crawl history
+                                                onClick={() => {
+                                                    this.setState({ isSelectCrawlTab: false });
+                                                    this.onClickPlatformChange(""); //Remove filter platform
+                                                }}>
+                                                <CollectionsSharpIcon className={classes.homeIcon} />
+                                                Add to collection history
                                             </Button>
                                         </Paper>
                                     </Grid>
@@ -330,6 +330,7 @@ class History extends React.Component {
                                             </TableRow>
                                         </Table>
                                         {this.renderAlert()}
+                                        {/* Ở đây truyền Data vào cho GroupResult thay cho Results */}
                                         {this.state.isSelectCrawlTab ? (<Results
                                             onLimitChange={(limit) => {
                                                 this.clickChangeLimit(limit)

@@ -287,7 +287,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                                     <Box minWidth={1050}>
                                         <Table>
                                             <TableBody>
-                                                {value.map((object) => ShowContentTable(object))}
+                                                {value.map((object) => (ShowContentTable(object)))}
                                             </TableBody>
                                         </Table>
                                     </Box>
