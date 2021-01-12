@@ -15,7 +15,7 @@ import {
 } from 'ver-4-11';
 import { Modal, Button as BtnBootstrap } from 'react-bootstrap';
 import { makeStyles } from 'ver-4-11';
-import { convertTimeStampToDateWithSecond, convertFormatHeaderTable } from '../../utils/convertTools';
+import { convertTimeStampToDateWithSecond } from '../../utils/convertTools';
 import Button from '@material-ui/core/Button';
 import FindInPageSharpIcon from '@material-ui/icons/FindInPageSharp';
 import SmallGallery from './SmallGallery';
@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => ({
     child: {
         marginLeft: 30,
 
+    },
+    paddingLeft:{
+        marginLeft:"10px !important",
     }
 }));
 
@@ -273,22 +276,12 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                                 <Typography className={classes.heading}>
                                     <Box minWidth={1050}>
                                         <Table>
-                                            {
-                                                index !== 0 ? "" :
-                                                    <TableHead>
-                                                        <TableRow className={classes.tablerow}>
-                                                            <TableCell>Base</TableCell>
-                                                            <TableCell>Platform</TableCell>
-
-                                                        </TableRow>
-                                                    </TableHead>
-                                            }
                                             <TableBody>
                                                 <TableRow>
                                                     <TableCell width="50%">
                                                         {key}
                                                     </TableCell>
-                                                    <TableCell width="50%">
+                                                    <TableCell width="50%" >
                                                         {value[0].platform}
                                                     </TableCell>
                                                 </TableRow>
@@ -316,19 +309,19 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         }
     }
     // Display api dynamically
-    const ShowHeaderTable = () => {
-        if (data.length && !isAllItems)
-            return (
-                <>
-                    {Object.entries(data[0]).map(([key, value]) => (
-                        <>
-                            {['User', 'Owner phone', 'Type', 'Thumbnail', 'Id', 'Collection id'].includes(convertFormatHeaderTable(key)) || (convertFormatHeaderTable(key) === 'Url' && !restProps.isSelectCrawlTab) ? <></> : <TableCell className={classes.tablecell}>{convertFormatHeaderTable(key)}</TableCell>}
-                        </>
-                    ))}
-                    <TableCell className={classes.tablecell}>Detail</TableCell>
-                </>
-            )
-    }
+    // const ShowHeaderTable = () => {
+    //     if (data.length && !isAllItems)
+    //         return (
+    //             <>
+    //                 {Object.entries(data[0]).map(([key, value]) => (
+    //                     <>
+    //                         {['User', 'Owner phone', 'Type', 'Thumbnail', 'Id', 'Collection id'].includes(convertFormatHeaderTable(key)) || (convertFormatHeaderTable(key) === 'Url' && !restProps.isSelectCrawlTab) ? <></> : <TableCell className={classes.tablecell}>{convertFormatHeaderTable(key)}</TableCell>}
+    //                     </>
+    //                 ))}
+    //                 <TableCell className={classes.tablecell}>Detail</TableCell>
+    //             </>
+    //         )
+    // }
 
     const returnTimeFormat = (key, value) => {
         if (key === 'time') {
@@ -422,6 +415,19 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
                             </TableHead>
                             <TableBody>
                                 {/* Render each body result */}
+                                <Box minWidth={1050}>
+                                    <Table>
+                                        {
+                                            <TableHead>
+                                                <TableRow className={classes.tablerow}>
+                                                    <TableCell width="50%">Base</TableCell>
+                                                    <TableCell width="50%">Platform</TableCell>
+
+                                                </TableRow>
+                                            </TableHead>
+                                        }
+                                    </Table>
+                                </Box>
                                 <RenderListLogs />
                             </TableBody>
                         </Table>

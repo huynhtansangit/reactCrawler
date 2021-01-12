@@ -19,6 +19,7 @@ import { convertDateToTimeStamp, removeEmptyValueParams } from '../../utils/conv
 import { Alert, AlertTitle } from '@material-ui/lab';
 import CollectionsSharpIcon from '@material-ui/icons/CollectionsSharp';
 import CloudDownloadSharpIcon from '@material-ui/icons/CloudDownloadSharp';
+import ResultAddToCollection from './ResultAddToCollection';
 const useStyles = theme => ({
     root: {
         flexGrow: 1,
@@ -32,17 +33,17 @@ const useStyles = theme => ({
         width: '100% !important',
         height: 60,
         '&:hover ': {
-            '& .MuiSvgIcon-root':{
-                color:'#005BB8 !important',
+            '& .MuiSvgIcon-root': {
+                color: '#005BB8 !important',
             }
         },
-        color:'#F6518F',
+        color: '#F6518F',
     },
     homeIcon: {
         fontSize: 36,
         color: '#F6518F',
         transition: '0.5s',
-        marginRight:10,
+        marginRight: 10,
     },
     textField: {
         height: '64px !important',
@@ -82,20 +83,20 @@ class History extends React.Component {
         if (prevState.filters !== this.state.filters) {
             willFetchData = true;
         }
-        else if(prevState.isSelectCrawlTab !== this.state.isSelectCrawlTab){
-            willFetchData = true; 
+        else if (prevState.isSelectCrawlTab !== this.state.isSelectCrawlTab) {
+            willFetchData = true;
         }
 
-        if(willFetchData){
-            if(this.state.isSelectCrawlTab)
-                    this.fetchingDataCrawl();
-                else
-                    this.fetchingDataAddItem();
+        if (willFetchData) {
+            if (this.state.isSelectCrawlTab)
+                this.fetchingDataCrawl();
+            else
+                this.fetchingDataAddItem();
         }
     }
 
     fetchingDataCrawl = async () => {
-        await this.setState({isLoading: true});
+        await this.setState({ isLoading: true });
 
         const cleanFilter = removeEmptyValueParams(this.state.filters);
         const responseData = await UserHistoryApi.getCrawlHistory(cleanFilter);
@@ -107,7 +108,7 @@ class History extends React.Component {
         // console.log(responseData['data']['logs']);
     }
     fetchingDataAddItem = async () => {
-        await this.setState({isLoading: true});
+        await this.setState({ isLoading: true });
         const cleanFilter = removeEmptyValueParams(this.state.filters);
         const responseData = await UserHistoryApi.getAddItemHistory(cleanFilter);
         await this.setState({
@@ -193,8 +194,8 @@ class History extends React.Component {
     }
 
     renderFilterButton = (classes) => {
-        if(this.state.isSelectCrawlTab){
-            return(
+        if (this.state.isSelectCrawlTab) {
+            return (
                 <Grid container spacing={0}>
                     <Grid item xs={12} sm={2} md={4} spacing={1}>
                         <Paper className={classes.paper}>
@@ -242,7 +243,7 @@ class History extends React.Component {
                 </Grid>
             )
         }
-        else{
+        else {
             return (
                 <Grid container spacing={0}>
                     <Grid item xs={12} sm={6} md={6} spacing={2}>
@@ -302,7 +303,7 @@ class History extends React.Component {
                                     <Grid item xs={6} sm={6} md={5} spacing={1}>
                                         <Paper className={classes.paper}>
                                             <Button variant="outlined" color="primary" className={classes.button}
-                                            onClick={()=>this.setState({isSelectCrawlTab: true})}>
+                                                onClick={() => this.setState({ isSelectCrawlTab: true })}>
                                                 <CloudDownloadSharpIcon className={classes.homeIcon} />
                                                 Crawl history
                                             </Button>
@@ -311,10 +312,10 @@ class History extends React.Component {
                                     <Grid item xs={6} sm={6} md={5} spacing={1}>
                                         <Paper className={classes.paper}>
                                             <Button variant="outlined" color="primary" className={classes.button}
-                                            onClick={()=>{
-                                                this.setState({isSelectCrawlTab: false});
-                                                this.onClickPlatformChange(""); //Remove filter platform
-                                            }}>
+                                                onClick={() => {
+                                                    this.setState({ isSelectCrawlTab: false });
+                                                    this.onClickPlatformChange(""); //Remove filter platform
+                                                }}>
                                                 <CollectionsSharpIcon className={classes.homeIcon} />
                                                 Add to collection history
                                             </Button>
@@ -330,7 +331,7 @@ class History extends React.Component {
                                         </Table>
                                         {this.renderAlert()}
                                         {/* Ở đây truyền Data vào cho GroupResult thay cho Results */}
-                                        <Results
+                                        {this.state.isSelectCrawlTab ? (<Results
                                             onLimitChange={(limit) => {
                                                 this.clickChangeLimit(limit)
                                             }}
@@ -339,10 +340,18 @@ class History extends React.Component {
                                             }}
                                             count={this.state.countData}
                                             data={this.state.fetchedDataCrawl.length ? this.state.fetchedDataCrawl : ""}
-                                            isSelectCrawlTab={this.state.isSelectCrawlTab}
-                                        // isAllItems={isA0llItems}
-                                        >
-                                        </Results>
+                                            isSelectCrawlTab={this.state.isSelectCrawlTab}></Results>) : (<ResultAddToCollection
+                                                onLimitChange={(limit) => {
+                                                    this.clickChangeLimit(limit)
+                                                }}
+                                                onPageChange={(page) => {
+                                                    this.clickChangePage(page)
+                                                }}
+                                                count={this.state.countData}
+                                                data={this.state.fetchedDataCrawl.length ? this.state.fetchedDataCrawl : ""}
+                                                isSelectCrawlTab={this.state.isSelectCrawlTab}>
+
+                                            </ResultAddToCollection>)}
                                     </Box>
                                 </Container>
                             </Paper>

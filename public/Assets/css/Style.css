@@ -450,7 +450,7 @@ section{
  /* Extra small devices (phones, 600px and down) */
  @media only screen and (max-width: 550px) {
     .dropdown-header-customize {
-        left: 66px !important;
+        left: 155px !important;
     }
     #banner-section{
         display: none !important;
@@ -481,7 +481,7 @@ section{
         left: 0px !important;
     }
     .dropdown-header-customize button:after {
-        left: 42% !important;
+        left: 86% !important;
         top: 10% !important;
     }
     .nav-link{
@@ -490,13 +490,13 @@ section{
     #exampleInputEmail1 {
         width: 253px !important;
         height: 35px !important;
-        left: -10px !important;
+        left: 78px !important;
     }
     .icon-input-header {
-        left: 98px !important;
+        left: 185px !important;
     }
     .btn-input-header {
-        right: 74px !important;
+        right: -14px !important;
     }
     .gallery-container{
         margin: 0 !important;
