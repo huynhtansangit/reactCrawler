@@ -307,7 +307,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
     const returnTimeFormat = (key, value) => {
         if (key === 'time') {
             return (
-                <TableCell width="35%" className={classes.tablecell}>{convertTimeStampToDateWithSecond(value)}</TableCell>
+                <TableCell width="25%" className={classes.tablecell}>{convertTimeStampToDateWithSecond(value)}</TableCell>
             )
         }
         else if (['user', 'owner_phone', 'type', 'thumbnail', 'id', 'collection_id', 'platform'].includes(key) || (key === 'url' && !restProps.isSelectCrawlTab)) {
@@ -319,7 +319,7 @@ const Results = ({ className, data, count, onLimitChange, onPageChange, isAllIte
         }
         else if (key === 'url' || key === 'source') {
             return (
-                <TableCell className={classes.tablecell} width="50%">
+                <TableCell className={classes.tablecell} width="60%">
                     <a href={value.toString()} target="_blank" rel="noopener noreferrer">{(value.toString()).substring(0, 75)}{value.toString().length > 75 ? "..." : ""}</a>
                 </TableCell>
             )
